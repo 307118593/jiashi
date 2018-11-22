@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<title>装修直播</title>
+		<style>
+			.hd_group {
+				width: 100%;
+				height: auto;
+				position: relative;
+			}
+			
+			.media-hd {
+				display: flex;
+				padding: 10px;
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+			}
+			
+			.hd_photo {
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				margin-left: 0.5rem;
+			}
+			
+			.mui-ellipsis,
+			.mui-media-body {
+				color: white;
+				text-align: right;
+			}
+			
+			.mui-media-body {
+				font-size: 1.2em;
+			}
+			
+			.hor-list-content {
+				list-style: none;
+				-webkit-overflow-scrolling: touch;
+				width: 100%;
+				display: inline;
+				white-space: nowrap;
+				overflow-x: scroll;
+				float: left;
+				overflow-y: hidden;
+				text-align: left;
+			}
+			
+			.worker-info {
+				padding: 5px;
+				display: inline-block;
+				width: 80px;
+				height: 140px;
+			}
+			
+			.worker-photo {
+				width: 80px;
+				height: 80px;
+				border-radius: 40px;
+			}
+			
+			.worker-name,
+			.worker-job {
+				margin: 0;
+				padding: 0;
+				text-align: center;
+				color: #333;
+			}
+			
+			.worker-name {
+				font-size: 1.2rem;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn) {
+				margin: 0;
+			}
+			
+			.mui-media-body {
+				margin-top: 1rem;
+				line-height: 1.5rem;
+			}
+			
+			.steps_index {
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				background-color: #00cd76;
+				line-height: 40px;
+				align-items: center;
+				text-align: center;
+				color: white;
+				font-size: 1.2rem;
+			}
+			
+			.steps_line {
+				width: 2px;
+				height: 60px;
+				margin-left: 20px;
+				margin-top: 2px;
+				background-color: #00cd76;
+			}
+			
+			.steps-content-text {
+				width: 100%;
+				padding: 10px;
+			}
+			
+			.steps-desc-text {
+				text-align: left;
+				display: flex;
+				width: 100%;
+				padding: 5px;
+			}
+			
+			.steps_right {
+				width: 100%;
+				text-align: right;
+				margin: 0;
+			}
+			
+			.steps_left {
+				width: 10rem;
+			}
+			
+			.steps_press {
+				width: 50px;
+				text-align: center;
+				padding: 5px;
+			}
+			
+			.steps-item {
+				display: flex;
+			}
+			
+			.steps-text2 {
+				background-color: #ccc;
+				color: white
+			}
+			
+			.steps-text3 {
+				background-color: #00cd76;
+				color: white
+			}
+			
+			.item-cell {
+				display: block;
+			}
+			
+			.item-cell-img {
+				width: 30%;
+				height: auto;
+			}
+			
+			.item-cell-img-max {
+				width: 100%;
+				height: auto;
+			}
+			
+			.cell-foot {
+				display: flex;
+				width: 100%;
+				padding: 5px;
+			}
+			
+			.cell-foot-like {
+				right: 2.5rem;
+				position: absolute;
+			}
+			
+			.cell-foot-date {
+				margin-left: 4rem;
+				color: #333;
+				font-size: 1rem;
+			}
+			
+			.broadcast_photo {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+			}
+			
+			.cell-img-group {
+				padding-left: 4rem;
+				padding-right: 2rem;
+				text-align: left;
+			}
+			
+			.item-cell-content {
+				margin-left: 4rem;
+				padding: 5px;
+				font-size: 1rem;
+				color: #333;
+			}
+			
+			.mui-table-view-cell:after {
+				height: 0;
+			}
+			
+			.cell-item-user {
+				padding: 0;
+				margin-left: 1rem;
+			}
+			
+			.cell-spot {
+				background-color: #00cd76;
+				width: 15px;
+				height: 15px;
+				border-radius: 50%;
+				margin-right: 0.7rem;
+			}
+			
+			.cell-item-hd {
+				display: flex;
+				padding: 10px;
+			}
+			
+			.pg-ul:before {
+				height: 1px;
+				background-color: gainsboro;
+			}
+			
+			.mui-segmented-control.mui-scroll-wrapper .mui-scroll {
+				height: 160px;
+			}
+			
+			.mui-segmented-control.mui-scroll-wrapper {
+				height: 160px;
+			}
+			
+			.mui-segmented-control .mui-control-item {
+				line-height: 22px;
+			}
+			
+			.mui-content {
+				background-color: white;
+			}
+			
+			.hd-image {
+				width: 100%;
+			}
+			
+			.pg-title {
+				font-size: 1rem;
+				padding-top: 0.5rem;
+				padding-bottom: 0.5rem;
+				padding-left: 0.48444rem;
+			}
+			
+			.finish-step {
+				color: #00cd76;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="hd_group">
+				<img class="hd-image" src="img/img1.jpg" id="image" />
+				<div class="media-hd">
+					<a href="javascript:;" style="width: 100%;">
+						<img class="mui-media-object mui-pull-right hd_photo" src="img/haha.jpg" id="headurl">
+						<div class="mui-media-body">
+							<span id="username">姓名</span>
+							<p class='mui-ellipsis' id="project">申花壹号院5栋101号 欧式 101平方米</p>
+						</div>
+					</a>
+				</div>
+
+			</div>
+			<h3 class="pg-title">项目成员</h3>
+			<div id="slider" class="mui-slider ">
+				<div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<div class="mui-scroll" id="project_us">
+						<a class="mui-control-item mui-active">
+							<div class="worker-info">
+								<img class="worker-photo" src="img/haha.jpg" />
+								<div class="worker-name">
+									员工
+								</div>
+								<div class="worker-job">
+									设计师
+								</div>
+							</div>
+						</a>
+
+					</div>
+				</div>
+			</div>
+
+			<h3 class="pg-title">施工进度</h3>
+			<div id="flow">
+				<div class="steps-item">
+					<div class="steps_press">
+						<div class="steps_index">
+							1
+						</div>
+						<div class="steps_line">
+
+						</div>
+					</div>
+					<div class="steps-content-text">
+						<div class="steps-desc-text steps-text1"><span class="steps_left">项目名称</span>
+							<p class="steps_right">未开始</p>
+						</div>
+						<div class="steps-desc-text steps-text2"><span class="steps_left">开始时间</span>
+							<p class="steps_right">2018/11/12</p>
+						</div>
+						<div class="steps-desc-text steps-text3"><span class="steps_left">结束时间</span>
+							<p class="steps_right">2018/11/12</p>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<h3 class="pg-title">装修播报</h3>
+			<ul class="pg-ul" id="broadcast">
+				<li class="cell-li">
+					<a style="width: 100%;" href="liveplay.html">
+						<div class="cell-item-hd">
+							<div class="cell-spot"></div>
+							<h4>
+								项目名称
+							</h4>
+						</div>
+						<div class="mui-table-view-cell cell-item-user">
+
+							<img class="mui-media-object mui-pull-left broadcast_photo" src="img/haha.jpg">
+							<div class="mui-media-body" style="color: #000000;text-align: left;">姓名</div>
+
+						</div>
+						<p class="item-cell-content">
+							测试内容测试内容测试内容
+						</p>
+						<div class="cell-img-group">
+							<img class="item-cell-img " src="img/img2.jpg" />
+						</div>
+						<div class="cell-foot">
+							<span class="cell-foot-like">点赞12</span>
+							<p class="cell-foot-date">2018/11/22</p>
+						</div>
+
+				</div>
+				</a>
+			</li>
+
+		</ul>
+
+		</div>
+
+	</body>
+	<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="js/request-util.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script>
+		mui.init();
+
+		$(function() {
+			var request = new Request();
+			var value = request.getnavivalues();
+			var $headurl = $("#headurl"),
+				$username = $("#username"),
+				$image = $("#image"),
+				$project = $("#project"),
+				$broadcast = $("#broadcast"),
+				$flow = $("#flow"),
+				$projectUs = $("#project_us");
+			var uid = value["uid"];
+			var pro_id = value["pro_id"];
+			console.log("直播源：" + uid);
+			var baseHeadurl = "https://web.yuegames.com/app/logo.png";
+			if(pro_id != undefined && uid != undefined) {
+				comment(pro_id, uid);
+			} else {
+				comment(1, 35);
+			}
+
+			function comment(pro_id, uid) {
+
+				var url = "https://web.yuegames.com/api/getMyProjectFlow1015";
+				var para = {};
+				para.pro_id = pro_id;
+				para.uid = uid;
+				request.request(url, para, "POST", function(data) {
+
+					var infomation = data.data;
+					if(infomation != undefined) {
+						//施工进度
+						var flow = infomation.flow;
+						var flowhtml = "";
+						$.each(flow, function(i, item) {
+							flowhtml += setflow(item, i);
+						});
+						$flow.html(flowhtml);
+						//项目播报
+						var broadcast = infomation.broadcast;
+						var broadcasthtml = "";
+						$.each(broadcast, function(i, item) {
+							broadcasthtml += setbroadcast(item);
+						});
+						$broadcast.html(broadcasthtml);
+						var project = infomation.project;
+
+						if(project != undefined) {
+							if(project.headurl == undefined) {
+
+								$headurl.attr("src", baseHeadurl);
+							} else {
+								$headurl.attr("src", project.headurl);
+							}
+							if(project.user_name == undefined) {
+								$username.text("未知");
+							} else {
+								$username.text(project.user_name);
+							}
+							$image.attr('src', project.image);
+							var proinfo = "";
+							if(project.name != undefined) {
+								proinfo += project.name + " ";
+							}
+							if(project.style != undefined) {
+								proinfo += project.style + " ";
+							}
+							if(project.area != undefined) {
+								proinfo += project.area + "m2";
+							}
+
+							$project.text(proinfo);
+						}
+						var workers = project.project_us;
+						var workerthtml = "";
+						$.each(workers, function(i, item) {
+							workerthtml += setworker(item);
+						});
+						$projectUs.html(workerthtml);
+						console.log(infomation);
+
+					} else {
+						console.log("没有直播");
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+
+				});
+			}
+
+			function setflow(data, i) {
+				var state = data.state != 0 ? "finish-step" : "";
+				return "<div class='steps-item'><div class='steps_press'>" +
+					"<div class='steps_index'>" + i + "</div>" +
+					"<div class='steps_line'></div></div>" +
+					"<div class='steps-content-text'>" +
+					"<div class='steps-desc-text steps-text1'><span class='steps_left'>" + data.name + "</span>" +
+					"<p class='steps_right " + state + "'>" + getstate(data.state) + "</p></div>" +
+					"<div class='steps-desc-text steps-text2'><span class='steps_left'>开始时间</span>" +
+					"<p class='steps_right'>" + isExist(data.starttime) + "</p></div>" +
+					"<div class='steps-desc-text steps-text3'><span class='steps_left'>结束时间</span>" +
+					"<p class='steps_right'>" + isExist(data.endtime) + "</p></div></div></div>";
+			}
+
+			function getstate(state) {
+				if(state == 0) {
+					return "未开始";
+				} else {
+					return "已完成";
+				}
+			}
+
+			function isExist(data) {
+				if(data != undefined) {
+					return data;
+				} else {
+					return "";
+				}
+			}
+
+			function isExistStep(data) {
+				if(data != undefined) {
+					return data;
+				} else {
+					return "项目进度";
+				}
+			}
+
+			function setbroadcast(data) {
+				var imagelist = "";
+				var className = "";
+				if(data.image.length > 1) {
+					className = "item-cell-img";
+
+				} else {
+					className = "item-cell-img-max";
+				}
+
+				$.each(data.image, function(i, item) {
+					imagelist += "<img class='" + className + "' src='" + item + "' />";
+				});
+				return "<li class='cell-li'><div class='cell-item-hd'>" +
+					"<div class='cell-spot'></div><h4>" + isExistStep(data.f_name) + "</h4></div>" +
+					"<p class='item-cell-content'>" + data.content + "</p>" +
+					"<div class='cell-img-group'>" + imagelist + "</div>" +
+					"<div class='cell-foot'><span class='cell-foot-like'>点赞" + data.zan + "</span>" +
+					"<p class='cell-foot-date'>" + isExist(data.addtime) + "</p></div></div></li>";
+			}
+
+			function setworker(data) {
+				return "<a class='mui-control-item mui-active'>" +
+					"<div class='worker-info'>" +
+					"<img class='worker-photo' src='" + getBasePhoto(data.avatar) + "' />" +
+					"<div class='worker-name'>" + data.name + "</div>" +
+					"<div class='worker-job'>" + data.job + "</div></div></a>";
+			}
+
+			function getBasePhoto(photo) {
+				if(photo == undefined) {
+					return baseHeadurl;
+				} else {
+					return photo;
+				}
+			}
+
+			function getBaseImage(photo) {
+				if(photo == undefined) {
+					return baseHeadurl;
+				} else {
+					return photo;
+				}
+			}
+		});
+	</script>
+
+</html>

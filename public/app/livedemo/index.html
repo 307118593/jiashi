@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>邀请体验</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!-- 状态栏的值可能为black, default, black-translucent -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<!-- UC应用模式 -->
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<!-- QQ强制全屏 -->
+		<meta name="x5-fullscreen" content="true">
+		<!-- QQ应用模式 -->
+		<meta name="x5-page-mode" content="app">
+		<!-- 是针对一些老的不识别viewport的浏览器，列如黑莓 -->
+		<meta name="HandheldFriendly" content="true">
+		<!-- 微软的老式浏览器 -->
+		<meta name="MobileOptimized" content="320">
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta name="format-detection" content="telephone=no, email=no" />
+
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<style type="text/css">
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				margin: 0;
+			}
+			
+			.hd-bg {
+				background-size: 100%;
+				width: 100%;
+			}
+			
+			.hd-top {
+				text-align: center;
+				padding-top: 2rem;
+				padding-bottom: 0.5rem;
+				background-attachment: fixed;
+			}
+			
+			.mui-content {
+				background-image: url(img/bg_register.png);
+				background-size: 100%;
+				background-color: #ff505e;
+			}
+			
+			.hd-center {
+				text-align: center;
+				padding: 2rem;
+			}
+			
+			.hd-bottom {
+				padding-left: 2rem;
+				padding-right: 2rem;
+				padding-bottom: 2rem;
+			}
+			
+			.hd_title_text {
+				color: white;
+			}
+			
+			.hd_part_titile {
+				background-color: #fdad45;
+				border-radius: 6px;
+				color: white;
+				font-weight: bold;
+				padding: 5px;
+				margin-right: 0.3rem;
+			}
+			
+			.hd-part {
+				margin-top: 1rem;
+				width: 100%;
+			}
+			
+			.hd_part_desc {
+				color: white;
+				margin-left: 1rem;
+			}
+			
+			.hd_part_right {
+				margin-left: 0.3rem;
+			}
+			
+			.hd_part_content {
+				color: white;
+				margin-top: 1.5rem;
+			}
+			
+			.part-content-item {
+				position: relative;
+			}
+			
+			.part-content {
+				width: 100%;
+				padding-top: 1.5rem;
+				padding-bottom: 0.5rem;
+				padding-left: 1rem;
+				padding-right: 1rem;
+				margin-top: 2rem;
+				text-align: center;
+				align-items: center;
+				border-radius: 6px;
+				background-color: white;
+			}
+			
+			.part-content-title {
+				position: absolute;
+				width: auto;
+				height: auto;
+				padding: 0.35rem;
+				top: -1rem;
+				margin-left: 1rem;
+				text-align: center;
+				background-color: #fdad45;
+				border-radius: 6px;
+				color: white;
+			}
+			
+			.mui-btn-warning {
+				height: 2.4rem;
+				margin-left: 1rem;
+				width: 8rem;
+			}
+			
+			.mui-input-vercode {
+				width: 100%;
+			}
+			
+			.btn-download {
+				text-align: center;
+				background-color: #fdad45;
+				border-radius: 6px;
+				padding: 0.8rem;
+				color: white;
+				font-weight: bold;
+				font-size: 1.5rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="hd-bg hd-top">
+				<div class="hd_title">
+					<h2 class="hd_title_text title_text">华派公司诚邀您</h2>
+					<h4 class="hd_title_text title_text_alias">体验现场装修直播</h4>
+
+				</div>
+				<div class="hd-part">
+					<h6 class="hd_part_desc">
+						<span class="hd_part_titile">
+							限时优享
+						</span>
+							3重优惠好礼<span class="hd_part_right">透明装修大礼包等着你</span>
+						</h6>
+				</div>
+				<h3 class="hd_part_content">
+					新手好礼相送
+				</h3>
+			</div>
+			<div class="hd-bg hd-center">
+
+				<div class="part-content-item">
+
+					<div class="part-content">
+						装修直播，远程监控，工程全透明					</div>
+					<div class="part-content-title">
+						第一重好礼
+					</div>
+				</div>
+				<div class="part-content-item">
+
+					<div class="part-content">
+						装修案例评鉴，最新流行风格掌控					</div>
+					<div class="part-content-title">
+						第二重好礼
+					</div>
+				</div>
+				<div class="part-content-item">
+
+					<div class="part-content">
+						华派最新活动，资讯第一时间知道					</div>
+					<div class="part-content-title">
+						第三重好礼
+					</div>
+				</div>
+			</div>
+			<div class="hd-bg hd-bottom">
+				<div class="mui-input-row ">
+					
+					<input id="phone" type="tel" class="mui-input-clear" placeholder="请输入联系电话">
+				</div>
+				<div style="display: flex;">
+					
+					<div class="mui-input-row mui-input-vercode">
+						<input id="verification" type="number" class="mui-input-clear" placeholder="请输入验证码">
+					</div>
+					<button type="button" class="mui-btn mui-btn-warning" id="getverif">
+						获取验证码
+					</button>
+				</div>
+				<div class="mui-input-row ">
+					<input id="address" type="text" class="mui-input-clear" placeholder="请输入地址信息">
+				</div>
+				<div class="btn-download" id="downapk">
+					立即下载注册
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="js/request-util.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script>
+		mui.init();
+		$(function() {
+			var request = new Request();
+			var value = request.getnavivalues();
+			var invitation = value["invitation"];
+			var $phone = $("#phone"),
+				$address = $("#address"),
+				$verification = $("#verification"),
+				$getverif = $("#getverif"),
+				$downapk = $("#downapk");
+			var verifurl = "https://web.yuegames.com/api/send_mes";
+			var registerurl = "https://web.yuegames.com/api/phone_login";
+			var apkurl = "https://web.yuegames.com/api/update_version";
+			var isclick = false;
+			//是否为android
+			var isAndroid = false;
+			//是否为ios
+			var isIOS = false;
+			//是否为微信
+			var downloadInWeixin = false;
+			//是否为android 下载地址
+			var androidDownloadUrl = "";
+			//是否为ios 下载地址
+			var iosAppstoreUrl = "";
+			var androidDownUrl="https://web.yuegames.com/app/livedemo/downloadapk.html"
+			/* 判断是否为微信环境 */
+			var isWeiXin = navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1 ? true : false;
+			checkPlatform();
+			console.log("邀请码:" + invitation);
+			$getverif.click(function() {
+
+				if(!isclick) {
+					isclick = true;
+					var phone = $phone.val();
+					if(phone != undefined) {
+						getVerification(phone);
+					} else {
+						mui.alert('提示', '请输入手机号', function() {});
+					}
+				}
+
+			});
+			$downapk.click(function() {
+				if(!isclick) {
+					isclick = true;
+					var verification = $verification.val();
+					var phone = $phone.val();
+					var address=$address.val();
+					if(invitation != undefined && verification != undefined) {
+						comment(phone, verification, invitation,address);
+					} else {
+						mui.alert('提示', '请输入验证码', function() {});
+					}
+				}
+			});
+
+			function getVerification(phone) {
+				var para = {};
+				para.phone = phone;
+				console.log(phone);
+				request.request(verifurl, para, "POST", function(data) {
+					var verifdata = data.data;
+					var error = data.error;
+					var mes = data.mes;
+					isclick = false;
+					
+					if(verifdata != undefined) {
+						var code = verifdata.code;
+						var count = 60;
+						var timer = setInterval(function() {
+							if(count > 0) {
+								count--;
+								$getverif.text(count);
+								
+							} else {
+								$getverif.text("获取验证码");
+								
+								clearInterval(timer);
+							}
+						}, 1000);
+					} else {
+						if(mes != undefined) {
+							mui.toast(mes);
+						}
+						window.location.href = androidDownUrl;
+						
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+					mui.toast("请求失败：" + errorThrown);
+					isclick = false;
+				});
+			}
+			/**
+			 * 注册
+			 * @param {Object} phone 手机号
+			 * @param {Object} verification 验证码
+			 * @param {Object} invitation 邀请码
+			 * @param {Object} address地址信息
+			 */
+			function comment(phone, verification, invitation,address) {
+				var para = {};
+				para.phone = phone;
+				para.code = verification;
+				para.invitation = invitation;
+				para.address = address;
+				request.request(registerurl, para, "POST", function(data) {
+					var registerdata = data.data;
+					var error = data.error;
+					var mes = data.mes;
+					isclick = false;
+					if(error == 0) {
+						mui.alert('注册成功，初始化密码为手机号后6位！', '提示', function() {
+							getapk();
+						});
+						
+					} else {
+						mui.toast(mes);
+//						window.location.href = androidDownUrl;
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+					mui.toast("请求失败：" + errorThrown);
+					isclick = false;
+				});
+			}
+			/**
+			 * 得到app下载版本
+			 */
+			function getapk() {
+				var para = {};
+
+				request.request(apkurl, para, "POST", function(data) {
+					var versiondata = data.data;
+					var error = data.error;
+					var mes = data.mes;
+					isclick = false;
+				
+					if(error == 0) {
+						if(isAndroid) {
+							androidDownloadUrl = versiondata.url;
+						} else if(isIOS) {
+							iosAppstoreUrl = versiondata.iosUrl;
+						}
+						downloadApp();
+
+					} else {
+						mui.toast(mes);
+						console.log("没有信息");
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+					mui.toast("请求失败：" + errorThrown);
+					isclick = false;
+				});
+			}
+
+			/* 点击下载按钮 */
+			function downloadApp() {
+				// 微信环境 
+				
+				if(isAndroid) {
+					// 微信环境   
+					if(isWeiXin) {
+						downloadInWeixin = true
+						window.location.hash = androidDownloadUrl;
+						// 改变hash，便于浏览器打开时直接下载安卓包 
+						return
+					}
+					// 安卓包下载地址 
+					window.location.href = androidDownloadUrl;
+				} else if(isIOS) {
+					// 微信环境   
+					if(isWeiXin) {
+						downloadInWeixin = true
+						window.location.hash = iosAppstoreUrl;
+						// 改变hash，便于浏览器打开时直接跳转AppStore 
+						return
+					}
+					// 苹果商店链接地址
+					window.location.href = iosAppstoreUrl;
+				} else {
+					mui.toast('暂不支持，敬请期待~');
+				}
+
+			}
+
+			function checkPlatform() {
+				if(/android/i.test(navigator.userAgent)) {
+					//alert("This is Android'browser.")//这是Android平台下浏览器
+					isAndroid = true;
+					mui.toast('android');
+					console.log("android");
+				}
+				if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+					//alert("This is iOS'browser.");//这是iOS平台下浏览器
+					isIOS = true;
+					mui.toast('ios');
+					console.log("ios");
+					//					window.location = "https://itunes.apple.com/cn/app/id1384882080?mt=8"
+				}
+				if(/Linux/i.test(navigator.userAgent)) {
+					//          alert("This is Linux'browser.");//这是Linux平台下浏览器
+				}
+				if(/Linux/i.test(navigator.platform)) {
+					//          alert("This is Linux operating system.");//这是Linux操作系统平台
+				}
+				if(/MicroMessenger/i.test(navigator.userAgent)) {
+					//          alert("This is MicroMessenger'browser.");//这是微信平台下浏览器
+					isWeiXin = true;
+					console.log("微信");
+				}
+			}
+
+		});
+	</script>
+
+</html>

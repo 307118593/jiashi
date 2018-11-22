@@ -1,0 +1,198 @@
+html,
+body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+.hd-bg {
+	background-size: 100%;
+	width: 100%;
+}
+
+.hd-top {
+	text-align: center;
+	padding-top: 2rem;
+	padding-bottom: 0.5rem;
+	background-attachment: fixed;
+}
+
+.hd-center {
+	text-align: center;
+	padding: 2rem;
+}
+
+
+
+.hd_title_text {
+	color: white;
+}
+
+.hd_part_titile {
+	background-color: #fdad45;
+	border-radius: 6px;
+	color: white;
+	font-weight: bold;
+	padding: 5px;
+	margin-right: 0.3rem;
+}
+
+.hd-part {
+	margin-top: 1rem;
+	width: 100%;
+}
+
+.hd_part_desc {
+	color: white;
+	margin-left: 1rem;
+}
+
+.hd_part_right {
+	margin-left: 0.3rem;
+}
+
+.hd_part_content {
+	color: white;
+	margin-top: 1.5rem;
+}
+
+.part-content-item {
+	position: relative;
+}
+
+.part-content {
+	width: 100%;
+	padding-top: 1.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	margin-top: 2rem;
+	text-align: center;
+	align-items: center;
+	border-radius: 6px;
+	background-color: white;
+}
+
+.part-content-title {
+	position: absolute;
+	width: auto;
+	height: auto;
+	padding: 0.35rem;
+	top: -1rem;
+	margin-left: 1rem;
+	text-align: center;
+	background-color: #fdad45;
+	border-radius: 6px;
+	color: white;
+}
+
+.mui-btn-warning {
+	height: 2.4rem;
+	margin-left: 1rem;
+	width: 8rem;
+}
+
+.mui-input-vercode {
+	width: 100%;
+}
+
+.btn-download {
+	text-align: center;
+	background-color: #fdad45;
+	border-radius: 6px;
+	padding: 0.8rem;
+	color: white;
+	font-weight: bold;
+	font-size: 1.5rem;
+}
+
+
+
+.hd-bottom {
+	padding-left: 2rem;
+	padding-right: 2rem;
+	padding-bottom: 2rem;
+	text-align: center;
+}
+
+.hd_title_text {
+	color: white;
+}
+
+.hd_part_titile {
+	background-color: #fdad45;
+	border-radius: 6px;
+	color: white;
+	font-weight: bold;
+	padding: 5px;
+	margin-right: 0.3rem;
+}
+
+.hd-part {
+	margin-top: 1rem;
+	width: 100%;
+}
+
+.hd_part_desc {
+	color: white;
+	margin-left: 1rem;
+}
+
+.hd_part_right {
+	margin-left: 0.3rem;
+}
+
+.hd_part_content {
+	color: white;
+	margin-top: 1.5rem;
+}
+
+.part-content-item {
+	position: relative;
+}
+
+.part-content {
+	width: 100%;
+	padding-top: 1.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	margin-top: 2rem;
+	text-align: center;
+	align-items: center;
+	border-radius: 6px;
+	background-color: white;
+}
+
+.part-content-title {
+	position: absolute;
+	width: auto;
+	height: auto;
+	padding: 0.35rem;
+	top: -1rem;
+	margin-left: 1rem;
+	text-align: center;
+	background-color: #fdad45;
+	border-radius: 6px;
+	color: white;
+}
+
+.mui-btn-warning {
+	height: 2.4rem;
+	margin-left: 1rem;
+}
+
+.mui-input-vercode {
+	width: 100%;
+}
+
+.btn-download {
+	text-align: center;
+	background-color: #fdad45;
+	border-radius: 6px;
+	padding: 0.8rem;
+	color: white;
+	font-weight: bold;
+	font-size: 1.5rem;
+}

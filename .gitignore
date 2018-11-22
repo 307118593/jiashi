@@ -1,0 +1,8 @@
+public/upload/*.png
+public/upload/*.jpg
+public/upload/*.gif
+public/uploads/*.png
+
+npm-debug.log
+yarn-error.log
+.env

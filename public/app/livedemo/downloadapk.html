@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>下载应用</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!-- 状态栏的值可能为black, default, black-translucent -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<!-- UC应用模式 -->
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<!-- QQ强制全屏 -->
+		<meta name="x5-fullscreen" content="true">
+		<!-- QQ应用模式 -->
+		<meta name="x5-page-mode" content="app">
+		<!-- 是针对一些老的不识别viewport的浏览器，列如黑莓 -->
+		<meta name="HandheldFriendly" content="true">
+		<!-- 微软的老式浏览器 -->
+		<meta name="MobileOptimized" content="320">
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta name="format-detection" content="telephone=no, email=no" />
+		<script type="text/javascript" src="js/qrcode.js"></script>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<style type="text/css">
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				margin: 0;
+				background-color: white;
+				position: relative;
+				
+			}
+			
+			.mui-content {
+				width: 100%;
+				height: 100%;
+				background-color: white;
+			}
+			
+			.hd-bg {
+				text-align: center;
+			}
+			
+			.btn-download {
+				text-align: center;
+				background-color: #02c170;
+				border-radius: 6px;
+				padding: 0.8rem;
+				color: white;
+				font-size: 1.5rem;
+			}
+			
+			.hd-bottom {
+				padding-left: 2rem;
+				padding-right: 2rem;
+				margin-bottom: 1rem;
+				margin-top: 2rem;
+			}
+			
+			.logo {
+				width: 6rem;
+			}
+			
+			.recode {
+				width: 10rem;
+			}
+			
+			.hd-top {
+				text-align: center;
+				width: 100%;
+			}
+			
+			.app-title {
+				padding: 0.566666rem;
+			}
+			
+			h3,
+			p {
+				color: white;
+			}
+			
+			.app-desc {
+				padding-left: 2rem;
+				padding-right: 2rem;
+				text-indent: 2rem;
+				color: gray;
+			}
+			
+			
+			
+			
+		
+			.icon-down{
+				width: 20px;
+				height: 20px;
+				margin-left: 1rem;
+			}
+			#masking{
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				bottom: 0;
+				position:fixed;
+			    left:0;
+			    top:0;
+			    opacity:.5;
+			    background:#999;
+			    z-index:998;
+			    pointer-events: none; 
+
+			}
+			#maskingtext{
+				text-align: center;
+				margin-top: 5rem;
+				position: absolute;
+				z-index:998;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				top:2rem;
+			}
+			
+			#maskingtext p{
+				color: #FFFFFF;
+				font-size: 1.2rem;
+			}
+			.top-icon{
+				width: 40px;
+				height: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<div class="mui-content">
+			<div class="hd-bg ">
+				
+				<img class="hd-top" src="img/bg_down.png"/>
+			
+			</div>
+			<div class="hd-bg">
+				<p class="app-desc">
+					家视透明装饰系统是专门为装饰公司和装饰业主量身定制的装饰项目管理系统，让家庭装修更透明、更方便！ </p>
+				
+			
+			</div>
+				
+			<div class="hd-bg hd-bottom">
+
+				<div class="btn-download" id="downapk">
+					立即下载<img class="icon-down" src="img/icon_down.png"/>
+				</div>
+			</div>
+
+			<div class="hd-bg hd-recode">
+				<p class="recode-text">—— 或扫一扫 ——</p>
+				<!--<img class="logo recode" src="img/code.png" />-->
+				<div id="qrcode" >
+					
+				</div>
+			</div>
+			<p class="appfooter">
+			<a class="footer" href="https://web.yuegames.com/HomeEye/index.html">Copyright©浙ICP备17009786号-2</a>
+			</p>
+		
+		</div>
+		<div id="masking" >
+			
+				
+		</div>
+		<div id="maskingtext" class="mask-desc">
+			<p style="width: 100%;text-align: right;padding-right: 2rem;">
+				<img class="top-icon" src="img/top.png"/></p>
+				<p>点击右上角<span class="mui-icon mui-icon-more"></p>
+				<p>选择在浏览器打开</p>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="js/request-util.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script>
+		mui.init();
+		$(function() {
+			var request = new Request();
+
+			var $downapk = $("#downapk");
+			var $masking = $("#masking");
+			var $maskingtext = $("#maskingtext");
+			$maskingtext.hide();
+			$masking.hide();
+			var apkurl = "https://web.yuegames.com/api/update_version";
+			var isclick = false;
+			//是否为android
+			var isAndroid = false;
+			//是否为ios
+			var isIOS = false;
+			//是否为微信
+			var downloadInWeixin = false;
+			//是否为android 下载地址
+			var androidDownloadUrl = "";
+			//是否为ios 下载地址
+			var iosAppstoreUrl = "https://itunes.apple.com/us/app/%E5%AE%B6%E8%A7%86%E8%A3%85%E4%BF%AE%E7%9B%B4%E6%92%AD/id1439192101?mt=8&uo=4";
+			/* 判断是否为微信环境 */
+			var isWeiXin = navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1 ? true : false;
+			checkPlatform();
+			getapk();
+			$downapk.click(function() {
+				if(!isclick) {
+					isclick = true;
+					downloadApp();
+				}
+			});
+
+			function getapk() {
+				var para = {};
+
+				request.request(apkurl, para, "POST", function(data) {
+					var versiondata = data.data;
+					var error = data.error;
+					var mes = data.mes;
+					isclick = false;
+					if(error == 0) {
+						if(isIOS) {
+							iosAppstoreUrl = versiondata.iosUrl;
+							creactRecode(iosAppstoreUrl);
+						}else{
+							androidDownloadUrl = versiondata.url;
+							creactRecode(androidDownloadUrl);
+						}
+						
+					} else {
+						mui.toast(mes);
+						console.log("没有信息");
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+					mui.toast("请求失败：" + errorThrown);
+					isclick = false;
+				});
+			}
+
+			function creactRecode(url) {
+				var qrcode = new QRCode(document.getElementById("qrcode"), {
+					text: url,
+					width: 128,
+					height: 128,
+					colorDark: "#000000",
+					colorLight: "#ffffff",
+				
+					
+				});
+			}
+			/* 点击下载按钮 */
+			function downloadApp() {
+				// 微信环境 
+
+				if(isAndroid) {
+					// 微信环境   
+					//					if(isWeiXin) {
+					//						downloadInWeixin = true
+					//						window.location.hash = 'download'
+					//						// 改变hash，便于浏览器打开时直接下载安卓包 
+					//						return
+					//					}
+					// 安卓包下载地址 
+					window.location.href = androidDownloadUrl
+				} else if(isIOS) {
+					// 微信环境   
+					//					if(isWeiXin) {
+					//						downloadInWeixin = true
+					//						window.location.hash = 'download'
+					//						// 改变hash，便于浏览器打开时直接跳转AppStore 
+					//						return
+					//					}
+					// 苹果商店链接地址
+					window.location.href = iosAppstoreUrl
+				} else {
+					window.location.href = androidDownloadUrl
+				}
+
+			}
+
+			function checkPlatform() {
+				if(/android/i.test(navigator.userAgent)) {
+					//alert("This is Android'browser.")//这是Android平台下浏览器
+					isAndroid = true;
+					mui.toast('android');
+					console.log("android");
+				}
+				if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+					//alert("This is iOS'browser.");//这是iOS平台下浏览器
+					isIOS = true;
+					mui.toast('ios');
+					console.log("ios");
+					//					window.location = "https://itunes.apple.com/cn/app/id1384882080?mt=8"
+				}
+				if(/Linux/i.test(navigator.userAgent)) {
+					//          alert("This is Linux'browser.");//这是Linux平台下浏览器
+				}
+				if(/Linux/i.test(navigator.platform)) {
+					//          alert("This is Linux operating system.");//这是Linux操作系统平台
+				}
+				if(/MicroMessenger/i.test(navigator.userAgent)) {
+					//          alert("This is MicroMessenger'browser.");//这是微信平台下浏览器
+					isWeiXin = true;
+					$maskingtext.show();
+					$masking.show();
+					console.log("微信");
+//					mui.alert('点击右上角图标，选择“在浏览器打开”', '提示', function() {
+//					
+//				});
+				}
+			}
+
+		});
+	</script>
+
+</html>

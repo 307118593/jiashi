@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>邀请体验,扫码分享</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	
+		<link rel="stylesheet" href="../css/mui.min.css" />
+		<link rel="stylesheet" href="../css/sharecss.css" />
+	
+		<style type="text/css">
+		
+			.mui-content{
+				background-image: url(../img/bg_register.png) ;
+				background-size: 100%;
+				background-color: #ff505e;
+			}
+			
+			#qrcode {
+				width: 150px;
+				height: 150px;
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+				border: solid 2px #02c170;
+				padding: 10px;
+				border-radius: 5px;
+			}
+			
+			#qrcode img {
+				text-align: center;
+			}
+			
+			.recode-text {
+				color: gray;
+				text-align: center;
+			}
+			
+			.hd-recode {
+				width: 100%;
+		
+				text-align: center;
+				padding: 2rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="hd-bg hd-top">
+				<div class="hd_title">
+					<h2 class="hd_title_text title_text">华派公司诚邀您</h2>
+					<h4 class="hd_title_text title_text_alias">体验现场装修直播</h4>
+
+				</div>
+				<div class="hd-part">
+					<h6 class="hd_part_desc">
+						<span class="hd_part_titile">
+							限时优享
+						</span>
+							3重优惠好礼<span class="hd_part_right">透明装修大礼包等着你</span>
+						</h6>
+				</div>
+				<h3 class="hd_part_content">
+					新手好礼相送
+				</h3>
+			</div>
+			<div class="hd-bg hd-center">
+				
+					<div class="part-content-item">
+
+					<div class="part-content">
+						装修直播，远程监控，工程全透明					</div>
+					<div class="part-content-title">
+						第一重好礼
+					</div>
+				</div>
+				<div class="part-content-item">
+
+					<div class="part-content">
+						装修案例评鉴，最新流行风格掌控					</div>
+					<div class="part-content-title">
+						第二重好礼
+					</div>
+				</div>
+				<div class="part-content-item">
+
+					<div class="part-content">
+						华派装饰最新活动，资讯第一时间知道					</div>
+					<div class="part-content-title">
+						第三重好礼
+					</div>
+				</div>
+			</div>
+			<div class="hd-bg hd-recode">
+				<p class="recode-text" style="color: #02c170;margin-bottom: 0.3rem;">扫一扫下载智家视APP</p>
+				<!--<img class="logo recode" src="img/code.png" />-->
+				<div id="qrcode">
+
+				</div>
+			</div>
+
+		</div>
+	</body>
+	<script type="text/javascript" src="../js/qrcode.js"></script>
+	<script>
+		creactRecode("https://www.homeeyes.cn/app/livedemo/hpinvite.html");
+
+		function creactRecode(url) {
+			var qrcode = new QRCode(document.getElementById("qrcode"), {
+				text: url,
+				width: 128,
+				height: 128,
+				colorDark: "#000000",
+				colorLight: "#ffffff",
+
+			});
+		}
+	</script>
+	
+</html>

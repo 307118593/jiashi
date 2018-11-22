@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<title>装修直播</title>
+		<style>
+			body,
+			html,
+			.mui-content {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				text-align: center;
+			}
+			
+			video {
+				max-width: 1200px;
+				width: 100%;
+			}
+			
+			.content {
+				height: auto;
+			}
+			
+			.live-content {
+				text-align: left;
+			}
+			
+			.appfooter {
+				position: absolute;
+				bottom: 0;
+			}
+		</style>
+	</head>
+	<script>
+	</script>
+
+	<body>
+		<div class="mui-content">
+			<div id="content" class="content">
+
+			</div>
+			<div class="live-content" style="padding: 1rem;">
+				<h4>直播简介</h4>
+				<p>透明装修直播，让装修更加放心，流程监控，项目监管一个不漏。</p>
+			</div>
+			<div class="hd-bg hd-recode">
+				<p class="recode-text" style="color: #02c170;margin-bottom: 0.3rem;">扫一扫下载智家视APP</p>
+				<!--<img class="logo recode" src="img/code.png" />-->
+				<div id="qrcode">
+
+				</div>
+			</div>
+			<p class="appfooter">
+				<a class="footer" href="https://web.yuegames.com/HomeEye/index.html">Copyright©浙ICP备17009786号-2</a>
+			</p>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-3.1.1.js"></script>
+	<script type="text/javascript" src="js/request-util.js"></script>
+	<script type="text/javascript" src="js/qrcode.js"></script>
+	<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
+
+	<script>
+		$(function() {
+			var request = new Request();
+			var value = request.getnavivalues();
+			var mac = value["mac"];
+			var invitation = value["invitation"];
+			var showUrl = "https://web.yuegames.com/app/livedemo/index.html?invitation=";
+			console.log("直播源：" + mac);
+			if(invitation != undefined) {
+				showUrl = showUrl + invitation;
+			} else {
+				showUrl = showUrl + 2;
+			}
+
+			creactRecode(showUrl);
+			var $content = $('#content');
+			if(mac != undefined) {
+				comment(mac);
+			} else {
+				comment("C15769474");
+			}
+
+			function comment(mac) {
+
+				var url = "https://web.yuegames.com/api/getH5Address";
+				var para = {};
+
+				para.mac = mac;
+				request.request(url, para, "POST", function(data) {
+
+					var lives = data.data;
+					if(lives != undefined) {
+
+						var htmlstr = "<video id='myPlayer' poster='' controls playsInline webkit-playsinline autoplay>" +
+							"<source id='rtmpurl' src='" + lives.rtmp + "' type='application/x-mpegURL' />" +
+							"<source id='httpurl' src='" + lives.hls + "'/></video>";
+						$content.html(htmlstr);
+						console.log("请求成功：" + lives.rtmp);
+						var player = new EZUIPlayer('myPlayer');
+						player.on('error', function() {
+							console.log('error');
+						});
+						player.on('play', function() {
+							console.log('play');
+						});
+						player.on('pause', function() {
+							console.log('pause');
+						});
+					} else {
+						console.log("没有直播");
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+
+				});
+			}
+
+			function creactRecode(url) {
+				var qrcode = new QRCode(document.getElementById("qrcode"), {
+					text: url,
+					width: 128,
+					height: 128,
+					colorDark: "#000000",
+					colorLight: "#ffffff",
+
+				});
+			}
+
+		});
+	</script>
+
+</html>

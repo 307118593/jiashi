@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<title>消息详情</title>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<style type="text/css">
+			.cell_item_text {
+				padding: 10px;
+				background: white;
+				border-bottom: gainsboro 1px solid ;
+				
+				
+			}
+			.title_text{
+				font-size: 1rem;
+				color: #333;
+				font-weight: bold;
+			}
+			.title_desc{
+				font-size: 1rem;
+				color: #333;
+			}
+			.message-desc{
+				padding: 5px;
+				font-size: 1rem;
+				color: #333;
+			}
+			.message-img{
+				width: 100%;
+				border-radius: 2px;
+				
+			}
+			.text-message{
+				padding-left: 2rem;
+				padding-right: 1rem;
+				padding-bottom: 0.5rem;
+				background: white;
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div class="cell_item_text">
+				<p><span class="title_text">发送主题：</span><span class="title_desc" id="title">未知</span></p>
+			</div>
+			<div class="cell_item_text">
+				<p><span class="title_text">发&nbsp;&nbsp;送&nbsp;&nbsp;人：</span><span class="title_desc" id="name">未知</span></p>
+			</div>
+			<div class="cell_item_text">
+				<p><span class="title_text">发送时间：</span><span id="date" class="title_desc">2018/11/12</span></p>
+			</div>
+			<div class="cell_item_text">
+				<p><span class="title_text">消息内容：</span></p>
+			</div>
+			<div class="text-message">
+				<p class="message-desc" id="content">消息内容</p>
+				<img class="message-img" id="image" src="img/img2.jpg"/>
+				
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="js/request-util.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script>
+		mui.init();
+		$(function() {
+			var request = new Request();
+			var value = request.getnavivalues();
+			var uid = value["uid"];
+			var mid = value["mid"];
+			var $title = $("#title"),
+				$name = $("#name"),
+				$date= $("#date"),
+				$content = $("#content"),
+				$image = $("#image");
+			console.log("直播源：" + uid);
+			var url = "http://web.yuegames.com/api/getMesDetail";
+			if(uid != undefined&&mid != undefined) {
+				comment(uid,mid);
+			} else {
+				comment(16,1);
+			}
+
+			function comment(uid,mid) {
+
+				var para = {};
+				para.uid = uid;
+				para.mid = mid;
+			
+				request.request(url, para, "POST", function(data) {
+					var msgdata = data.data;
+					console.log(msgdata)
+					if(data.error== 0){
+						
+							$title.text(msgdata.title);
+							$date.text(msgdata.sendtime);  
+							$content.text(msgdata.content);
+							
+							if(msgdata.image!=undefined){
+								$image.attr("src", msgdata.image);
+							}
+							
+							if(msgdata.name!=undefined){
+								$name.text(msgdata.name);
+							}
+							
+				} else {
+						if(data.mes!=undefined){
+							mui.toast(data.mes);
+						}else{
+							mui.toast("请求失败");
+						}
+						
+					}
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+					mui.toast("请求失败");
+
+				});
+			}
+
+		});
+	</script>
+
+</html>

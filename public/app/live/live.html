@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+    <meta name="renderer" content="webkit">
+    <title>测试页面</title>
+    <style>
+        body{margin:0;text-align: center;}
+        video{max-width: 1200px;width: 100%;}
+    </style>
+</head>
+<script>
+</script>
+<body>
+<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
+
+<video id="myPlayer" poster="" controls playsInline webkit-playsinline autoplay>
+    <source src="rtmp://rtmp.open.ys7.com/openlive/df04621526534efd89fee361859d12e1" type="" />
+    <source src="http://hls.open.ys7.com/openlive/df04621526534efd89fee361859d12e1.m3u8" type="application/x-mpegURL" />
+
+</video>
+
+<script>
+    var player = new EZUIPlayer('myPlayer');
+    player.on('error', function(){
+        console.log('error');
+    });
+    player.on('play', function(){
+        console.log('play');
+    });
+    player.on('pause', function(){
+        console.log('pause');
+    });
+
+</script>
+</body>
+</html>
+
+<!-- "deviceSerial": "C15769474",
+"channelNo": 1,
+"deviceName": "杭州办公室",
+"hls": "http://hls.open.ys7.com/openlive/df04621526534efd89fee361859d12e1.m3u8",
+"hlsHd": "http://hls.open.ys7.com/openlive/df04621526534efd89fee361859d12e1.hd.m3u8",
+"rtmp": "rtmp://rtmp.open.ys7.com/openlive/df04621526534efd89fee361859d12e1",
+"rtmpHd": "rtmp://rtmp.open.ys7.com/openlive/df04621526534efd89fee361859d12e1.hd",
+"flvAddress": "https://flvopen.ys7.com:9188/openlive/df04621526534efd89fee361859d12e1.flv",
+"hdFlvAddress": "https://flvopen.ys7.com:9188/openlive/df04621526534efd89fee361859d12e1.hd.flv",
+"status": 1,
+"exception": 0,
+"ret": "200",
+"desc": "获取成功!" -->

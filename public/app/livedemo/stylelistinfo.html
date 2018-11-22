@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<title>装修直播</title>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+		<style type="text/css">
+			.hd_group {
+				background-image: url(img/bg_share.png);
+				background-size: 100%;
+				display: flex;
+				height: 300px;
+				width: 100%;
+			}
+			
+			.hd_photo {
+				width: 116px;
+				height: 116px;
+				border-radius: 16px;
+			}
+			
+			.case-title {
+				margin-top: 2px;
+				background-color: white;
+				padding: 10px;
+				font-size: 1rem;
+			}
+			
+			.pg-title {
+				font-size: 1rem;
+				padding: 0;
+			}
+			
+			.case-text {
+				padding: 0;
+				margin-top: 5px;
+			}
+			
+			.hd_title {
+				width: auto;
+			}
+			
+			.style_infomation {
+				display: flex;
+				margin-left: auto;
+				margin-right: auto;
+				margin-top: 100px;
+			}
+			
+			.hd_title_desc {
+				text-align: left;
+				color: gainsboro;
+			}
+			
+			.hd_title_text {
+				padding: 0;
+			}
+			
+			.page-content {
+				width: 100%;
+				position: absolute;
+				top: 250px;
+				padding-left: 24px;
+				padding-right: 24px;
+				padding-bottom: 3rem;
+			}
+			
+			.pg-content-desc {
+				width: 100%;
+				background: rgba(255, 255, 255, 1);
+				box-shadow: -1px -6px 8px 0px rgba(120, 120, 120, 0.3);
+				border-radius: 30px;
+				padding: 1rem;
+			}
+			
+			.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item {
+				border-top: 1px solid #c8c7cc;
+				border-bottom: 0px solid #c8c7cc;
+			}
+			
+			.item-cell {
+				display: block;
+			}
+			
+			.item-cell-desc {
+				width: 100%;
+				padding: 10px;
+			}
+			
+			.style_type {
+				color: #00CD76;
+				margin-left: 10px;
+				border: 1px solid #00CD76;
+				border-radius: 3px;
+				padding: 1px 3px;
+			}
+			
+			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+				color: #00CD76;
+				border-bottom: 2px solid #007aff;
+				background: 0 0;
+			}
+			
+			.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar {
+				background-color: #00CD76;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="page">
+			<div class="hd_group">
+				<div class="style_infomation">
+					<img class="hd_photo" src="img/haha.jpg" id="avatar" />
+					<div class="hd_title">
+						<p class="hd_title_desc">
+							<span class="hd_title_text hd_name" id="name">员工</span>
+							<span id="year">5</span>年
+						</p>
+						<p class="hd_title_desc">
+							<span class="hd_title_text hd_job" id="position">首席设计</span>
+							<span class="hd_title_text" id="style">现代简约</span>
+						</p>
+
+						<p class="hd_title_desc" id="content">
+							设计不是一沉不变地作秀，而是自我思想的绽放。
+						</p>
+					</div>
+				</div>
+
+			</div>
+			<div class="page-content">
+				<div class="pg-content-desc">
+					<div id="slider" class="mui-slider">
+						<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+							<a class="mui-control-item" href="#item1mobile">
+								设计案例
+							</a>
+							<a class="mui-control-item" href="#item2mobile">
+								所获荣誉
+							</a>
+							<a class="mui-control-item" href="#item3mobile">
+
+							</a>
+						</div>
+						<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+
+						<div class="mui-slider-group">
+							<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+								<ul class="pg-ul" id="cases">
+									<li class="cell-li">
+										<a href="liveplay.html">
+											<div class="item-cell">
+												<img class="item-cell-img" src="img/img2.jpg" />
+												<div class="item-cell-desc">
+													<h4 class="pg-title">
+									明月嘉苑
+								</h4>
+													<p class="pg-desc-text case-text">
+														125平方米
+													</p>
+													<p class="pg-desc-text case-text">
+														美式简约
+													</p>
+												</div>
+											</div>
+										</a>
+									</li>
+
+								</ul>
+							</div>
+							<div id="item2mobile" class="mui-slider-item mui-control-content">
+								<p class="pg-desc-text" id="honor">
+									荣获国家"设计之花"一等奖
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="js/request-util.js"></script>
+	<script type="text/javascript" src="js/mui.min.js"></script>
+	<script>
+		$(function() {
+			var request = new Request();
+			var value = request.getnavivalues();
+			var uid = value["uid"];
+			var $avatar = $("#avatar"),
+				$name = $("#name"),
+				$style = $("#style"),
+				$year = $("#year"),
+				$content = $("#content"),
+				$position = $("#position"),
+				$honor = $("#honor"),
+				$cases = $("#cases");
+			console.log("直播源：" + uid);
+
+			if(uid != undefined) {
+				comment(uid);
+			} else {
+				comment(16);
+			}
+
+			function comment(uid) {
+
+				var url = "https://web.yuegames.com/api/designer_detail";
+				var para = {};
+				para.uid = uid;
+				console.log(uid);
+				request.request(url, para, "POST", function(data) {
+
+					var stylesdata = data.data;
+					if(stylesdata != undefined) {
+						var designer = stylesdata.designer;
+						if(designer != undefined) {
+							$avatar.attr("src", designer.avatar);
+							$name.text(designer.name);
+							$style.text(designer.style);
+							$year.text(designer.year);
+							$content.text(designer.content);
+							$position.text(designer.position);
+							$honor.text(designer.honor);
+						}
+						var cases = stylesdata.cases;
+						var casehtml = "";
+						$.each(cases, function(i, item) {
+							casehtml += setCases(item);
+						});
+						$cases.html(casehtml);
+					} else {
+						console.log("没有直播");
+					}
+
+				}, function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log("请求失败：" + errorThrown);
+
+				});
+			}
+
+			function setCases(data) {
+				return "<li class='cell-li'><a href='" + data.url + "'>" +
+					"<div class='item-cell'>" +
+					"<img class='item-cell-img' src='" + data.photo + "' />" +
+					"<div class='item-cell-desc'><h4 class='pg-title'>" +
+					data.title +
+					"</h4><p class='pg-desc-text case-text'>" +
+					data.area +
+					"平方米<span class='style_type'>" +
+					data.style +
+					"</span></p></div></div></a></li>";
+			}
+		});
+	</script>
+
+</html>

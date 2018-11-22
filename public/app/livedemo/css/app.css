@@ -1,0 +1,122 @@
+body,
+html {
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	/*overflow-y: hidden;
+	overflow-x: hidden;*/
+	width: 100%;
+	height: 100%;
+}
+
+.page {
+	background-color: gainsboro;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.hd_title {
+	width: 100%;
+	text-align: center;
+	padding: 5px;
+}
+
+h3,
+p,
+h4 {
+	margin: 0;
+	text-align: left;
+}
+
+a {
+	color: #333;
+	text-decoration: none;
+}
+
+.hd_title_desc {
+	padding: 2px;
+	text-align: center;
+}
+
+.hd_title_text {
+	color: white;
+	padding: 5px;
+}
+
+.hd_name {
+	font-size: 1.4rem;
+}
+
+.pg-content {
+	padding: 10px;
+	background-color: white;
+}
+
+.pg-title {
+	padding: 5px;
+}
+
+.pg-desc-text {
+	padding: 10px;
+}
+
+.pg-ul {
+	list-style: none;
+	margin: 5px 0;
+	padding: 0;
+	width: 100%;
+}
+
+.item-cell {
+	display: flex;
+	padding: 10px;
+	background-color: white;
+	margin-bottom: 5px;
+}
+
+.item-cell-img {
+	width: 70%;
+	height: 150px;
+}
+
+.item-cell-desc {
+	width: 30%;
+	padding: 10px;
+}
+
+.appfooter {
+	margin-top: 2rem;
+	text-align: center;
+	width: 100%;
+}
+
+.footer {
+	color: gray;
+}
+
+.recode-text {
+	color: gray;
+	text-align: center;
+}
+
+.hd-recode {
+	width: 100%;
+	margin-top: 2rem;
+	text-align: center;
+}
+
+#qrcode {
+	width: 150px;
+	height: 150px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	border: solid 2px #02c170;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+#qrcode img {
+	text-align: center;
+}

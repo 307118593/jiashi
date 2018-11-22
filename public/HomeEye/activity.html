@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新服务</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+		<style type="text/css">
+			.padded-img {
+				max-width: 200px;
+				height: auto;
+			}
+			
+			.title {
+				text-align: center;
+				margin-top: 10px;
+			}
+			
+			.title .ch {
+				font-size: 1.5em;
+				font-weight: bold;
+				color: #222222;
+			}
+			
+			.mui-media p {
+				color: #222222;
+			}
+			
+			.mui-media h6 {
+				font-size: 1.2em;
+				font-weight: bold;
+				color: #222222;
+			}
+			
+			.mui-media-image {
+				width: 100%;
+			}
+			
+			.service-value {
+				margin-top: 20px;
+			}
+			
+			.mui-grid-view.mui-grid-9 .mui-media {
+				color: white;
+			}
+			
+			.mui-btn-block {
+				padding: 5px;
+				width: 80%;
+				margin-left: auto;
+				margin-right: auto;
+			}
+			
+			.mui-input-row label {
+				padding: 11px 0px 11px 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		
+		<div class="mui-content" id="app">
+			<div class="mui-card">
+				<div class="mui-card-header mui-card-media" style="height:40vw;background-image:url(img/cbd.jpg)"></div>
+				<div class="mui-card-content">
+					<div class="mui-card-content-inner">
+						<h4>{{message}}</h4>
+						<h5>带来全新用户体验</h5>
+						<p style="color: #333;">家视智装 服务管理系统依托全新的管理思想，先进的信息技术 为家装企业创建全新的高效协同办公平台 让家装过程环节的沟通协作畅通无阻! 为家装环境组织构建一个内部规范、灵捷、高效的业务流程 让家装环节的制度流程落地有效执行 确保了数据信息在传递过程中的准确性、时效性和有效性 帮助企业快速反应、紧密协作、良好运营，全面提升核心竞争力。
+						</p>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="mui-card">
+				<div class="title">
+					<p class="ch">家装现状</p>
+					<p class="en">Present situation</p>
+					<div class="line"></div>
+				</div>
+				<div class="mui-content-padded">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell mui-media">
+							<img class="padded-img" data-preview-src="" data-preview-group="1" src="https://www.hesm.cn/images/ps1.jpg">
+							<h6>项目难管</h6>
+							<p>项目常顾此失彼，项目实施一团糟，设计出图慢，客户迟迟不落单，项目实时困难。人员、工期、质量难以管控，沟通不及时，信息对不上，工地材料出错，返工，推诿扯皮。</p>
+						</li>
+						<li class="mui-table-view-cell mui-media">
+							<img class="padded-img" data-preview-src="" data-preview-group="1" src="https://www.hesm.cn/images/ps2.jpg">
+							<h6>成本高，效率低</h6>
+							<p>业务人员成本高，出单率低，管理难度大，与第三方平台合作，有偿获得客户源，利润低，更有可能合作不成打水漂。甚至将自己的公司变成了其他平台的项目经理，得不偿失。</p>
+						</li>
+						<li class="mui-table-view-cell mui-media">
+							<img class="padded-img" data-preview-src="" data-preview-group="1" src="https://www.hesm.cn/images/ps3.jpg">
+							<h6>客户不满</h6>
+							<p>以签单为导向，低价让利吸引用户。一是漏项再增项，低开高走；二是低价低质，偷工减料，节约成本。影响用户体验，趋近于一锤子买卖，使其获客越来越难，进入恶性循环。</p>
+						</li>
+						<li class="mui-table-view-cell mui-media">
+							<img class="padded-img" data-preview-src="" data-preview-group="1" src="https://www.hesm.cn/images/ps4.jpg">
+							<h6>私单跑单严重</h6>
+							<p>公司员工流动性大，客户跟进难接替，客户跟进不及时，服务质量上不去，客户资源流失浪费严重，私单和跑单问题严重。</p>
+						</li>
+						<li class="mui-table-view-cell mui-media">
+							<img class="padded-img" data-preview-src="" data-preview-group="1" src="https://www.hesm.cn/images/ps5.jpg">
+							<h6>工地难控</h6>
+							<p>工地多，人员少，工地分散、情况复杂、难以掌控；项目经理和施工人员游离在监控范围之外，工期无法保障，工程质量多有偏差。</p>
+						</li>
+						<li class="mui-table-view-cell mui-media">
+							<img class="padded-img" data-preview-src="" data-preview-group="1" src="https://www.hesm.cn/images/ps6.jpg">
+							<h6>成本难清</h6>
+							<p>财务数据理不清，财务结算不准确，实际盈亏成了一本糊涂账。多个项目同时进行、单个周期冗长、财务数据不及时、统计分析不到位，好像从未算清盈亏详情，决策只能靠拍脑袋。</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="service-value">
+				<div class="title">
+					<p class="ch">更优质的服务</p>
+
+					<div class="line"></div>
+				</div>
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<img class="mui-media-image" src="img/index.jpg" />
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<img class="mui-media-image" src="img/index1.jpg" />
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<img class="mui-media-image" src="img/index2.jpg" />
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<img class="mui-media-image" src="img/index3.jpg" />
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<img class="mui-media-image" src="img/index4.jpg" />
+					</li>
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+						<img class="mui-media-image" src="img/index5.jpg" />
+					</li>
+				</ul>
+			</div>
+			<div class="mui-card" style="margin: 5px;">
+				<form class="mui-input-group">
+					<div class="title">
+						您的装修信息
+					</div>
+					<div class="mui-input-row">
+						<label>城市</label>
+						<input type="text" placeholder="请选择所在城市">
+					</div>
+					<div class="mui-input-row">
+						<label>面积</label>
+						<input type="text" placeholder="请输入房屋面积">
+					</div>
+					<div class="mui-input-row">
+						<label>户型</label>
+						<input type="text" placeholder="请选择房屋户型">
+					</div>
+					<div class="mui-input-row" style="display: flex;">
+
+						<div class="mui-radio mui-left">
+							<label>新房装修</label>
+							<input name="radio1" type="radio">
+						</div>
+						<div class="mui-radio mui-left">
+							<label>旧房翻新</label>
+							<input name="radio1" type="radio">
+						</div>
+
+					</div>
+					<div class="mui-input-row">
+						<label>手机</label>
+						<input type="text" placeholder="输入手机我们及时联系您">
+					</div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary mui-btn-block">立即体验</button>
+					</div>
+				</form>
+			</div>
+
+		</div>
+		<script>
+			new Vue({
+				el: '#app',
+				data: {
+					message: '家视APP'
+				}
+			})
+		</script>
+	</body>
+
+</html>
