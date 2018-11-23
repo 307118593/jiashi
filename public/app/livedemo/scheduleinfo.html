@@ -375,7 +375,9 @@
 			var uid = value["uid"];
 			var pro_id = value["pro_id"];
 			console.log("直播源：" + uid);
-			var baseHeadurl = "https://web.yuegames.com/app/logo.png";
+			var homeurl="https://www.homeeyes.cn";	
+			var baseHeadurl = homeurl+"/app/logo.png";
+			var Flowurl = homeurl+"/api/getMyProjectFlow1015";
 			if(pro_id != undefined && uid != undefined) {
 				comment(pro_id, uid);
 			} else {
@@ -384,11 +386,11 @@
 
 			function comment(pro_id, uid) {
 
-				var url = "https://web.yuegames.com/api/getMyProjectFlow1015";
+				
 				var para = {};
 				para.pro_id = pro_id;
 				para.uid = uid;
-				request.request(url, para, "POST", function(data) {
+				request.request(Flowurl, para, "POST", function(data) {
 
 					var infomation = data.data;
 					if(infomation != undefined) {

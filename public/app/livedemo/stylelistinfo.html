@@ -20,9 +20,9 @@
 			}
 			
 			.hd_photo {
-				width: 116px;
-				height: 116px;
-				border-radius: 16px;
+				width: 120px;
+				height: 146px;
+				border-radius: 6px;
 			}
 			
 			.case-title {
@@ -43,18 +43,18 @@
 			}
 			
 			.hd_title {
-				width: auto;
+				width: 100%;
 			}
 			
 			.style_infomation {
-				display: flex;
+				display: block;
 				margin-left: auto;
 				margin-right: auto;
-				margin-top: 100px;
+				margin-top: 40px;
 			}
 			
 			.hd_title_desc {
-				text-align: left;
+				text-align: center;
 				color: gainsboro;
 			}
 			
@@ -65,9 +65,9 @@
 			.page-content {
 				width: 100%;
 				position: absolute;
-				top: 250px;
-				padding-left: 24px;
-				padding-right: 24px;
+				top: 280px;
+				padding-left: 20px;
+				padding-right: 20px;
 				padding-bottom: 3rem;
 			}
 			
@@ -75,14 +75,11 @@
 				width: 100%;
 				background: rgba(255, 255, 255, 1);
 				box-shadow: -1px -6px 8px 0px rgba(120, 120, 120, 0.3);
-				border-radius: 30px;
-				padding: 1rem;
+				border-radius: 20px;
+				padding: 0.555rem;
 			}
 			
-			.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item {
-				border-top: 1px solid #c8c7cc;
-				border-bottom: 0px solid #c8c7cc;
-			}
+			
 			
 			.item-cell {
 				display: block;
@@ -90,7 +87,10 @@
 			
 			.item-cell-desc {
 				width: 100%;
-				padding: 10px;
+				padding-left: 5px;
+				padding-right: 5px;
+				padding-top: 2px;
+				padding-bottom: 0px;
 			}
 			
 			.style_type {
@@ -100,15 +100,34 @@
 				border-radius: 3px;
 				padding: 1px 3px;
 			}
-			
-			.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
-				color: #00CD76;
-				border-bottom: 2px solid #007aff;
-				background: 0 0;
+			.icon_left{
+				width: 20px;
+				height: 20px;
+				margin-right: 0.3333rem;
 			}
-			
-			.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar {
-				background-color: #00CD76;
+			.icon_year{
+				width: 15px;
+				height: 15px;
+				margin-left: 0.5333rem;
+			}
+			.mui-control-item{
+				width: 100%;
+				text-align: left;
+				padding: 5px;
+				border-bottom: solid 1px gainsboro;
+			}
+			.desc-content{
+				border-bottom: solid 1px gainsboro;
+			}
+			.item-cell-img{
+				width: 100%;
+			}
+			.cell-li{
+				border-bottom: solid 1px gainsboro;
+				
+			}
+			.item-cell{
+				padding: 5px;
 			}
 		</style>
 	</head>
@@ -121,67 +140,62 @@
 					<div class="hd_title">
 						<p class="hd_title_desc">
 							<span class="hd_title_text hd_name" id="name">员工</span>
-							<span id="year">5</span>年
+							
 						</p>
 						<p class="hd_title_desc">
 							<span class="hd_title_text hd_job" id="position">首席设计</span>
+							<img class="icon_left icon_year" src="img/icon_stylelist.png" />
+							<span id="year">5</span>年
+							
+						</p>
+						<p class="hd_title_desc">
+							
 							<span class="hd_title_text" id="style">现代简约</span>
 						</p>
-
-						<p class="hd_title_desc" id="content">
-							设计不是一沉不变地作秀，而是自我思想的绽放。
-						</p>
+					
 					</div>
 				</div>
 
 			</div>
 			<div class="page-content">
 				<div class="pg-content-desc">
-					<div id="slider" class="mui-slider">
-						<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-							<a class="mui-control-item" href="#item1mobile">
-								设计案例
-							</a>
-							<a class="mui-control-item" href="#item2mobile">
-								所获荣誉
-							</a>
-							<a class="mui-control-item" href="#item3mobile">
-
-							</a>
-						</div>
-						<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
-
-						<div class="mui-slider-group">
-							<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
-								<ul class="pg-ul" id="cases">
-									<li class="cell-li">
-										<a href="liveplay.html">
-											<div class="item-cell">
-												<img class="item-cell-img" src="img/img2.jpg" />
-												<div class="item-cell-desc">
-													<h4 class="pg-title">
+					<div class="mui-control-item" >
+						<img class="icon_left" src="img/icon_cell.png" />设计理念
+					</div>
+					<p class="pg-desc-text desc-content" id="content">
+						设计不是一沉不变地作秀，而是自我思想的绽放。
+					</p>
+					<div class="mui-control-item" >
+						<img class="icon_left" src="img/icon_cell.png" />所获荣誉
+					</div>
+					<p class="pg-desc-text desc-content" id="honor">
+						荣获国家"设计之花"一等奖
+					</p>
+					<div class="mui-control-item" >
+						<img class="icon_left" src="img/icon_cell.png" />设计案例
+					</div>
+					<ul class="pg-ul" id="cases">
+						<li class="cell-li">
+							<a href="liveplay.html">
+								<div class="item-cell">
+									<img class="item-cell-img" src="img/img2.jpg" />
+									<div class="item-cell-desc">
+										<h4 class="pg-title">
 									明月嘉苑
 								</h4>
-													<p class="pg-desc-text case-text">
-														125平方米
-													</p>
-													<p class="pg-desc-text case-text">
-														美式简约
-													</p>
-												</div>
-											</div>
-										</a>
-									</li>
+										<p class="pg-desc-text case-text">
+											125平方米
+										</p>
+										<p class="pg-desc-text case-text">
+											美式简约
+										</p>
+									</div>
+								</div>
+							</a>
+						</li>
 
-								</ul>
-							</div>
-							<div id="item2mobile" class="mui-slider-item mui-control-content">
-								<p class="pg-desc-text" id="honor">
-									荣获国家"设计之花"一等奖
-								</p>
-							</div>
-						</div>
-					</div>
+					</ul>
+					
 				</div>
 			</div>
 		</div>
@@ -211,8 +225,8 @@
 			}
 
 			function comment(uid) {
-
-				var url = "https://web.yuegames.com/api/designer_detail";
+				var homeurl = "https://www.homeeyes.cn";
+				var url = homeurl + "/api/designer_detail";
 				var para = {};
 				para.uid = uid;
 				console.log(uid);

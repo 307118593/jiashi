@@ -128,9 +128,11 @@
 				$verification = $("#verification"),
 				$getverif = $("#getverif"),
 				$downapk = $("#downapk");
-			var verifurl = "https://web.yuegames.com/api/send_mes";
-			var registerurl = "https://web.yuegames.com/api/phone_login";
-			var apkurl = "https://web.yuegames.com/api/update_version";
+			var homeurl="https://www.homeeyes.cn";	
+			var verifurl = homeurl+"/api/send_mes";
+			var registerurl = homeurl+"/api/phone_login";
+			var apkurl = homeurl+"/api/update_version";
+			var androidDownUrl=homeurl+"/app/livedemo/downloadapk.html";
 			var isclick = false;
 			//是否为android
 			var isAndroid = false;
@@ -142,7 +144,7 @@
 			var androidDownloadUrl = "";
 			//是否为ios 下载地址
 			var iosAppstoreUrl = "";
-			var androidDownUrl="https://web.yuegames.com/app/livedemo/downloadapk.html"
+		
 			/* 判断是否为微信环境 */
 			var isWeiXin = navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1 ? true : false;
 			checkPlatform();
@@ -231,8 +233,8 @@
 					var mes = data.mes;
 					isclick = false;
 					if(error == 0) {
-						mui.alert('注册成功，初始化密码为手机号后6位！', '提示', function() {
-							getapk();
+						mui.alert('注册成功，初始化密码为手机号后6位，公司邀请码：'+invitation, '提示', function() {
+							window.location.href = androidDownUrl;
 						});
 						
 					} else {

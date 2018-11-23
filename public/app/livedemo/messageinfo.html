@@ -84,7 +84,8 @@
 				$content = $("#content"),
 				$image = $("#image");
 			console.log("直播源：" + uid);
-			var url = "http://web.yuegames.com/api/getMesDetail";
+				var homeurl="https://www.homeeyes.cn";	
+			var url = homeurl+"/api/getMesDetail";
 			if(uid != undefined&&mid != undefined) {
 				comment(uid,mid);
 			} else {

@@ -129,7 +129,7 @@
 				$verification = $("#verification"),
 				$getverif = $("#getverif"),
 				$downapk = $("#downapk");
-			var homeurl="https://web.yuegames.com";	
+			var homeurl="https://www.homeeyes.cn";	
 			var verifurl =homeurl+ "/api/send_mes";
 			var registerurl =homeurl+ "/api/phone_login";
 			var apkurl =homeurl+ "/api/update_version";
@@ -234,7 +234,7 @@
 					var mes = data.mes;
 					isclick = false;
 					if(error == 0) {
-						mui.alert('注册成功，初始化密码为手机号后6位！', '提示', function() {
+						mui.alert('注册成功，初始化密码为手机号后6位，公司邀请码：'+invitation, '提示', function() {
 							window.location.href = androidDownUrl;
 						});
 						

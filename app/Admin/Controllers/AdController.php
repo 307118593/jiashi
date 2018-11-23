@@ -74,7 +74,7 @@ class AdController extends Controller
                         $column->append($collapse);
                     });
                   
-            });
+            }); 
    
         });
     }
@@ -86,6 +86,8 @@ class AdController extends Controller
         $homeurl = $request->input('homeurl');
         $content = $request->input('content');
         $address = $request->input('address');
+        $sharetitle = $request->input('sharetitle');
+        $sharecontent = $request->input('sharecontent');
         $tel = $request->input('tel');
         $file = $request->file('image');
         $logo = $request->file('logo');
@@ -115,8 +117,13 @@ class AdController extends Controller
             $data['homeurl'] = $homeurl;
             $data['address'] = $address;
             $data['tel'] = $tel;
-            $data['sharetitle'] = $sharetitle;
-            $data['sharecontent'] = $sharecontent;
+            if ($sharetitle) {
+                $data['sharetitle'] = $sharetitle;
+            }
+             if ($sharecontent) {
+                $data['sharecontent'] = $sharecontent;
+               
+            }
         // }
         $res = DB::table('admin_users')->where('id',$z_uid)->update($data);
         return Redirect('admin/ad?res='.$res);

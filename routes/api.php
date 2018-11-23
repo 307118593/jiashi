@@ -214,6 +214,8 @@ Route::any('del_staff','StaffController@del_staff');
 // 添加客户
 Route::any('add_customer','CustomerController@add_customer');
 Route::any('get_customer','CustomerController@get_customer');
+//修改客户
+Route::any('edit_customer','CustomerController@edit_customer');
 
 //萤石设备管理 --start
 //添加设备

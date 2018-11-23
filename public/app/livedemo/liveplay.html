@@ -77,7 +77,9 @@
 			var value = request.getnavivalues();
 			var mac = value["mac"];
 			var invitation = value["invitation"];
-			var showUrl = "https://web.yuegames.com/app/livedemo/index.html?invitation=";
+			var homeurl="https://www.homeeyes.cn";	
+			var showUrl = homeurl+"/app/livedemo/index.html?invitation=";
+			var h5url = homeurl+"/api/getH5Address";
 			console.log("直播源：" + mac);
 			if(invitation != undefined) {
 				showUrl = showUrl + invitation;
@@ -94,12 +96,9 @@
 			}
 
 			function comment(mac) {
-
-				var url = "https://web.yuegames.com/api/getH5Address";
 				var para = {};
-
 				para.mac = mac;
-				request.request(url, para, "POST", function(data) {
+				request.request(h5url, para, "POST", function(data) {
 
 					var lives = data.data;
 					if(lives != undefined) {
