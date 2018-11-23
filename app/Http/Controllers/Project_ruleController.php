@@ -28,7 +28,8 @@ class Project_ruleController extends Controller
 	//查询我的项目
 	public function myProject(Request $request){
 		$uid = $request->input('uid');
-		if ($uid > 0) {
+		$role = $this->getRole($uid);
+		if ($role != 1) {
 			$z_uid = DB::table('admin_users')->where('id',$uid)->value('pid');
 		}else{
 			$z_uid = $uid;
@@ -428,7 +429,7 @@ class Project_ruleController extends Controller
 			'uid'=>$uid,
 			'starttime_d'=>$starttime_d,
 			'z_uid'=>$z_uid,
-			'project_us'=>$project_us,
+			'project_us'=>json_encode($project_us),
 			'type'=>$type,
 			'area'=>$area,
 			'leader_id'=>$leader_id,

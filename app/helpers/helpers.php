@@ -34,7 +34,7 @@
                     $v = base64_decode(str_replace($result[1], '', $v));
                     $img = Image::make($v);  
                     // $ex = $v->getClientOriginalExtension();
-                    $name = $pro_id.time().rand(1,9).rand(1,9).rand(1,9).".".$result[2];
+                    $name = time().rand(1,9).rand(1,9).rand(1,9).".".$result[2];
                     $path = $uppath.$name;
                     $img->save('upload/'.$path);
                     // $image = 'bobao/'.$name;
