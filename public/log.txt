@@ -1028,3 +1028,12 @@ response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"b7c714ff1
 request body = {'to':'18205871079','templateId':'273344','appId':'8a216da864da60ef0164db1cc221016f','datas':['4146','10',]}
 request url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da8552a3cd401554350785e1294/SMS/TemplateSMS?sig=A98A94EE7A3EB7546A0555D68B7D23A7
 response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"fc2e070e70714fd48918ce45c158f019","dateCreated":"20181123130002"}}
+request body = {'to':'13968811599','templateId':'273344','appId':'8a216da864da60ef0164db1cc221016f','datas':['1335','10',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da8552a3cd401554350785e1294/SMS/TemplateSMS?sig=7605881DD7556844517679A6BA5586F5
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"90405a8141d34c6298620aa6db55155b","dateCreated":"20181124122313"}}
+request body = {'to':'13957797168','templateId':'273344','appId':'8a216da864da60ef0164db1cc221016f','datas':['6213','10',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da8552a3cd401554350785e1294/SMS/TemplateSMS?sig=D946D6B5D71AF474CDD05951F4A0145A
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"d47325629e1644039c3a4cf95f2622f7","dateCreated":"20181124122420"}}
+request body = {'to':'13957797168','templateId':'273344','appId':'8a216da864da60ef0164db1cc221016f','datas':['6531','10',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da8552a3cd401554350785e1294/SMS/TemplateSMS?sig=0E66FE81CEE8B3789237229B1A995DDB
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"207062e8f0064d80a7633d39a1b6a81f","dateCreated":"20181124122900"}}
