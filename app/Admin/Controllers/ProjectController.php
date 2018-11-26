@@ -216,7 +216,7 @@ class ProjectController extends Controller
                 // }else{
                 // }
                 $form->hidden('z_uid', '所属装修公司')->default($cid);
-                $form->text('name','项目名称*')->help('如:申花壹号院5幢110室..')->setWidth(3)->rules('required|min:3');
+                $form->text('name','项目名称*')->help('如:申花壹号院5幢110室..')->setWidth(3)->rules('required|min:2');
                 // $phones = DB::table('user')->select('id','phone','name')->get();
                 // foreach ($phones as $k => $v) {
                 //     $data[$v->id] = $v->phone.'--'.$v->name;
