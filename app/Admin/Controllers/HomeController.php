@@ -91,7 +91,14 @@ class HomeController extends Controller
                 });
             }//负责人总监结束--
                 
-
+            $content->row(function(Row $row) use($role,$cid){
+                for ($i=0; $i < 7; $i++) { 
+                    $date[$i] = date('m-d', strtotime('-'.$i.' days'));
+                }
+                // return $date;
+                $charjs = new Box('近一周用户在线时长', view('admin.chartjs.line',compact('cc','date')));
+                $row->column(6, $charjs);
+            });
         });
     }
 }

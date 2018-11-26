@@ -40,6 +40,7 @@ $('.$class').bootstrapSwitch({
 
         var pk = $(this).data('key');
         var value = $(this).val();
+
         $.ajax({
             url: "{$this->grid->resource()}/" + pk,
             type: "POST",
@@ -48,11 +49,8 @@ $('.$class').bootstrapSwitch({
                 _token: LA.token,
                 _method: 'PUT'
             },
-       
             success: function (data) {
-                
-                // toastr.success(data.message);
-                toastr.success('修改成功');
+                toastr.success(data.message);
             }
         });
     }

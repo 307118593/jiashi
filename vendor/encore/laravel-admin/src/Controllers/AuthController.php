@@ -76,21 +76,22 @@ class AuthController extends Controller
     /**
      * User setting page.
      *
-     * @return mixed
+     * @param Content $content
+     *
+     * @return Content
      */
-    public function getSetting()
+    public function getSetting(Content $content)
     {
-        return Admin::content(function (Content $content) {
-            $content->header(trans('admin.user_setting'));
-            $form = $this->settingForm();
-            $form->tools(
-                function (Form\Tools $tools) {
-                    $tools->disableBackButton();
-                    $tools->disableListButton();
-                }
-            );
-            $content->body($form->edit(Admin::user()->id));
-        });
+        $form = $this->settingForm();
+        $form->tools(
+            function (Form\Tools $tools) {
+                $tools->disableList();
+            }
+        );
+
+        return $content
+            ->header(trans('admin.user_setting'))
+            ->body($form->edit(Admin::user()->id));
     }
 
     /**
@@ -110,49 +111,50 @@ class AuthController extends Controller
      */
     protected function settingForm()
     {
-        return Administrator::form(function (Form $form) {
-            $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
-            $job = Admin::user()->job;
-            $form->display('username', trans('admin.username'));
-            $form->text('name', '姓名')->rules('required');
-            $form->image('avatar', trans('admin.avatar'))->uniqueName();
-            if ($role == 2) {
-                
-            }
-            if ($job == 3) {//设计师
-                $form->image('background','自定义背景图')->setwidth(3)->uniqueName()->help('自定义背景图,建议尺寸长宽比2:1,最大不能超过1M..');
-                // $form->select('sex','性别')->options([0=>'男',1=>'女'])->setwidth(2);
-                $form->text('position','设计师职位')->setwidth(2)->help('如:首席设计师,助理设计师')->rules('required|min:1');
-                $form->text('style','设计风格')->setwidth(2)->help('如:简约,现代');
-                // $form->text('address','所在地')->setwidth(2);
-                $form->slider('year','工龄/经验')->options(['max' => 10, 'min' => 2, 'step' => 1, 'postfix' => '年'])->setwidth(4);
-                $form->textarea('honor','个人荣誉')->setwidth(5);
-                $form->text('content','设计理念')->setwidth(5)->help('设计师的以上信息将会展示在APP里.');
-            }
-                $form->divide();
+        $form = new Form(new Administrator());
+
+        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
+        $job = Admin::user()->job;
+        $form->display('username', trans('admin.username'));
+        $form->text('name', '姓名')->rules('required');
+        $form->image('avatar', trans('admin.avatar'))->uniqueName();
+        if ($role == 2) {
             
-            $form->password('password', trans('admin.password'))->rules('confirmed|required');
-            $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
-                ->default(function ($form) {
-                    return $form->model()->password;
-                });
-
-            $form->setAction(admin_base_path('auth/setting'));
-
-            $form->ignore(['password_confirmation']);
-
-            $form->saving(function (Form $form) {
-                if ($form->password && $form->model()->password != $form->password) {
-                    $form->password = bcrypt($form->password);
-                }
+        }
+        if ($job == 3) {//设计师
+            $form->image('background','自定义背景图')->setwidth(3)->uniqueName()->help('自定义背景图,建议尺寸长宽比2:1,最大不能超过1M..');
+            // $form->select('sex','性别')->options([0=>'男',1=>'女'])->setwidth(2);
+            $form->text('position','设计师职位')->setwidth(2)->help('如:首席设计师,助理设计师')->rules('required|min:1');
+            $form->text('style','设计风格')->setwidth(2)->help('如:简约,现代');
+            // $form->text('address','所在地')->setwidth(2);
+            $form->slider('year','工龄/经验')->options(['max' => 10, 'min' => 2, 'step' => 1, 'postfix' => '年'])->setwidth(4);
+            $form->textarea('honor','个人荣誉')->setwidth(5);
+            $form->text('content','设计理念')->setwidth(5)->help('设计师的以上信息将会展示在APP里.');
+        }
+            $form->divide();
+        $form->password('password', trans('admin.password'))->rules('confirmed|required');
+        $form->password('password_confirmation', trans('admin.password_confirmation'))->rules('required')
+            ->default(function ($form) {
+                return $form->model()->password;
             });
 
-            $form->saved(function () {
-                admin_toastr(trans('admin.update_succeeded'));
+        $form->setAction(admin_base_path('auth/setting'));
 
-                return redirect(admin_base_path(''));
-            });
+        $form->ignore(['password_confirmation']);
+
+        $form->saving(function (Form $form) {
+            if ($form->password && $form->model()->password != $form->password) {
+                $form->password = bcrypt($form->password);
+            }
         });
+
+        $form->saved(function () {
+            admin_toastr(trans('admin.update_succeeded'));
+
+            return redirect(admin_base_path(''));
+        });
+
+        return $form;
     }
 
     /**

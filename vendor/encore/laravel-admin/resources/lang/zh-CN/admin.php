@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'continue_editing'      => '修改',
     'online'                => '在线',
     'login'                 => '登录',
     'logout'                => '登出',
