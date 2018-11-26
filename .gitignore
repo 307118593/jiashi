@@ -2,5 +2,5 @@ public/upload/*.png
 public/upload/*.jpg
 public/upload/*.gif
 public/uploads/*.png
-
+storage/logs/laravel.log
 .env

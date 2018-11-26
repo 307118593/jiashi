@@ -531,11 +531,7 @@ class Builder
      * @return string
      */
     public function renderFooter()
-    {   
-        if ($this->mode == static::MODE_CREATE) {
-            $this->tools->disableDelete();
-            $this->tools->disableView();
-         }
+    {
         return $this->footer->render();
     }
 
@@ -585,6 +581,4 @@ SCRIPT;
 
         return view($this->view, $data)->render();
     }
-
-       
 }

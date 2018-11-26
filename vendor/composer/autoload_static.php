@@ -15,8 +15,8 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '4e8671d7be9056dcd04ddd9e8e15f9cc' => __DIR__ . '/..' . '/encore/laravel-admin/src/helpers.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '9eb92a60b23a168bdc5f3366f76ebf52' => __DIR__ . '/../..' . '/app/helpers/helpers.php',
@@ -91,6 +91,7 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         ),
         'J' => 
         array (
+            'Jxlwqq\\StarRating\\' => 18,
             'JakubOnderka\\PhpConsoleHighlighter\\' => 35,
             'JakubOnderka\\PhpConsoleColor\\' => 29,
         ),
@@ -110,6 +111,8 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         ),
         'E' => 
         array (
+            'Encore\\Cropper\\' => 15,
+            'Encore\\Chartjs\\' => 15,
             'Encore\\Admin\\Media\\' => 19,
             'Encore\\Admin\\' => 13,
             'Egulias\\EmailValidator\\' => 23,
@@ -280,6 +283,10 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         array (
             0 => __DIR__ . '/..' . '/laravel/tinker/src',
         ),
+        'Jxlwqq\\StarRating\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jxlwqq/star-rating/src',
+        ),
         'JakubOnderka\\PhpConsoleHighlighter\\' => 
         array (
             0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
@@ -307,6 +314,14 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
+        'Encore\\Cropper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-admin-ext/cropper/src',
+        ),
+        'Encore\\Chartjs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-admin-ext/chartjs/src',
         ),
         'Encore\\Admin\\Media\\' => 
         array (
@@ -945,6 +960,7 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'Encore\\Admin\\Auth\\Permission' => __DIR__ . '/..' . '/encore/laravel-admin/src/Auth/Permission.php',
         'Encore\\Admin\\Console\\AdminCommand' => __DIR__ . '/..' . '/encore/laravel-admin/src/Console/AdminCommand.php',
         'Encore\\Admin\\Console\\CreateUserCommand' => __DIR__ . '/..' . '/encore/laravel-admin/src/Console/CreateUserCommand.php',
+        'Encore\\Admin\\Console\\ExtendCommand' => __DIR__ . '/..' . '/encore/laravel-admin/src/Console/ExtendCommand.php',
         'Encore\\Admin\\Console\\ImportCommand' => __DIR__ . '/..' . '/encore/laravel-admin/src/Console/ImportCommand.php',
         'Encore\\Admin\\Console\\InstallCommand' => __DIR__ . '/..' . '/encore/laravel-admin/src/Console/InstallCommand.php',
         'Encore\\Admin\\Console\\MakeCommand' => __DIR__ . '/..' . '/encore/laravel-admin/src/Console/MakeCommand.php',
@@ -999,6 +1015,7 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'Encore\\Admin\\Form\\Field\\MultipleFile' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/MultipleFile.php',
         'Encore\\Admin\\Form\\Field\\MultipleImage' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/MultipleImage.php',
         'Encore\\Admin\\Form\\Field\\MultipleSelect' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/MultipleSelect.php',
+        'Encore\\Admin\\Form\\Field\\Nullable' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/Nullable.php',
         'Encore\\Admin\\Form\\Field\\Number' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/Number.php',
         'Encore\\Admin\\Form\\Field\\Password' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/Password.php',
         'Encore\\Admin\\Form\\Field\\PlainInput' => __DIR__ . '/..' . '/encore/laravel-admin/src/Form/Field/PlainInput.php',
@@ -1049,10 +1066,13 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'Encore\\Admin\\Grid\\Filter\\Date' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Date.php',
         'Encore\\Admin\\Grid\\Filter\\Day' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Day.php',
         'Encore\\Admin\\Grid\\Filter\\Equal' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Equal.php',
+        'Encore\\Admin\\Grid\\Filter\\Group' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Group.php',
         'Encore\\Admin\\Grid\\Filter\\Gt' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Gt.php',
         'Encore\\Admin\\Grid\\Filter\\Hidden' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Hidden.php',
         'Encore\\Admin\\Grid\\Filter\\Ilike' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Ilike.php',
         'Encore\\Admin\\Grid\\Filter\\In' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/In.php',
+        'Encore\\Admin\\Grid\\Filter\\Layout\\Column' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Layout/Column.php',
+        'Encore\\Admin\\Grid\\Filter\\Layout\\Layout' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Layout/Layout.php',
         'Encore\\Admin\\Grid\\Filter\\Like' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Like.php',
         'Encore\\Admin\\Grid\\Filter\\Lt' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Lt.php',
         'Encore\\Admin\\Grid\\Filter\\Month' => __DIR__ . '/..' . '/encore/laravel-admin/src/Grid/Filter/Month.php',
@@ -1117,6 +1137,11 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'Encore\\Admin\\Widgets\\Tab' => __DIR__ . '/..' . '/encore/laravel-admin/src/Widgets/Tab.php',
         'Encore\\Admin\\Widgets\\Table' => __DIR__ . '/..' . '/encore/laravel-admin/src/Widgets/Table.php',
         'Encore\\Admin\\Widgets\\Widget' => __DIR__ . '/..' . '/encore/laravel-admin/src/Widgets/Widget.php',
+        'Encore\\Chartjs\\Chartjs' => __DIR__ . '/..' . '/laravel-admin-ext/chartjs/src/Chartjs.php',
+        'Encore\\Chartjs\\ChartjsServiceProvider' => __DIR__ . '/..' . '/laravel-admin-ext/chartjs/src/ChartjsServiceProvider.php',
+        'Encore\\Cropper\\Crop' => __DIR__ . '/..' . '/laravel-admin-ext/cropper/src/Crop.php',
+        'Encore\\Cropper\\Cropper' => __DIR__ . '/..' . '/laravel-admin-ext/cropper/src/Cropper.php',
+        'Encore\\Cropper\\CropperServiceProvider' => __DIR__ . '/..' . '/laravel-admin-ext/cropper/src/CropperServiceProvider.php',
         'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'Faker\\Calculator\\Iban' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Iban.php',
         'Faker\\Calculator\\Inn' => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker/Calculator/Inn.php',
@@ -2556,6 +2581,9 @@ class ComposerStaticInitd32bb5cb59d5aa01ca3645fa4560a0e1
         'JakubOnderka\\PhpConsoleColor\\InvalidStyleException' => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src/InvalidStyleException.php',
         'JakubOnderka\\PhpConsoleHighlighter\\Highlighter' => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src/Highlighter.php',
         'JsonSerializable' => __DIR__ . '/..' . '/nesbot/carbon/src/JsonSerializable.php',
+        'Jxlwqq\\StarRating\\StarRating' => __DIR__ . '/..' . '/jxlwqq/star-rating/src/StarRating.php',
+        'Jxlwqq\\StarRating\\StarRatingExtension' => __DIR__ . '/..' . '/jxlwqq/star-rating/src/StarRatingExtension.php',
+        'Jxlwqq\\StarRating\\StarRatingServiceProvider' => __DIR__ . '/..' . '/jxlwqq/star-rating/src/StarRatingServiceProvider.php',
         'Laravel\\Tinker\\ClassAliasAutoloader' => __DIR__ . '/..' . '/laravel/tinker/src/ClassAliasAutoloader.php',
         'Laravel\\Tinker\\Console\\TinkerCommand' => __DIR__ . '/..' . '/laravel/tinker/src/Console/TinkerCommand.php',
         'Laravel\\Tinker\\TinkerCaster' => __DIR__ . '/..' . '/laravel/tinker/src/TinkerCaster.php',

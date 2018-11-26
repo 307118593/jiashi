@@ -141,7 +141,8 @@ return [
     |---------------------------------------------------------|
      */
     'layout' => ['sidebar-mini'],
-
+    // 'layout' => ['sidebar-mini', 'sidebar-collapse'],
+    
     /*
      * Background image in login page
      */
@@ -160,5 +161,25 @@ return [
         'media-manager' => [
             'disk' => 'public'   // 指向config/filesystem.php中设置的disk
         ],
+        'chartjs' => [
+        
+            // Set to `false` if you want to disable this extension
+            'enable' => true,
+        ],
+        'cropper' => [
+        
+            // 如果要关掉这个扩展，设置为false
+            'enable' => true,
+        ],
+        'star-rating' => [
+         
+             // set to false if you want to disable this extension
+             'enable' => true,
+             
+             // configuration
+             'config' => [
+                 'min' => 1, 'max' => 5, 'step' => 1, 'size' => 'xs'
+             ]
+         ],
     ],
 ];
