@@ -256,10 +256,14 @@ Route::any('getShareLink','CompanyController@getShareLink');
 Route::any('getBuildTeam','CompanyController@getBuildTeam');
 //获取项目经理详情
 Route::any('getBuilderDetail','CompanyController@getBuilderDetail');
+//获取施工案例详情
+Route::any('getBuildDetail','CompanyController@getBuildDetail');
 
 //推送
 //测试推送
 Route::any('send_push','PushController@send_push');
+//储存用户 DeviceToken
+Route::any('pushDeviceToken','PushController@pushDeviceToken');
 
 //消息管理
 //获取消息列表

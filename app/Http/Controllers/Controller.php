@@ -79,8 +79,9 @@ class Controller extends BaseController
 	public function getStartSource(Request $request){
 		$cid = $request->input('cid',0);
 		$uid = $request->input('uid');
+		$DeviceToken = $request->input('DeviceToken');
 		if ($uid) {
-    	DB::table('user')->where('id',$uid)->update(['uptime'=>date('Y-m-d H:i:s',time())]);
+    		DB::table('user')->where('id',$uid)->update(['uptime'=>date('Y-m-d H:i:s',time())]);
 			$res = DB::table('record')->where('uid',$uid)->where('day',date('Y-m-d'))->first();
 			if (empty($res)) {
 				
@@ -96,6 +97,10 @@ class Controller extends BaseController
 					'starttime'=>time(),
 				];
 				DB::table('record')->where('id',$res->id)->update($new);
+			}
+
+			if ($DeviceToken) {
+				DB::table('user')->where('id',$uid)->update(['DeviceToken'=>$DeviceToken]);
 			}
 		}
 		$welcome = DB::table('welcome_page')->where('cid',$cid)->orderBy('sort','asc')->take(3)->get();

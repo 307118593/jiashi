@@ -255,6 +255,25 @@ class CompanyController extends Controller
 
 	}
 
+	//获取施工案例详情
+	public function getBuildDetail(Request $request){
+		$bid = $request->input('bid');
+		$build_cases = DB::table('build_case')->where('id',$bid)->first();
+		if ($build_cases->photo) {
+			$build_cases->photo = $this->upload.$build_cases->photo;
+		}
+		$build_cases->keting = $this->duotu($build_cases->keting);
+		$build_cases->woshi = $this->duotu($build_cases->woshi);
+		$build_cases->weishengjian = $this->duotu($build_cases->weishengjian);
+		$build_cases->chufang = $this->duotu($build_cases->chufang);
+		$build_cases->shuidianshigong = $this->duotu($build_cases->shuidianshigong);
+		$build_cases->qiqianggongyi = $this->duotu($build_cases->qiqianggongyi);
+		$build_cases->mugonggongyi = $this->duotu($build_cases->mugonggongyi);
+		$build_cases->youqigongyi = $this->duotu($build_cases->youqigongyi);
+		
+		return response()->json(['error'=>0,'data'=>$build_cases]);
+	}
+
 	public function duotu($images){
 		if (!$images) {
 			return;
