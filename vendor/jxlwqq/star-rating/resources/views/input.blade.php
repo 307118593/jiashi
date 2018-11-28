@@ -8,7 +8,7 @@
 
         <div class="input-group">
 
-            <input {!! $attributes !!} class="rating" id="{!! $id !!}" />
+            <input {!! $attributes !!} value="{!! $attributes !!}" class="rating" id="{!! $id !!}" />
 
         </div>
 
