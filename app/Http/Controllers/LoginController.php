@@ -23,6 +23,7 @@ class LoginController extends Controller
     public function getUserInfo(Request $request){
         $uid = $request->input('uid');
         $pid = $request->input('pid',-2);
+        $DeviceToken = $request->input('DeviceToken');
         if ($pid >= 0) {
             $info = DB::table('admin_users')->where('id',$uid)->first();
             if ($info->avatar) {
@@ -37,6 +38,9 @@ class LoginController extends Controller
                     $info->cid = $info->pid;
                 }
             return response()->json(['error'=>0,'data'=>$info]);
+        }
+        if ($DeviceToken) {
+            DB::table('user')->where('id',$uid)->update(['DeviceToken'=>$DeviceToken]);
         }
         $info = DB::table('user')->where('id',$uid)->first();
         $info->newMes = DB::table('messages_user')->where('uid',$info->id)->where('is_read',0)->where('is_del',0)->count();
