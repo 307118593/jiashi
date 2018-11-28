@@ -162,7 +162,8 @@ class Build_caseController
                 $form->number('build_time','施工周期/月')->default(3);
                 $form->image('photo','封面图')->move('anli')->setwidth(3)->uniqueName();
                 $form->tags('style','施工标签')->help('你可以选择标签来突出优点,也可以自定义添加标签:输入文字按回车键成为一个标签.最多可以添加4个标签')->setWidth(5);
-                $form->slider('star','项目星级')->options(['max' => 5, 'min' => 1, 'step' => 1, 'postfix' => '星'])->setwidth(4);
+                // $form->slider('star','项目星级')->options(['max' => 5, 'min' => 1, 'step' => 1, 'postfix' => '星'])->setwidth(4);
+                $form->starRating('star','星级')->default(4);
                 $form->hidden('cid','公司')->default($cid);
                 $form->hidden('addtime','时间')->default(time());
                 $where = [];
