@@ -205,7 +205,8 @@ class ProjectController extends Controller
     //获取项目进度
     public function getMyProjectFlow(Request $request){
         $pro_id = $request->input('pro_id');
-    	$uid = $request->input('uid');
+        $uid = $request->input('uid');
+        DB::table('project')->where('id',$pro_id)->increment('hot');
     	$project = DB::table('project')->where('id',$pro_id)->select('id','uid','name','z_uid','image','project_us','state','type','area','style','cameras','leader_id')->first();
     	if ($project->image) {
     		$project->image = $this->host.'upload/'.$project->image;
@@ -313,8 +314,9 @@ class ProjectController extends Controller
 
     //获取项目进度-播报多图 修改日期10/15
     public function getMyProjectFlow1015(Request $request){
-          $pro_id = $request->input('pro_id');
+        $pro_id = $request->input('pro_id');
         $uid = $request->input('uid');
+        DB::table('project')->where('id',$pro_id)->increment('hot');
         $project = DB::table('project')->where('id',$pro_id)->select('id','uid','name','z_uid','image','project_us','state','type','area','style','cameras','leader_id')->first();
         if ($project->image) {
             $project->image = $this->host.'upload/'.$project->image;

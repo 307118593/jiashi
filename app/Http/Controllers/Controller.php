@@ -136,6 +136,27 @@ class Controller extends BaseController
 		DB::table('record')->where('id',$res->id)->update($up);
 		return response()->json(['error'=>0,'data'=>'ok']);
 	}
+	//前台进入app通知接口
+	public function openApp(Request $request){
+		$uid = $request->input('uid');
+		$res = DB::table('record')->where('uid',$uid)->where('day',date('Y-m-d'))->first();
+		if (empty($res)) {
+			$cid = DB::table('user')->where('id',$uid)->value('cid');
+			$new = [
+				'uid'=>$uid,
+				'cid'=>$cid,
+				'starttime'=>time(),
+				'day'=>date('Y-m-d'),
+			];
+			DB::table('record')->insert($new);
+		}else{
+			$new = [
+				'starttime'=>time(),
+			];
+			DB::table('record')->where('id',$res->id)->update($new);
+		}
+		return response()->json(['error'=>0,'data'=>'ok']);
+	}
 
 	public function get_accessToken(){
 		$accessToken = DB::table('config')->where('name','accessToken')->first();

@@ -36,6 +36,8 @@ Route::any('getRole/{uid}','Controller@getRole');
 Route::any('getStartSource','Controller@getStartSource');
 //关闭app通知接口
 Route::any('closeApp','Controller@closeApp');
+//前台进入app通知接口
+Route::any('openApp','Controller@openApp');
 
 //注册----
 //短信
@@ -102,6 +104,10 @@ Route::any('snap','YsController@snap');
 Route::any('daoru','YsController@daoru');
 //获取\H5直播地址
 Route::any('getH5Address','YsController@getH5Address');
+//打开设备通知接口
+Route::any('openYs','YsController@openYs');
+//关闭设备通知接口
+Route::any('closeYs','YsController@closeYs');
 // //查询设备列表
 // Route::any('get_YsList','YsController@remove_Ys');
 

@@ -355,6 +355,42 @@ class YsController extends Controller
         $number = count($camera);
         return view('live.allLive',['camera'=>$camera,'count'=>$count,'uid'=>$uid,'number'=>$number]);
     }
+
+    //打开直播通知接口
+    public function openYs(Request $request){
+        $mac = $request->input('mac');
+        $uid = $request->input('uid',0);
+        $res = DB::table('camera_log')->where('uid',$uid)->where('mac',$mac)->where('day',date('Y-m-d'))->first();
+        if (empty($res)) {
+            $new = [
+                'uid'=>$uid,
+                'mac'=>$mac,
+                'opentime'=>time(),
+                'day'=>date('Y-m-d'),
+            ];
+            DB::table('camera_log')->insert($new);
+        }else{
+            $new = [
+                'opentime'=>time(),
+            ];
+            DB::table('camera_log')->where('id',$res->id)->update($new);
+        }
+        return response()->json(['error'=>0,'data'=>'ok']);
+
+    }
+
+    //关闭直播通知接口
+    public function closeYs(Request $request){
+        $mac = $request->input('mac');
+        $uid = $request->input('uid',0);
+        $res = DB::table('camera_log')->where('uid',$uid)->where('mac',$mac)->orderBy('id','desc')->first();
+        $up = [
+            'alivetime'=>time()-$res->opentime + $res->alivetime,
+            'closetime'=>time(),
+        ];
+        DB::table('camera_log')->where('id',$res->id)->update($up);
+        return response()->json(['error'=>0,'data'=>'ok']);
+    }
  
  
 }
