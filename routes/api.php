@@ -17,25 +17,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::any('test',function(){
-	// $b = DB::table('broadcast')->get();
-	// foreach ($b as $k => $v) {
-	// 	DB::table('broadcast')->where('id',$v->id)->update(['image'=>"[\"".$v->image."\"]"]);
-	// }
-	// $user = DB::table('user')->get();
-	// foreach ($user as $key => $v) {
-	// 	$res = DB::table('admin_users')->where('username',$v->phone)->first();
-	// 	if ($res) {
-	// 		DB::table('user')->where('phone',$v->phone)->update(['copy_id'=>$res->id]);
-	// 	}
-	// }
-	// return \Hash::make('123321');
-
-	// $user = DB::table('admin_users')->get();
-	// foreach ($user as $key => $v) {
-	// 	if ($v->job == 0) {
-	// 		DB::table('admin_users')->where('id',$v->id)->update(['job'=>2]);
-	// 	}
-	// }
+	$predefined = [
+		'ticker' => '这是ticker',
+	    'title' => '工地新建通知',
+	    "text"=>'您好,您的工地名称:测试..已经新建完成',   
+	    "after_open" => 'go_app',
+	];
+	$device_token = DB::table('user')->where('id',35)->value('DeviceToken');
+	$res = sendUnicast($device_token,$predefined);
+	return $res;
 });
 //上传版本
 Route::any('update_version','Controller@update_version');

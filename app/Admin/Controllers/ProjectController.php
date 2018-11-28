@@ -331,7 +331,7 @@ class ProjectController extends Controller
             // });
 
 
-            $form->saving(function (Form $form) {
+            $form->saving(function (Form $form){
                 $pro_id = $form->model()->id;
                 $temp = $form->model()->temp;
                 $z_uid = $form->model()->z_uid;
@@ -351,6 +351,18 @@ class ProjectController extends Controller
 
                 
                 
+            });
+            $form->saved(function (Form $form){
+                if (!$form->id) {//新增状态
+                    $predefined = [
+                        'ticker' => '这是ticker',
+                        'title' => '工地新建通知',
+                        "text"=>'您好,您的工地名:'.$form->name.'已经新建完成',   
+                        "after_open" => 'go_app',
+                    ];
+                    $device_token = DB::table('user')->where('id',$form->uid)->value('DeviceToken');
+                    sendUnicast($device_token,$predefined);
+                }
             });
             
             

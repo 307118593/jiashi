@@ -157,9 +157,26 @@ class Flowcontroller extends Controller
                 // return $id;
                 if ($form->id > 0) {
                     if ($form->state == 1) {
-                    DB::table('flow')->where('id',$form->id)->update(['starttime'=>date('Y-m-d H:i:s',time())]);
+                        $predefined = [
+                            'ticker' => '这是ticker',
+                            'title' => '进度开始通知',
+                            "text"=>'您好,您的进度:'.$form->name.'已经开始施工.',   
+                            "after_open" => 'go_app',
+                        ];
+                        $device_token = DB::table('user')->where('id',DB::table('project')->where('id',$form->pro_id)->value('uid'))->value('DeviceToken');
+                        sendUnicast($device_token,$predefined);
+
+                        DB::table('flow')->where('id',$form->id)->update(['starttime'=>date('Y-m-d H:i:s',time())]);
                     }
                     if ($form->state == 2) {
+                        $predefined = [
+                            'ticker' => '这是ticker',
+                            'title' => '进度完成通知',
+                            "text"=>'您好,您的进度:'.$form->name.'已经完成施工.',   
+                            "after_open" => 'go_app',
+                        ];
+                        $device_token = DB::table('user')->where('id',DB::table('project')->where('id',$form->pro_id)->value('uid'))->value('DeviceToken');
+                        sendUnicast($device_token,$predefined);
                         DB::table('flow')->where('id',$form->id)->update(['endtime'=>date('Y-m-d H:i:s',time())]);
                     }
                     // exit;
