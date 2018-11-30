@@ -7,10 +7,7 @@
  //    	$this->host = 'http://'.request()->server('HTTP_HOST').'/';
  //        $this->upload = 'http://'.request()->server('HTTP_HOST').'/upload/';
  //    }
-	//友盟推送
-    const Appkey = '5b598f75f29d98513c0000c3';
-    const UmengMessageSecret = 'b49db5518f933098a82f640f8b1b1f6e';
-    const AppMasterSecret = 'hkkejqyvdp483becakuup9rgqup8jn5u';
+
 
 	//上传单图
 	function upload_image($file,$uppath='images/'){
@@ -55,8 +52,25 @@
 	}
 
 	//友盟单播
-	function sendUnicast($device_token,$predefined){
+	function sendUnicast($device_token,$predefined,$extraField){
 		Umeng::android()->sendUnicast($device_token,$predefined); //单播
+		//加入本地消息
+		$data = [
+			'title'=>$predefined['title'],
+			'content'=>$predefined['text'],
+			'cid'=>$extraField['cid'],
+			'addtime'=>date('Y-m-d H:i:s'),
+			'type'=>-1,
+		];
+		$mid = DB::table('messages')->insertGetId($data);
+		if ($mid) {
+			$array = [
+				'uid'=>$extraField['uid'],
+				'mid'=>$mid,
+				'sendtime'=>date('Y-m-d H:i:s'),
+			];
+			DB::table('messages_user')->insert($array);
+		}
 	}
 
 

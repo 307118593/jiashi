@@ -359,9 +359,15 @@ class ProjectController extends Controller
                         'title' => '工地新建通知',
                         "text"=>'您好,您的工地名:'.$form->name.'已经新建完成',   
                         "after_open" => 'go_app',
+                        "cid" => $form->z_uid,
+                        "uid" => $form->uid,
+                    ];
+                    $extraField=[
+                        "cid" => $form->z_uid,
+                        "uid" => $form->uid,
                     ];
                     $device_token = DB::table('user')->where('id',$form->uid)->value('DeviceToken');
-                    sendUnicast($device_token,$predefined);
+                    sendUnicast($device_token,$predefined,$extraField);
                 }
             });
             
@@ -369,14 +375,4 @@ class ProjectController extends Controller
         });
     }
 
-    public function strToHtml($s){
-    if ($s==null||$s.equals("")) return "";
-    $s = $s.replaceAll("&","&");
-    $s = $s.replaceAll("<","<");
-    $s = $s.replaceAll(">",">");
-    $s = $s.replaceAll(" "," ");
-    //s = s.replaceAll("<br/>","/n");
-    //s = s.replaceAll("'","'");
-    return $s;
-    }
 }

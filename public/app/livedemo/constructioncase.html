@@ -20,9 +20,8 @@
 			}
 			
 			.hd_photo {
-				width: 120px;
-				height: 146px;
-				border-radius: 6px;
+				width: 100%;
+				height: 170px;
 			}
 			
 			.case-title {
@@ -50,7 +49,7 @@
 				display: block;
 				margin-left: auto;
 				margin-right: auto;
-				margin-top: 40px;
+				
 			}
 			
 			.hd_title_desc {
@@ -65,9 +64,9 @@
 			.page-content {
 				width: 100%;
 				position: absolute;
-				top: 280px;
-				padding-left: 20px;
-				padding-right: 20px;
+				top: 240px;
+				padding-left: 10px;
+				padding-right: 10px;
 				padding-bottom: 3rem;
 			}
 			
@@ -78,8 +77,6 @@
 				border-radius: 20px;
 				padding: 0.555rem;
 			}
-			
-			
 			
 			.item-cell {
 				display: block;
@@ -100,33 +97,39 @@
 				border-radius: 3px;
 				padding: 1px 3px;
 			}
-			.icon_left{
+			
+			.icon_left {
 				width: 20px;
 				height: 20px;
 				margin-right: 0.3333rem;
 			}
-			.icon_year{
+			
+			.icon_year {
 				width: 15px;
 				height: 15px;
 				margin-left: 0.5333rem;
 			}
-			.mui-control-item{
+			
+			.mui-control-item {
 				width: 100%;
 				text-align: left;
 				padding: 5px;
 				border-bottom: solid 1px gainsboro;
 			}
-			.desc-content{
+			
+			.desc-content {
 				border-bottom: solid 1px gainsboro;
 			}
-			.item-cell-img{
+			
+			.item-cell-img {
 				width: 100%;
 			}
-			.cell-li{
+			
+			.cell-li {
 				border-bottom: solid 1px gainsboro;
-				
 			}
-			.item-cell{
+			
+			.item-cell {
 				padding: 5px;
 			}
 		</style>
@@ -140,39 +143,35 @@
 					<div class="hd_title">
 						<p class="hd_title_desc">
 							<span class="hd_title_text hd_name" id="name">员工</span>
-							
+
 						</p>
 						<p class="hd_title_desc">
-							<span class="hd_title_text hd_job" id="position">首席设计</span>
+							<span class="hd_title_text hd_job" id="position">首席设计</span>颗星
 							<img class="icon_left icon_year" src="img/icon_stylelist.png" />
-							<span id="year">5</span>年
-							
+							<span id="year">5</span>分
+
 						</p>
-						<p class="hd_title_desc">
-							
-							<span class="hd_title_text" id="style">现代简约</span>
-						</p>
-					
+
 					</div>
 				</div>
 
 			</div>
 			<div class="page-content">
 				<div class="pg-content-desc">
-					<div class="mui-control-item" >
-						<img class="icon_left" src="img/icon_cell.png" />设计理念
+					<div class="mui-control-item">
+						<img class="icon_left" src="img/icon_cell.png" />业主评价
 					</div>
-					<p class="pg-desc-text desc-content" id="content">
+					<p class="pg-desc-text desc-content" id="style">
 						设计不是一沉不变地作秀，而是自我思想的绽放。
 					</p>
-					<div class="mui-control-item" >
-						<img class="icon_left" src="img/icon_cell.png" />所获荣誉
+					<div class="mui-control-item" style="text-align: left;">
+						<img class="icon_left" src="img/icon_cell.png" />团队星级
 					</div>
-					<p class="pg-desc-text desc-content" id="honor">
-						荣获国家"设计之花"一等奖
-					</p>
-					<div class="mui-control-item" >
-						<img class="icon_left" src="img/icon_cell.png" />设计案例
+					<div class="pg-desc-text desc-content" id="honor">
+						<img class="icon_star" src="img/icon_star.png" />
+					</div>
+					<div class="mui-control-item">
+						<img class="icon_left" src="img/icon_cell.png" />施工展示
 					</div>
 					<ul class="pg-ul" id="cases">
 						<li class="cell-li">
@@ -190,12 +189,12 @@
 											美式简约
 										</p>
 									</div>
-								</div>
+								</div> 
 							</a>
 						</li>
 
 					</ul>
-					
+
 				</div>
 			</div>
 		</div>
@@ -207,7 +206,7 @@
 		$(function() {
 			var request = new Request();
 			var value = request.getnavivalues();
-			var uid = value["uid"];
+			var bid = value["bid"];
 			var $avatar = $("#avatar"),
 				$name = $("#name"),
 				$style = $("#style"),
@@ -216,39 +215,71 @@
 				$position = $("#position"),
 				$honor = $("#honor"),
 				$cases = $("#cases");
-			console.log("直播源：" + uid);
+			console.log("直播源：" + bid);
 
-			if(uid != undefined) {
-				comment(uid);
+			if(bid != undefined) {
+				comment(bid);
 			} else {
-				comment(16);
+				comment(1);
 			}
 
-			function comment(uid) {
+			function comment(bid) {
 				var homeurl = "https://www.homeeyes.cn";
-				var url = homeurl + "/api/designer_detail";
+				var url = homeurl + "/api/getBuildDetail";
 				var para = {};
-				para.uid = uid;
-				console.log(uid);
+				para.bid = bid;
+				console.log(bid);
 				request.request(url, para, "POST", function(data) {
 
-					var stylesdata = data.data;
-					if(stylesdata != undefined) {
-						var designer = stylesdata.designer;
-						if(designer != undefined) {
-							$avatar.attr("src", designer.avatar);
-							$name.text(designer.name);
-							$style.text(designer.style);
-							$year.text(designer.year);
-							$content.text(designer.content);
-							$position.text(designer.position);
-							$honor.text(designer.honor);
+					var casedata = data.data;
+					if(casedata != undefined) {
+
+						$avatar.attr("src", casedata.photo);
+						$name.text(casedata.title);
+						$style.text(casedata.style);
+						$year.text(casedata.praise);
+						$position.text(casedata.star);
+						var starsgroup = "";
+						for(var i = 0; i < 5; i++) {
+							if(i < casedata.star) {
+								starsgroup += "<img class='icon_star' src='img/icon_star.png'>";
+							} else {
+								starsgroup += "<img class='icon_star' src='img/icon_star_gary.png'>";
+							}
 						}
-						var cases = stylesdata.cases;
+						$honor.html(starsgroup);
+				
 						var casehtml = "";
-						$.each(cases, function(i, item) {
-							casehtml += setCases(item);
-						});
+						if(casedata.shuidianshigong!=undefined){
+							casehtml += setCases(casedata.shuidianshigong);
+						}
+						if(casedata.qiqianggongyi!=undefined){
+							casehtml += setCases(casedata.qiqianggongyi);
+						}
+						if(casedata.mugonggongyi!=undefined){
+							casehtml += setCases(casedata.mugonggongyi);
+						}
+						
+						if(casedata.youqigongyi!=undefined){
+							casehtml += setCases(casedata.youqigongyi);
+						}
+						
+						if(casedata.keting!=undefined){
+							casehtml += setCases(casedata.keting);
+						}
+						
+						if(casedata.woshi!=undefined){
+							casehtml += setCases(casedata.woshi);
+						}
+						
+						if(casedata.weishengjian!=undefined){
+							casehtml += setCases(casedata.weishengjian);
+						}
+						
+						if(casedata.chufang!=undefined){
+							casehtml += setCases(casedata.chufang);
+						}
+						
 						$cases.html(casehtml);
 					} else {
 						console.log("没有直播");
@@ -261,16 +292,11 @@
 			}
 
 			function setCases(data) {
-				return "<li class='cell-li'><a href='" + data.url + "'>" +
-					"<div class='item-cell'>" +
-					"<img class='item-cell-img' src='" + data.photo + "' />" +
-					"<div class='item-cell-desc'><h4 class='pg-title'>" +
-					data.title +
-					"</h4><p class='pg-desc-text case-text'>" +
-					data.area +
-					"平方米<span class='style_type'>" +
-					data.style +
-					"</span></p></div></div></a></li>";
+				var imageitem="";
+					$.each(data, function(i, item) {
+							imageitem += "<img class='item-cell-img' src='" + item + "' />";
+						});
+				return "<li class='cell-li'>"+imageitem+"</li>";
 			}
 		});
 	</script>

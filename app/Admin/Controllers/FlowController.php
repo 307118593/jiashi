@@ -163,8 +163,12 @@ class Flowcontroller extends Controller
                             "text"=>'您好,您的进度:'.$form->name.'已经开始施工.',   
                             "after_open" => 'go_app',
                         ];
+                        $extraField=[
+                            "cid" => DB::table('project')->where('id',$form->pro_id)->value('z_uid'),
+                            "uid" => DB::table('project')->where('id',$form->pro_id)->value('uid'),
+                        ];
                         $device_token = DB::table('user')->where('id',DB::table('project')->where('id',$form->pro_id)->value('uid'))->value('DeviceToken');
-                        sendUnicast($device_token,$predefined);
+                        sendUnicast($device_token,$predefined,$extraField);
 
                         DB::table('flow')->where('id',$form->id)->update(['starttime'=>date('Y-m-d H:i:s',time())]);
                     }
@@ -175,8 +179,12 @@ class Flowcontroller extends Controller
                             "text"=>'您好,您的进度:'.$form->name.'已经完成施工.',   
                             "after_open" => 'go_app',
                         ];
+                         $extraField=[
+                            "cid" => DB::table('project')->where('id',$form->pro_id)->value('z_uid'),
+                            "uid" => DB::table('project')->where('id',$form->pro_id)->value('uid'),
+                        ];
                         $device_token = DB::table('user')->where('id',DB::table('project')->where('id',$form->pro_id)->value('uid'))->value('DeviceToken');
-                        sendUnicast($device_token,$predefined);
+                        sendUnicast($device_token,$predefined,$extraField);
                         DB::table('flow')->where('id',$form->id)->update(['endtime'=>date('Y-m-d H:i:s',time())]);
                     }
                     // exit;

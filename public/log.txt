@@ -1073,3 +1073,6 @@ response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"c110c9ea6
 request body = {'to':'15305771716','templateId':'273344','appId':'8a216da864da60ef0164db1cc221016f','datas':['3607','10',]}
 request url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da8552a3cd401554350785e1294/SMS/TemplateSMS?sig=52B23C8728C849F97E3D984E39DFA3BD
 response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"8f389468aca44166b453f437c7625b08","dateCreated":"20181128155611"}}
+request body = {'to':'18716643045','templateId':'273344','appId':'8a216da864da60ef0164db1cc221016f','datas':['1784','10',]}
+request url = https://app.cloopen.com:8883/2013-12-26/Accounts/8a216da8552a3cd401554350785e1294/SMS/TemplateSMS?sig=5E15A7AF68D299F34D407A5142C44F9E
+response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"fcaf911fa8ca48239a06ebaf4edcc836","dateCreated":"20181130112118"}}

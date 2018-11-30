@@ -52,7 +52,7 @@ class LoginController extends Controller
 
     
 	//手机号发送短信
-    public function send_mes(Request $request){//type =2 时..手机号快捷登录
+    public function send_mes(Request $request){//type =2 时..手机号快捷登录,绑定手机号
     	$phone = $request->input('phone');
     	if (!$phone) {
     		return response()->json(['error'=>1,'mes'=>'请输入手机号.']);
