@@ -42,6 +42,7 @@ class Crop extends File
     private function base64_image_content($base64_image_content, $path)
     {
         //匹配出图片的格式
+        // dd($base64_image_content);
         if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $result)) {
             $type = $result[2];
             $new_file = $path . "/" . date('Ymd', time()) . "/";
@@ -65,7 +66,7 @@ class Crop extends File
         //检查是否是base64编码
         if (preg_match('/data:image\/.*?;base64/is',$base64)) {
             //base64转图片 返回的是绝对路径
-            $imagePath = $this->base64_image_content($base64,public_path('uploads/base64img'));
+            $imagePath = $this->base64_image_content($base64,public_path('upload/base64img'));
             if ($imagePath !== false) {
                 //删除旧图片
                 @unlink(public_path('uploads/').$this->original);

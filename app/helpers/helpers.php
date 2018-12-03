@@ -28,7 +28,7 @@
 	    }
 	    return response()->json(['error'=>1,'mes'=>'上传失败']);
 	}
-	//上传base64位图片
+	//上传base64位多图
 	function upload_base64_image($file,$uppath='images/'){
 
 		if (is_array($file)) {
@@ -50,6 +50,31 @@
         }
 
 	}
+
+	//上传base64位单图图
+	function upload_base64_oneimage($file,$uppath='images/'){
+
+		// if (is_array($file)) {
+            // foreach($file as $v) {
+                // dd($file);
+                $file = str_replace(' ', '+', $file);
+                if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $file, $result)){
+                    $file = base64_decode(str_replace($result[1], '', $file));
+                    $img = Image::make($file);  
+                    // $ex = $v->getClientOriginalExtension();
+                    $name = time().rand(1,9).rand(1,9).rand(1,9).".".$result[2];
+                    $path = $uppath.$name;
+                    $img->save('upload/'.$path);
+                    // $image = 'bobao/'.$name;
+            		return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path]);
+                }
+            // }
+        // }else{
+            // return response()->json(['error'=>1,'mes'=>'不是文件数组']);
+        // }
+
+	}
+
 
 	//友盟单播
 	function sendUnicast($device_token,$predefined,$extraField){

@@ -230,8 +230,8 @@ class StaffController extends Controller
             }
             if ($jobid == 3) {//设计师
                 $form->divide();
-                $form->image('avatar','头像')->setwidth(3)->uniqueName();
-                //$form->cropper('avatar','头像')->cRatio(400,600)->uniqueName();
+                // $form->image('avatar','头像')->setwidth(3)->uniqueName();
+                $form->cropper('avatar','头像')->cRatio(450,600)->uniqueName();
                 $form->image('background','自定义背景图')->setwidth(3)->uniqueName()->help('自定义背景图,建议尺寸长宽比2:1,最大不能超过1M..');
                 $form->text('position','设计师职位')->setwidth(2)->help('如:首席设计师,助理设计师');
                 // $form->select('sex','性别')->options([0=>'男',1=>'女'])->setwidth(2);
@@ -243,8 +243,8 @@ class StaffController extends Controller
                 // $form->divide();
             }else if($jobid == 11){
                 $form->divide();
-                 $form->image('avatar','头像')->setwidth(3)->uniqueName();
-                //$form->cropper('avatar','头像')->cRatio(400,600)->uniqueName();
+                 // $form->image('avatar','头像')->setwidth(3)->uniqueName();
+                $form->cropper('avatar','头像')->cRatio(450,600)->uniqueName();
                 $form->slider('year','工龄/经验')->options(['max' => 25, 'min' => 2, 'step' => 1, 'postfix' => '年'])->setwidth(8);
                 $form->number('build_number','施工项目个数');
                 $form->radio('medal','荣誉')->options([0=>'金牌',1=>'银牌'])->default(1)->help('金牌项目经理优先排序.首页只显示金牌经理且最多显示五名');
@@ -264,7 +264,9 @@ class StaffController extends Controller
             }else{
                 $form->hidden('sort','排序权重');
             }
-            
+            $form->saving(function(form $form){
+                // dump($form->avatar);exit;
+            });
             $form->saved(function(form $form){
                 $newid = DB::table('admin_users')->select('id')->where('username',$form->username)->value('id');
                 if ($form->job == 1 || $form->job == 10) {
