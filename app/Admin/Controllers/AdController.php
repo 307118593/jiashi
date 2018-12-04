@@ -42,6 +42,7 @@ class AdController extends Controller
                     $row->column(12, function (Column $column) use($z_uid,$role){
                         $infos['image'] = $this->host.DB::table('admin_users')->where('id',$z_uid)->value('image'); 
                         $infos['logo'] = $this->host.DB::table('admin_users')->where('id',$z_uid)->value('logo'); 
+                        $infos['company_bg'] = $this->host.DB::table('admin_users')->where('id',$z_uid)->value('company_bg'); 
                         $infos['address'] = DB::table('admin_users')->where('id',$z_uid)->value('address'); 
                         $infos['tel'] = DB::table('admin_users')->where('id',$z_uid)->value('tel'); 
                         $infos['sharetitle'] = DB::table('admin_users')->where('id',$z_uid)->value('sharetitle'); 
@@ -52,8 +53,12 @@ class AdController extends Controller
                         $form->url('homeurl','公司官网')->default(DB::table('admin_users')->where('id',$z_uid)->value('homeurl'))->help('请带上http://或者https://,如:http://www.xxx.com');
                         $form->text('address', '公司地址')->setwidth(8);
                         $form->text('tel', '电话')->setwidth(6)->help('如有多个地址或电话..请用英文字符分号即";"分隔,如地址1;地址2..电话1;电话2..');
-                        $form->image('logo','公司logo')->help('图片宽高比最好接近1:1,适配app');
-                        $form->image('image','拦腰图片')->help('图片宽高比最好接近2:1,适配app');
+                        // $form->image('logo','公司logo')->help('图片宽高比最好接近1:1,适配app');
+                        // $form->image('image','拦腰图片')->help('图片宽高比最好接近2:1,适配app');
+                		$form->cropper('logo','公司logo')->cRatio(600,600)->uniqueName()->help('图片宽高比最好接近1:1,适配app');;
+                		$form->cropper('company_bg','首页背景图')->cRatio(600,200)->uniqueName();
+                		$form->cropper('image','拦腰图片')->cRatio(600,400)->uniqueName()->help('图片宽高比最好接近2:1,适配app');;
+
                         $form->textarea('content', '公司简介')->default(DB::table('admin_users')->where('id',$z_uid)->value('content'))->help('简介不能超过220个字.');
                         $form->divide();
                         $form->text('sharetitle','分享标题');
@@ -65,10 +70,10 @@ class AdController extends Controller
                         //     $collapse->add('LOGO/拦腰广告图','<img style="max-width:600px;margin:0 100px" src="'.$this->host.$logo.'"><img style="max-width:600px; margin:0 100px" src="'.$this->host.$image.'">');
                         // }
                         $collapse->add('设置公司简介', $form);
-                        $form1 = new Form();
-                        $form1->action('setimages');
-                        $form1->hidden('z_uid','公司主键')->default($z_uid);
-                        $form1->multipleImage('pics','公司相册');
+                        // $form1 = new Form();
+                        // $form1->action('setimages');
+                        // $form1->hidden('z_uid','公司主键')->default($z_uid);
+                        // $form1->multipleImage('pics','公司相册');
                         // echo $collapse->render();
                         // $collapse->add('上传图片', $form1);
                         $column->append($collapse);
@@ -89,26 +94,36 @@ class AdController extends Controller
         $sharetitle = $request->input('sharetitle');
         $sharecontent = $request->input('sharecontent');
         $tel = $request->input('tel');
-        $file = $request->file('image');
-        $logo = $request->file('logo');
+        $file = $request->input('image');
+        $logo = $request->input('logo');
+        $company_bg = $request->input('company_bg');
         $data = [];
-        if ($file) {
-            $img = Image::make($file);  
-            $ex = $file->getClientOriginalExtension();
-            $name = $z_uid.".".$ex;
-            $path = 'upload/company/'.$name;
-            $img->resize(600, 300);
-            $img->save($path);
-            $data['image'] = $path;
+        // if ($file) {
+        //     $img = Image::make($file);  
+        //     $ex = $file->getClientOriginalExtension();
+        //     $name = $z_uid.".".$ex;
+        //     $path = 'upload/company/'.$name;
+        //     $img->resize(600, 300);
+        //     $img->save($path);
+        //     $data['image'] = $path;
+        // }
+        // if ($logo) {
+        //     $img = Image::make($logo);  
+        //     $ex = $logo->getClientOriginalExtension();
+        //     $name = $z_uid."_logo.".$ex;
+        //     $path = 'upload/company/'.$name;
+        //     $img->resize(400, 400);
+        //     $img->save($path);
+        //     $data['logo'] = $path;
+        // }
+        if (preg_match('/data:image\/.*?;base64/is',$file)) {
+        	$data['image'] = upload_base64_oneimage($file,'company/');
         }
-        if ($logo) {
-            $img = Image::make($logo);  
-            $ex = $logo->getClientOriginalExtension();
-            $name = $z_uid."_logo.".$ex;
-            $path = 'upload/company/'.$name;
-            $img->resize(400, 400);
-            $img->save($path);
-            $data['logo'] = $path;
+        if (preg_match('/data:image\/.*?;base64/is',$logo)) {
+        	$data['logo'] = upload_base64_oneimage($logo,'company/');
+        }
+        if (preg_match('/data:image\/.*?;base64/is',$company_bg)) {
+        	$data['company_bg'] = upload_base64_oneimage($company_bg,'company/');
         }
         // if ($content) {
             $data['content'] = $content;

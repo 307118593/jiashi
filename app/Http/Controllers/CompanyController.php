@@ -16,7 +16,7 @@ class CompanyController extends Controller
 				$banner[$k]->image = $this->upload.$v->image;
 			}
 		}
-		$company = DB::table('admin_users')->where('id',$cid)->select('id','name','avatar','content','image','address','style','year','age','homeurl','tel','logo')->first();
+		$company = DB::table('admin_users')->where('id',$cid)->select('id','name','avatar','content','image','address','style','year','age','homeurl','tel','logo','company_bg')->first();
 		if ($company->image) {
 			$company->image = $this->host.$company->image;
 		}
@@ -25,6 +25,9 @@ class CompanyController extends Controller
 		}
 		if ($company->logo) {
 			$company->logo = $this->host.$company->logo;
+		}
+		if ($company->company_bg) {
+			$company->company_bg = $this->host.$company->company_bg;
 		}
 
 		$designer = DB::table('admin_users')->where('pid',$cid)->where('job',3)->select('id','name','avatar','style','year','position','username','honor','content')->orderBy('is_up',1)->orderBy('sort','desc')->take(5)->get();

@@ -66,7 +66,10 @@
                     $path = $uppath.$name;
                     $img->save('upload/'.$path);
                     // $image = 'bobao/'.$name;
-            		return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path]);
+                    return 'upload/'.$path;
+            		// return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path]);
+                }else{
+                	return false;
                 }
             // }
         // }else{
