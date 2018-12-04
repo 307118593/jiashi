@@ -85,9 +85,12 @@ class YsController extends Controller
                     $auth[$k]->isSupportTalk = $Support->isSupportTalk;
                     $auth[$k]->isSupportZoom = $Support->isSupportZoom;
                     $auth[$k]->name = $Support->name;
-                    if ($Support->user_share == 1) {
+                    if ($Support->user_share == 1 || ($is_copy == 1 && $Support->staff_share == 1)) {
                         unset($auth[$k]);
                     }
+                    // if ($is_copy == 1 && $Support->staff_share == 1) {
+                    //     unset($auth[$k]);
+                    // }
                 }
                 
             }
