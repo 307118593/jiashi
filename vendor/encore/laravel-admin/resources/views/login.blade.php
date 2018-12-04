@@ -22,10 +22,12 @@
   <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
+<body class="hold-transition login-page" style="background: url({{ URL::asset('uploads/adminlogin.jpg')}}) no-repeat;background-size: cover;">
 <!-- <body class="hold-transition login-page" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif> -->
-<body class="hold-transition login-page" style="background: #62b5fd;background:-moz-linear-gradient(right, red, rgba(0, 0, 255, 0.5));
+  
+<!-- <body class="hold-transition login-page" style="background: #62b5fd;background:-moz-linear-gradient(right, red, rgba(0, 0, 255, 0.5));
       background:-webkit-gradient(linear, right 0, left 0, from(rgba(0, 255, 179, 1)), to(rgba(0, 0, 255, 0.5)));
-      background:-o-linear-gradient(right, red, rgba(0, 0, 255, 0.5));" >
+      background:-o-linear-gradient(right, red, rgba(0, 0, 255, 0.5));" > -->
 <div class="login-box" style="position:absolute;top:0;left:50%;transform:translateX(-50%)">
 <div class="login-box">
   <div class="login-logo">
