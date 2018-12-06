@@ -31,6 +31,7 @@ Route::group([
     $router->resource('activitys', ActivitysController::class);
     $router->resource('residence', ResidenceController::class);
     $router->resource('build_case', Build_caseController::class);
+    $router->resource('record', RecordController::class);
     $router->get('ad', 'AdController@index');
     $router->post('setCompany', 'AdController@setCompany');
     $router->get('api/users', 'Camera_authController@users');

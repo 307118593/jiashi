@@ -93,6 +93,9 @@ class BannerController extends Controller
             // });
             $grid->image('图片')->image();
             $grid->sort('排序权重');
+            if ($role == 1) {
+                $grid->column('admin_users.name','所属公司');
+            }
             $grid->updated_at('修改时间');
             $grid->actions(function ($actions) {
                 $actions->disableView();
@@ -119,7 +122,9 @@ class BannerController extends Controller
             $form->hidden('cid', '公司')->default($cid);
             $form->text('title','标题')->setWidth(2);
             // $form->text('href','跳转地址')->setWidth(4);
-            $form->image('image','图片')->setWidth(4)->uniqueName();
+            // $form->image('image','图片')->setWidth(4)->uniqueName();
+            $form->cropper('image','图片')->cRatio(800,500)->uniqueName();
+
             // $form->radio('tag','类型')->options(['0' => '内部地址', '1'=> '外部地址'])->default('0');
             $form->number('sort','排序权重')->help('权重越大越靠前.');
             $form->hidden('created_at', '创建时间');

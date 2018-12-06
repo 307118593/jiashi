@@ -129,8 +129,10 @@ class Controller extends BaseController
 		$uid = $request->input('uid');
 		// return response()->json(['error'=>0,'uid'=>$uid]);
 		$res = DB::table('record')->where('uid',$uid)->orderBy('id','desc')->first();
+		// return $res;
 		$up = [
 			'alivetime'=>time()-$res->starttime + $res->alivetime,
+			'starttime'=>time(),
 			'endtime'=>time(),
 		];
 		DB::table('record')->where('id',$res->id)->update($up);

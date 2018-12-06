@@ -188,6 +188,8 @@ class StaffController extends Controller
                 $filter->like('name', '昵称');
                 $filter->equal('job','职位')->radio([
                         // ''   => 'All',
+                        1    => '销售总监',
+                        10    => '工程总监',
                         3    => '设计师',
                         11    => '项目经理',
                     ]);

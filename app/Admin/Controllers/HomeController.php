@@ -71,7 +71,7 @@ class HomeController extends Controller
 
                     //员工总数->总监->设计师
                     $staffCount = DB::table('admin_users')->where('pid',$cid)->count();
-                    $zongjianCount = DB::table('admin_users')->where('pid',$cid)->whereIn('job',[1,11])->count();
+                    $zongjianCount = DB::table('admin_users')->where('pid',$cid)->whereIn('job',[1,10])->count();
                     $designCount = DB::table('admin_users')->where('pid',$cid)->where('job',3)->count();
                     $STAFF = new InfoBox('设计师团队:'.$designCount.'人', 'fa-cogs', 'green', '/admin/staff', '员工数:'.$staffCount.'人,总监:'.$zongjianCount);
                     $USER = new InfoBox('公司邀请码:'.$yaoqingma, 'fa-cogs', 'purple', '/admin/user', '注册客户:'.$userCount.'人');

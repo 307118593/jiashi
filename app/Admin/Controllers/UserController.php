@@ -93,6 +93,7 @@ class UserController extends Controller
     protected function grid()
     {
         return Admin::grid(User::class, function (Grid $grid) {
+
             $grid->model()->orderBy('id','desc')->where('is_copy',0);
 
             $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
@@ -106,7 +107,7 @@ class UserController extends Controller
                 $grid->model()->where('cid',$pid);
             }
 
-            // $grid->id('ID')->sortable();
+            $grid->id('ID','用户主键')->sortable();
             // $grid->headurl('头像')->image(45,45);
             $grid->phone('手机号');
             $grid->name('姓名');
@@ -177,9 +178,15 @@ class UserController extends Controller
             $grid->disableRowSelector();
             $grid->filter(function($filter){
                 $filter->disableIdFilter();
-                $filter->equal('phone', '手机号');
-                $filter->like('name', '昵称');
+                    $filter->equal('id', '用户主键');
+                // $filter->column(1/2, function ($filter) {
+                    $filter->equal('phone', '手机号');
+                // });
+                // $filter->column(1/2, function ($filter) {
+                    $filter->like('name', '昵称');
+                // });
             });
+           
         });
     }
 
