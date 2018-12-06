@@ -1,7 +1,5 @@
 <?php
-
 namespace Encore\Admin\Grid;
-
 use Encore\Admin\Grid\Filter\AbstractFilter;
 use Encore\Admin\Grid\Filter\Group;
 use Encore\Admin\Grid\Filter\Layout\Layout;
@@ -10,7 +8,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Input;
-
 /**
  * Class Filter.
  *
@@ -37,12 +34,10 @@ class Filter implements Renderable
      * @var Model
      */
     protected $model;
-
     /**
      * @var array
      */
     protected $filters = [];
-
     /**
      * @var array
      */
@@ -50,58 +45,54 @@ class Filter implements Renderable
         'equal', 'notEqual', 'ilike', 'like', 'gt', 'lt', 'between', 'group',
         'where', 'in', 'notIn', 'date', 'day', 'month', 'year', 'hidden',
     ];
-
     /**
      * If use id filter.
      *
      * @var bool
      */
     protected $useIdFilter = true;
-
     /**
      * Id filter was removed.
      *
      * @var bool
      */
     protected $idFilterRemoved = false;
-
     /**
      * Action of search form.
      *
      * @var string
      */
     protected $action;
-
     /**
      * @var string
      */
     protected $view = 'admin::filter.container';
-
     /**
      * @var string
      */
     protected $filterID = 'filter-box';
-
     /**
      * @var string
      */
     protected $name = '';
-
     /**
      * @var bool
      */
     public $expand = false;
-
     /**
      * @var Collection
      */
     protected $scopes;
-
     /**
      * @var Layout
      */
     protected $layout;
-
+    /**
+     * Primary key of giving model.
+     *
+     * @var mixed
+     */
+    protected $primaryKey;
     /**
      * Create a new filter instance.
      *
@@ -110,15 +101,11 @@ class Filter implements Renderable
     public function __construct(Model $model)
     {
         $this->model = $model;
-
-        $pk = $this->model->eloquent()->getKeyName();
-
+        $this->primaryKey = $this->model->eloquent()->getKeyName();
         $this->initLayout();
-
-        $this->equal($pk, strtoupper($pk));
+        $this->equal($this->primaryKey, strtoupper($this->primaryKey));
         $this->scopes = new Collection();
     }
-
     /**
      * Initialize filter layout.
      */
@@ -126,7 +113,6 @@ class Filter implements Renderable
     {
         $this->layout = new Filter\Layout\Layout($this);
     }
-
     /**
      * Set action of search form.
      *
@@ -137,10 +123,8 @@ class Filter implements Renderable
     public function setAction($action)
     {
         $this->action = $action;
-
         return $this;
     }
-
     /**
      * Get grid model.
      *
@@ -150,7 +134,6 @@ class Filter implements Renderable
     {
         return $this->model;
     }
-
     /**
      * Set ID of search form.
      *
@@ -161,10 +144,8 @@ class Filter implements Renderable
     public function setFilterID($filterID)
     {
         $this->filterID = $filterID;
-
         return $this;
     }
-
     /**
      * Get filter ID.
      *
@@ -174,7 +155,6 @@ class Filter implements Renderable
     {
         return $this->filterID;
     }
-
     /**
      * @param $name
      *
@@ -183,12 +163,9 @@ class Filter implements Renderable
     public function setName($name)
     {
         $this->name = $name;
-
         $this->setFilterID("{$this->name}-{$this->filterID}");
-
         return $this;
     }
-
     /**
      * @return string
      */
@@ -196,26 +173,40 @@ class Filter implements Renderable
     {
         return $this->name;
     }
-
     /**
      * Disable Id filter.
+     *
+     * @return $this
      */
     public function disableIdFilter()
     {
         $this->useIdFilter = false;
+        return $this;
     }
-
     /**
      * Remove ID filter if needed.
      */
     public function removeIDFilterIfNeeded()
     {
         if (!$this->useIdFilter && !$this->idFilterRemoved) {
-            array_shift($this->filters);
+            $this->removeFilterByID($this->primaryKey);
+            foreach ($this->layout->columns() as $column) {
+                $column->removeFilterByID($this->primaryKey);
+            }
             $this->idFilterRemoved = true;
         }
     }
-
+    /**
+     * Remove filter by filter id.
+     *
+     * @param mixed $id
+     */
+    protected function removeFilterByID($id)
+    {
+        $this->filters = array_filter($this->filters, function (AbstractFilter $filter) use ($id) {
+            return $filter->getId() != $id;
+        });
+    }
     /**
      * Get all conditions of the filters.
      *
@@ -224,38 +215,28 @@ class Filter implements Renderable
     public function conditions()
     {
         $inputs = array_dot(Input::all());
-
         $inputs = array_filter($inputs, function ($input) {
             return $input !== '' && !is_null($input);
         });
-
         $this->sanitizeInputs($inputs);
-
         if (empty($inputs)) {
             return [];
         }
-
         $params = [];
-
         foreach ($inputs as $key => $value) {
             array_set($params, $key, $value);
         }
-
         $conditions = [];
-
         $this->removeIDFilterIfNeeded();
-
         foreach ($this->filters() as $filter) {
             $conditions[] = $filter->condition($params);
         }
-
         return tap(array_filter($conditions), function ($conditions) {
             if (!empty($conditions)) {
                 $this->expand();
             }
         });
     }
-
     /**
      * @param $inputs
      *
@@ -266,16 +247,13 @@ class Filter implements Renderable
         if (!$this->name) {
             return $inputs;
         }
-
         $inputs = collect($inputs)->filter(function ($input, $key) {
             return starts_with($key, "{$this->name}_");
         })->mapWithKeys(function ($val, $key) {
             $key = str_replace("{$this->name}_", '', $key);
-
             return [$key => $val];
         })->toArray();
     }
-
     /**
      * Add a filter to grid.
      *
@@ -286,12 +264,9 @@ class Filter implements Renderable
     protected function addFilter(AbstractFilter $filter)
     {
         $this->layout->addFilter($filter);
-
         $filter->setParent($this);
-
         return $this->filters[] = $filter;
     }
-
     /**
      * Use a custom filter.
      *
@@ -303,7 +278,6 @@ class Filter implements Renderable
     {
         return $this->addFilter($filter);
     }
-
     /**
      * Get all filters.
      *
@@ -313,7 +287,6 @@ class Filter implements Renderable
     {
         return $this->filters;
     }
-
     /**
      * @param string $key
      * @param string $label
@@ -326,7 +299,6 @@ class Filter implements Renderable
             return $this->scopes->push($scope);
         });
     }
-
     /**
      * Get all filter scopes.
      *
@@ -336,7 +308,6 @@ class Filter implements Renderable
     {
         return $this->scopes;
     }
-
     /**
      * Get current scope.
      *
@@ -345,12 +316,10 @@ class Filter implements Renderable
     public function getCurrentScope()
     {
         $key = request(Scope::QUERY_NAME);
-
         return $this->scopes->first(function ($scope) use ($key) {
             return $scope->key == $key;
         });
     }
-
     /**
      * Get scope conditions.
      *
@@ -361,10 +330,8 @@ class Filter implements Renderable
         if ($scope = $this->getCurrentScope()) {
             return $scope->condition();
         }
-
         return [];
     }
-
     /**
      * Add a new layout column.
      *
@@ -376,12 +343,9 @@ class Filter implements Renderable
     public function column($width, \Closure $closure)
     {
         $width = $width < 1 ? round(12 * $width) : $width;
-
         $this->layout->column($width, $closure);
-
         return $this;
     }
-
     /**
      * Expand filter container.
      *
@@ -390,10 +354,8 @@ class Filter implements Renderable
     public function expand()
     {
         $this->expand = true;
-
         return $this;
     }
-
     /**
      * Execute the filter with conditions.
      *
@@ -407,10 +369,8 @@ class Filter implements Renderable
             $this->conditions(),
             $this->scopeConditions()
         );
-
         return $this->model->addConditions($conditions)->buildData($toArray);
     }
-
     /**
      * @param callable $callback
      * @param int      $count
@@ -423,10 +383,8 @@ class Filter implements Renderable
             $this->conditions(),
             $this->scopeConditions()
         );
-
         return $this->model->addConditions($conditions)->chunk($callback, $count);
     }
-
     /**
      * Get the string contents of the filter view.
      *
@@ -435,11 +393,9 @@ class Filter implements Renderable
     public function render()
     {
         $this->removeIDFilterIfNeeded();
-
         if (empty($this->filters)) {
             return '';
         }
-
         return view($this->view)->with([
             'action'    => $this->action ?: $this->urlWithoutFilters(),
             'layout'    => $this->layout,
@@ -447,7 +403,6 @@ class Filter implements Renderable
             'expand'    => $this->expand,
         ])->render();
     }
-
     /**
      * Get url without filter queryString.
      *
@@ -457,26 +412,20 @@ class Filter implements Renderable
     {
         /** @var Collection $columns */
         $columns = collect($this->filters)->map->getColumn();
-
         $pageKey = 'page';
-
         if ($gridName = $this->model->getGrid()->getName()) {
             $pageKey = "{$gridName}_{$pageKey}";
         }
-
         $columns->push($pageKey);
-
         $groupNames = collect($this->filters)->filter(function ($filter) {
             return $filter instanceof Group;
         })->map(function (AbstractFilter $filter) {
             return "{$filter->getId()}_group";
         });
-
         return $this->fullUrlWithoutQuery(
             $columns->merge($groupNames)
         );
     }
-
     /**
      * Get url without scope queryString.
      *
@@ -486,7 +435,6 @@ class Filter implements Renderable
     {
         return $this->fullUrlWithoutQuery(Scope::QUERY_NAME);
     }
-
     /**
      * Get full url without query strings.
      *
@@ -499,21 +447,15 @@ class Filter implements Renderable
         if ($keys instanceof Arrayable) {
             $keys = $keys->toArray();
         }
-
         $keys = (array) $keys;
-
         $request = request();
-
         $query = $request->query();
         array_forget($query, $keys);
-
         $question = $request->getBaseUrl().$request->getPathInfo() == '/' ? '/?' : '?';
-
         return count($request->query()) > 0
             ? $request->url().$question.http_build_query($query)
             : $request->fullUrl();
     }
-
     /**
      * Generate a filter object and add to grid.
      *
@@ -526,10 +468,8 @@ class Filter implements Renderable
     {
         if (in_array($method, $this->supports)) {
             $className = '\\Encore\\Admin\\Grid\\Filter\\'.ucfirst($method);
-
             return $this->addFilter(new $className(...$arguments));
         }
-
         return $this;
     }
 }
