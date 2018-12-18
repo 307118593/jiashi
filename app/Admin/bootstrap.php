@@ -24,6 +24,10 @@ Column::extend('color', function ($value, $color) {
     return "<span style='color: $color'>$value</span>";
 });
 Column::extend('popover', Popover::class);
+
+Column::extend('size', function ($value, $size) {
+    return "<span style='font-size: $size'>$value</span>";
+});
 // Admin::css('http://47.97.109.9/resources/css/xcConfirm.css');
 // Admin::js('http://47.97.109.9/resources/js/jquery-3.1.1.min.js');
 // Admin::js('http://47.97.109.9/resources/js/BeAlert.js');

@@ -12,4 +12,8 @@ class Camera_log extends Model
     {
         return $this->belongsTo('App\User','uid','id');
     }
+    public function camera()
+    {
+        return $this->belongsTo('App\Camera','mac','mac');
+    }
 }

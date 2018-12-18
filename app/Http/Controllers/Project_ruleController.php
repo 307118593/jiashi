@@ -27,7 +27,8 @@ class Project_ruleController extends Controller
 
 	//查询我的项目
 	public function myProject(Request $request){
-		$uid = $request->input('uid');
+        $uid = $request->input('uid');
+		$condition = $request->input('condition','');
 		$role = $this->getRole($uid);
 		if ($role != 1) {
 			$z_uid = DB::table('admin_users')->where('id',$uid)->value('pid');
@@ -35,7 +36,10 @@ class Project_ruleController extends Controller
 			$z_uid = $uid;
 		}
 		
-    	$project = DB::table('project')->where('z_uid',$z_uid)->select('id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id','staff_share')->orderBy('id','desc')->get();
+    	$project = DB::table('project')->where('z_uid',$z_uid)->when($condition,function($query) use($condition){
+            return $query->where('name','like','%'.$condition.'%');
+        })
+        ->select('id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id','staff_share')->orderBy('id','desc')->get();
     	// return $z_uid;
     	// $leaderProject = [];
     	// $joinProject = [];
@@ -60,7 +64,7 @@ class Project_ruleController extends Controller
                    $project[$k]->speed = 0;
                 }else{
                    $project[$k]->speed = round($finish/$all,2)*100;
-                   $project[$k]->speed = $project[$k]->speed;
+                   $project[$k]->speed = $project[$k]->speed.'%';
                 }
     		}
     		if ($uid != $v->leader_id && !in_array($uid,$project_us) && $v->staff_share == 0) {
@@ -202,17 +206,19 @@ class Project_ruleController extends Controller
 	public function editFlowState(Request $request){
 		$pro_id = $request->input('pro_id');
 		$f_id = $request->input('f_id');
-		$state = $request->input('state');
-		$restate = DB::table('flow')->where(['pro_id'=>$pro_id,'id'=>$f_id])->value('state');
-		if ($restate >= $state) {
-			return response()->json(['error'=>1,'mes'=>'操作失败.']);
-		}
+        $state = $request->input('state');
+		$time = $request->input('time');
+		// $restate = DB::table('flow')->where(['pro_id'=>$pro_id,'id'=>$f_id])->value('state');
+		// if ($restate >= $state) {
+		// 	return response()->json(['error'=>1,'mes'=>'操作失败.']);
+		// }
 		if ($state == 1) {
-			$res = DB::table('flow')->where(['pro_id'=>$pro_id,'id'=>$f_id])->update(['starttime'=>date('Y-m-d H:i:s',time()),'state'=>$state]);
+			$res = DB::table('flow')->where(['pro_id'=>$pro_id,'id'=>$f_id])->update(['starttime'=>$time,'state'=>$state]);
+            DB::table('project')->where('id',$pro_id)->update(['state'=>2]);
 		}
 
 		if ($state == 2) {
-			$res = DB::table('flow')->where(['pro_id'=>$pro_id,'id'=>$f_id])->update(['endtime'=>date('Y-m-d H:i:s',time()),'state'=>$state]);
+			$res = DB::table('flow')->where(['pro_id'=>$pro_id,'id'=>$f_id])->update(['endtime'=>$time,'state'=>$state]);
 		}
 
 		if ($res) {

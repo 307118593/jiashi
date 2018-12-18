@@ -39,7 +39,22 @@ class Controller extends BaseController
 	}
 	
 	public function update_version(request $request){
-		$version = $request->input('version',-1); 
+		$type = $request->input('type',0); 
+		$version = $request->input('version',-1);
+		// return $type; 
+		if ($type==1) {
+			if ($version == -1) {
+				$res = DB::table('company_version')->orderBy('version','desc')->first();
+				return response()->json(['error'=>0,'data'=>$res]);
+			}
+			$res = DB::table('company_version')->where('version','>',$version)->orderBy('version','desc')->first();
+			if ($res) {
+				$res->addtime = strtotime($res->addtime);
+				return response()->json(['error'=>0,'data'=>$res]);
+			}else{
+				return response()->json(['error'=>1,'mes'=>'已经是最新版本']);
+			}
+		}
 		$iosUrl = 'https://itunes.apple.com/us/app/%E5%AE%B6%E8%A7%86%E8%A3%85%E4%BF%AE%E7%9B%B4%E6%92%AD/id1439192101?mt=8&uo=4';
 		if ($version == -1) {
 			$res = DB::table('app_version')->orderBy('version','desc')->first();

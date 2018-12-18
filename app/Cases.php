@@ -12,4 +12,20 @@ class Cases extends Model
     {
         return $this->belongsTo('App\Staff','uid','id');
     }
+    public function residence()
+    {
+        return $this->belongsTo('App\Residence','rid','id');
+    }
+
+
+    public function setPanoramaAttribute($panorama)
+    {
+        if (is_array($panorama)) {
+            $this->attributes['panorama'] = json_encode($panorama);
+        }
+    }
+    public function getPanoramaAttribute($panorama)
+    {
+        return json_decode($panorama, true);
+    }
 }

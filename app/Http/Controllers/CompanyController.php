@@ -103,6 +103,9 @@ class CompanyController extends Controller
 							$cases[$k]->photo = $this->upload.$v->photo;
 						}
 						$cases[$k]->author = DB::table('admin_users')->where('id',$v->uid)->value('name');
+						if (empty($v->url)) {
+							$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?case_id='.$v->id;
+						}
 					}
 				$data['banner'] = $banner;
 				$data['company'] = $company;
@@ -140,6 +143,9 @@ class CompanyController extends Controller
 				$cases[$k]->photo = $this->upload.$v->photo;
 			}
 			$cases[$k]->author = DB::table('admin_users')->where('id',$v->uid)->value('name');
+			if ($v->panorama) {
+				$v->panorama = $this->duotu($v->panorama);
+			}
 		}
 		$data['designer'] = $designer;
 		$data['cases'] = $cases;
@@ -155,7 +161,28 @@ class CompanyController extends Controller
 				$cases[$k]->photo = $this->upload.$v->photo;
 			}
 			$cases[$k]->author = DB::table('admin_users')->where('id',$v->uid)->value('name');
+			// if ($v->panorama) {
+			// 	$v->panorama = $this->duotu($v->panorama);
+			// }
+			if (empty($v->url)) {
+				$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?case_id='.$v->id;
+			}
 		}
+		return response()->json(['error'=>0,'data'=>$cases]);
+	}
+
+	//案例详情
+	public function case_detail(Request $request){
+		$case_id = $request->input('case_id');
+		$cases = DB::table('cases')->where('id',$case_id)->first();
+		if ($cases->photo) {
+			$cases->photo = $this->upload.$cases->photo;
+		}
+		$cases->author = DB::table('admin_users')->where('id',$cases->uid)->value('name');
+		if ($cases->panorama) {
+			$cases->panorama = $this->duotu($cases->panorama);
+		}
+	
 		return response()->json(['error'=>0,'data'=>$cases]);
 	}
 
@@ -245,26 +272,43 @@ class CompanyController extends Controller
 			if ($v->photo) {
 				$v->photo = $this->upload.$v->photo;
 			}
-			$build_cases[$k]->keting = $this->duotu($v->keting);
-			$build_cases[$k]->woshi = $this->duotu($v->woshi);
-			$build_cases[$k]->weishengjian = $this->duotu($v->weishengjian);
-			$build_cases[$k]->chufang = $this->duotu($v->chufang);
-			$build_cases[$k]->shuidianshigong = $this->duotu($v->shuidianshigong);
-			$build_cases[$k]->qiqianggongyi = $this->duotu($v->qiqianggongyi);
-			$build_cases[$k]->mugonggongyi = $this->duotu($v->mugonggongyi);
-			$build_cases[$k]->youqigongyi = $this->duotu($v->youqigongyi);
+			// $build_cases[$k]->keting = $this->duotu($v->keting);
+			// $build_cases[$k]->woshi = $this->duotu($v->woshi);
+			// $build_cases[$k]->weishengjian = $this->duotu($v->weishengjian);
+			// $build_cases[$k]->chufang = $this->duotu($v->chufang);
+			// $build_cases[$k]->shuidianshigong = $this->duotu($v->shuidianshigong);
+			// $build_cases[$k]->qiqianggongyi = $this->duotu($v->qiqianggongyi);
+			// $build_cases[$k]->mugonggongyi = $this->duotu($v->mugonggongyi);
+			// $build_cases[$k]->youqigongyi = $this->duotu($v->youqigongyi);
 
 		}
+		$arts = DB::table('arts')->where('uids','like','%"'.$uid.'"%')->orderby('sort','desc')->get();
+		foreach ($arts as $k => $v) {
+			$arts[$k]->images = $this->duotu($v->images);
+			$arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?case_id='.$v->id;
+		}
 		$data['builder'] = $builder;
+		$data['arts'] = $arts;
 		$data['build_cases'] = $build_cases;
 		return response()->json(['error'=>0,'data'=>$data]);
 
+	}
+
+	//获取工艺详情
+	public function artDetail(Request $request){
+		$art_id = $request->input('case_id');
+		$art = DB::table('arts')->where('id',$art_id)->first();
+		$art->images = $this->duotu($art->images);
+		return response()->json(['error'=>0,'data'=>$art]);
 	}
 
 	//获取施工案例详情
 	public function getBuildDetail(Request $request){
 		$bid = $request->input('bid');
 		$build_cases = DB::table('build_case')->where('id',$bid)->first();
+		$build_cases->builder = DB::table('admin_users')->where('id',$build_cases->uid)->value('name');
+		$build_cases->builder_avatar = $this->upload.DB::table('admin_users')->where('id',$build_cases->uid)->value('avatar');
+			
 		if ($build_cases->photo) {
 			$build_cases->photo = $this->upload.$build_cases->photo;
 		}
@@ -280,6 +324,51 @@ class CompanyController extends Controller
 		return response()->json(['error'=>0,'data'=>$build_cases]);
 	}
 
+	//公司统计
+	public function companyRecord(Request $request){
+		 $cid = $request->input('cid');
+		 $uid = $request->input('uid');
+		 $data['comeraCount'] =  DB::table('camera')->where('cid',$cid)->count();
+		 $data['projectCount'] = DB::table('project')->where('z_uid',$cid)->count();
+		 $data['staffCount'] =  DB::table('admin_users')->where('pid',$cid)->count();
+		 $data['userCount'] =   DB::table('user')->where('cid',$cid)->where('is_copy',0)->count();
+		 $data['invitation'] =   $cid + 1000;
+		 for ($i=0; $i < 7; $i++) { 
+	        $date[$i]['day'] = date('Y-m-d', strtotime('-'.$i.' days'));
+	    	}
+	    	$date = array_reverse($date);
+	     foreach ($date as $k => $v) {
+	     	$date[$k]['count'] = DB::table('record')->where('day',$v['day'])->count();
+	     }
+	     $data['alive'] = $date;
+
+	     $project = DB::table('project')->where('leader_id',$uid)->orWhere('project_us','like','%"'.$uid.'"%')->orderBy('state','asc')->get();
+	     $project = $project->toArray();
+	     // dd($project);
+	     $own = [];
+	     $own['projectCount'] = count($project);
+	     $i=0;$j=0;$x=0;
+	     foreach ($project as $k => $v) {
+	     	if ($v->state < 2) {
+	     		$i ++;
+	     	}
+	     	if ($v->state == 2 ) {
+	     		$j ++;
+	     	}
+	     	if ($v->state == 3) {
+	     		$x ++;
+	     	}
+	     }
+	     $own['notStartCount'] = $i;
+	     $own['onStartCount'] = $j;
+	     $own['endtStartCount'] = $x;
+	     $alldata['companydata'] = $data;
+	     $alldata['own'] = $own;
+		 return response()->json(['error'=>0,'data'=>$alldata]);
+	}
+
+
+	//多图处理
 	public function duotu($images){
 		if (!$images) {
 			return;
@@ -290,6 +379,11 @@ class CompanyController extends Controller
 			$pic[] = $this->upload.$v;
 		}
 		return $pic;
+	}
+
+	public function getRecord(Request $request){
+		$cid = $request->input('cid');
+		
 	}
 
 }

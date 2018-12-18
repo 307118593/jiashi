@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use Admin;
 use App\Record;
+use App\Staff;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -100,11 +101,11 @@ class RecordController
         }
         $grid->alivetime('在线时长/分钟')->display(function($alivetime){
             return round($alivetime/60,1);
-        })->label('danger');
+        })->label('primary')->size('18px');
         $grid->endtime('最后退出')->display(function($endtime){
             return date("Y-m-d H:i",$endtime);
         });
-        $grid->day('日期')->sortable()->label();
+        $grid->day('日期')->sortable()->label()->size('18px');
 
         $grid->disableCreateButton();
         $grid->disableExport();
@@ -113,6 +114,15 @@ class RecordController
             $actions->disableDelete();
             $actions->disableEdit();
             $actions->disableView();
+        });
+        $grid->filter(function($filter) use($role){
+            $filter->disableIdFilter();
+            $filter->like('user.name','用户名称');
+            $filter->equal('user.phone','用户手机号');
+            $filter->day('day', '日期');
+            if ($role == 1) {
+                $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+            }
         });
         return $grid;
     }

@@ -350,7 +350,7 @@ class YsController extends Controller
             $res = $this->vpost('https://open.ys7.com/api/lapp/live/address/get','accessToken='.$this->accessToken.'&source='.$v->mac.':1');
             $res = json_decode($res);
                 if ($res->data[0]->status == 1 && $res->data[0]->exception == 0) {
-                    DB::table('camera')->where('id',$v->id)->update(['hls'=>$res->data[0]->hls,'rtmp'=>$res->data[0]->rtmp,'alive'=>1]);
+                    DB::table('camera')->where('id',$v->id)->update(['hls'=>$res->data[0]->hlsHd,'rtmp'=>$res->data[0]->rtmpHd,'alive'=>1]);
                 }
          
         }
@@ -368,6 +368,7 @@ class YsController extends Controller
             $new = [
                 'uid'=>$uid,
                 'mac'=>$mac,
+                'cid'=>DB::table('camera')->where('mac',$mac)->value('cid'),
                 'opentime'=>time(),
                 'day'=>date('Y-m-d'),
             ];

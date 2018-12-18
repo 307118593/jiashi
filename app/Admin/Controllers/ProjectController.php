@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Project;
 use App\User;
+use App\Staff;
 use DB;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -180,10 +181,22 @@ class ProjectController extends Controller
                 $actions->disableDelete(); $actions->disableView();
                 // $actions->disableEdit();
             });
-            $grid->filter(function($filter){
+            $grid->filter(function($filter) use($role){
                 $filter->disableIdFilter();
-                $filter->like('admin_users.name', '负责人');
-                $filter->between('starttime_d', '项目开始时间')->datetime();
+                $filter->column(1/2, function ($filter) use($role) {
+                    $filter->equal('user.phone', '业主手机号');
+                    $filter->like('user.name', '业主名称');
+                    if ($role == 1) {
+                        $filter->equal('z_uid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                    }
+                    
+                });
+                $filter->column(1/2, function ($filter) {
+                    $filter->like('admin_users.name', '负责人');
+                    $filter->between('starttime_d', '项目开始时间')->datetime();
+                });
+
+                
 
             });
         });
@@ -331,7 +344,7 @@ class ProjectController extends Controller
             // });
 
 
-            $form->saving(function (Form $form){
+            $form->saved(function (Form $form){
                 $pro_id = $form->model()->id;
                 $temp = $form->model()->temp;
                 $z_uid = $form->model()->z_uid;
@@ -349,10 +362,6 @@ class ProjectController extends Controller
                     }
                 }
 
-                
-                
-            });
-            $form->saved(function (Form $form){
                 if (!$form->id) {//新增状态
                     $predefined = [
                         'ticker' => '这是ticker',
@@ -369,7 +378,26 @@ class ProjectController extends Controller
                     $device_token = DB::table('user')->where('id',$form->uid)->value('DeviceToken');
                     sendUnicast($device_token,$predefined,$extraField);
                 }
+                
             });
+            // $form->saved(function (Form $form){
+            //     if (!$form->id) {//新增状态
+            //         $predefined = [
+            //             'ticker' => '这是ticker',
+            //             'title' => '工地新建通知',
+            //             "text"=>'您好,您的工地名:'.$form->name.'已经新建完成',   
+            //             "after_open" => 'go_app',
+            //             "cid" => $form->z_uid,
+            //             "uid" => $form->uid,
+            //         ];
+            //         $extraField=[
+            //             "cid" => $form->z_uid,
+            //             "uid" => $form->uid,
+            //         ];
+            //         $device_token = DB::table('user')->where('id',$form->uid)->value('DeviceToken');
+            //         sendUnicast($device_token,$predefined,$extraField);
+            //     }
+            // });
             
             
         });

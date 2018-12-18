@@ -3,6 +3,8 @@
 namespace App\Admin\Controllers;
 
 use App\Camera_log;
+use App\Camera;
+use App\Staff;
 use DB;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -72,28 +74,48 @@ class Camera_logController extends Controller
     protected function grid()
     {
         return Admin::grid(Camera_log::class, function (Grid $grid) {
+            $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
+            $userid = admin::user()->id;
+            $pid = admin::user()->pid;
 
+            $grid->model()->orderBy('id','desc');
+            if ($role != 1) {
+                if ($role == 2) {
+                    $cid = $userid;
+                }else{
+                    $cid = $pid;
+                }
+                $grid->model()->where('cid',$cid);
+            }
             $grid->id('ID')->sortable();
             $grid->mac('设备标识');
-            $grid->column('user.phone','所属管理员')->display(function($phone){
+            $grid->column('camera.name','设备名称');
+            $grid->column('user.phone','观看人')->display(function($phone){
                 return DB::table('user')->where('phone',$phone)->value('name').'<br>'.$phone;
             });
-            $grid->is_admin('身份')->display(function($is_admin){
-                return $is_admin == 0?'管理员':'子用户';
+           $grid->alivetime('当日观看时长/分钟')->display(function($alivetime){
+                return round($alivetime/60,1);
+            })->label('primary')->size('20px');
+            $grid->closetime('最后退出')->display(function($closetime){
+                return date("Y-m-d H:i",$closetime);
             });
-            $grid->addtime('绑定时间');
-            $grid->losetime('解绑时间');
+            $grid->day('日期')->sortable()->label()->size('20px');
+
             $grid->disableCreateButton();
             $grid->disableRowSelector();
+            $grid->actions(function ($actions) {
+                $actions->disableDelete();
+                $actions->disableEdit();
+                $actions->disableView();
+            });
             $grid->filter(function($filter){
                 $filter->disableIdFilter();
                 $filter->like('mac', '设备标识');
+                $filter->equal('user.name', '用户名');
                 $filter->equal('user.phone', '手机号');
-                $filter->equal('身份')->select([0 => '管理员',1=>'子用户']);
+                $filter->day('day', '日期');
             });
-            $grid->actions(function ($actions) {
-                $actions->disableView();
-            });
+            
         });
     }
 

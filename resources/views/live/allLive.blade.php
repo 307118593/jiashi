@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <title>九宫格</title>
+    <title>
+            @if($count==4)
+              四宫格
+            @elseif($count==6) 
+              六宫格 
+            @else 
+              九宫格 
+            @endif
+    </title>
     <style>
         * { padding: 0; margin: 0; }
         .main {
@@ -180,10 +188,17 @@
        <div class="pull-right" >
           {{ $camera->appends(['userid' => $uid ,'count'=>$count])->links() }}
           @if($count==4)
-          <a href="/lives?userid={{$uid}}&count=9"><button class="button">九宫格</button></a>
+          <a href="/lives?userid={{$uid}}&count=6"><button class="button">六宫格</button></a>
+          <a href="/lives?userid={{$uid}}&count=9"><button class="button" style="margin-left: 100px">九宫格</button></a>
+          @elseif($count==9)
+          <a href="/lives?userid={{$uid}}&count=4"><button class="button">四宫格</button></a>
+          <a href="/lives?userid={{$uid}}&count=6"><button class="button" style="margin-left: 100px">六宫格</button></a>
           @else
           <a href="/lives?userid={{$uid}}&count=4"><button class="button">四宫格</button></a>
+          <a href="/lives?userid={{$uid}}&count=9"><button class="button" style="margin-left: 100px">九宫格</button></a>
           @endif
+          
+
        </div>
  </div>
  <script type="text/javascript">

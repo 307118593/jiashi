@@ -118,38 +118,6 @@ class CameraController extends Controller
                  $grid->column('admin_users.name','所属公司');
             }
             $grid->column('project.name','绑定工地');
-            // $grid->account('账号');
-            // $grid->pwd('密码');
-            // $grid->is_share('共享')->display(function($is_share){
-            //     return $is_share==0?'否':'<p style="color:green">共享</p>';
-            // });
-                 // <script src="http://47.97.109.9/resources/js/jquery1-1.9.1.js"></script><script src="http://47.97.109.9/resources/js/jquery-3.1.1.min.js"></script>
-
-            
-            /*
-      function firm(id){
-        var data = {id:id};
-        $.ajax({
-          url:"http://47.97.109.9/api/jiechubangding",
-          data:data,
-          dataType:"json",
-          type:"POST",
-          success:function(data){
-             if(data.error == 0){
-              location.reload(true);
-            }
-            if(data.code==1){
-              alert("操作失败");
-            }  
-          }
-        })
-    }
-    var mes = '确定要将设备名为\"'+name+'\"解除绑定吗?';
-                        if(confirm(mes)){
-
-                        }
-            */
-             
             $grid->addtime('新建时间');
             if (in_array(Request::get('cameras'), ['1'])) {
                 $states = [
@@ -216,14 +184,7 @@ class CameraController extends Controller
                 });
             // }
             $grid->disableRowSelector();
-            // $grid->actions(function ($actions) {
-            //     // prepend一个操作
-            //     $camera = $actions->row;
-            //     if ($camera['uid']>0 || $camera['pro_id']>0) {
-            //         $actions->prepend('<button type="button" class="btn btn-danger btn-xs">解绑</button><span>  ..</span>');
-            //     }
-                
-            // });
+         
             $grid->tools(function ($tools) use($role,$userid){
                 $tools->append(new Cameras());
                 $userid = time().$userid;
@@ -263,6 +224,22 @@ class CameraController extends Controller
             });
            
 
+            $grid->filter(function($filter) use($role){
+                $filter->disableIdFilter();
+                $filter->column(1/2, function ($filter) use($role) {
+                    $filter->equal('mac', '设备序列号');
+                    $filter->like('name', '设备名称');
+                    if ($role == 1) {
+                        $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                    }
+                    
+                });
+                $filter->column(1/2, function ($filter) {
+                    $filter->like('user.name', '绑定的客户名称');
+                    $filter->like('project.name', '绑定的工地名称');
+                    
+                });
+            });
         });
     }
 

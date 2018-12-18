@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Welcome;
+use App\Staff;
 use DB;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -110,13 +111,22 @@ class WelcomeController extends Controller
             $grid->image('图片')->image();
             $grid->url('链接');
             
-            $grid->disableFilter();
             $grid->disableExport();
             $grid->actions(function ($actions) {
                 $actions->disableView();
             });
             $grid->disableRowSelector();
-
+            if ($role != 1) {
+                $grid->disableFilter();
+            }else{
+                $grid->filter(function($filter) use($role){
+                    $filter->disableIdFilter();
+                    $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                });
+            }
+             
+                
+            
         });
     }
 

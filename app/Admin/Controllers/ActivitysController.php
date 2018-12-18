@@ -120,6 +120,15 @@ class ActivitysController
         });
         $grid->disableRowSelector();
         $grid->disableExport();
+         $grid->filter(function($filter) use($role){
+            $filter->disableIdFilter();
+            $filter->like('title','标题');
+            $filter->equal('admin_users.name','作者');
+            $filter->equal('type','类型')->radio([0=>'跳转到图片',1=>'跳转到外链']);
+            if ($role == 1) {
+                $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+            }
+        });
         return $grid;
     }
 

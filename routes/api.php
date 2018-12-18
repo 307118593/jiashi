@@ -17,15 +17,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::any('test',function(){
-	$predefined = [
-		'ticker' => '这是ticker',
-	    'title' => '工地新建通知',
-	    "text"=>'您好,您的工地名称:测试..已经新建完成',   
-	    "after_open" => 'go_app',
-	];
-	$device_token = DB::table('user')->where('id',35)->value('DeviceToken');
-	$res = sendUnicast($device_token,$predefined);
-	return $res;
+	// $predefined = [
+	// 	'ticker' => '这是ticker',
+	//     'title' => '工地新建通知',
+	//     "text"=>'您好,您的工地名称:测试..已经新建完成',   
+	//     "after_open" => 'go_app',
+	// ];
+	// $device_token = DB::table('user')->where('id',35)->value('DeviceToken');
+	// $res = sendUnicast($device_token,$predefined);
+	// return $res;
+	// $camera = DB::table('camera_log')->get();
+	// foreach ($camera as $k => $v) {
+	// 	$cid = DB::table('camera')->where('mac',$v->mac)->value('cid');
+	// 	DB::table('camera_log')->where('id',$v->id)->update(['cid'=>$cid]);
+	// }
 });
 //上传版本
 Route::any('update_version','Controller@update_version');
@@ -244,6 +249,8 @@ Route::any('designer_list','CompanyController@designer_list');
 Route::any('designer_detail','CompanyController@designer_detail');
 //设计师案例列表
 Route::any('designer_cases','CompanyController@designer_cases');
+//案例详情
+Route::any('case_detail','CompanyController@case_detail');
 //获取相册
 Route::any('get_pics','CompanyController@get_pics');
 //获取邀请页面链接
@@ -254,7 +261,10 @@ Route::any('getBuildTeam','CompanyController@getBuildTeam');
 Route::any('getBuilderDetail','CompanyController@getBuilderDetail');
 //获取施工案例详情
 Route::any('getBuildDetail','CompanyController@getBuildDetail');
-
+//获取公司统计
+Route::any('companyRecord','CompanyController@companyRecord');
+//获取工艺详情
+Route::any('artDetail','CompanyController@artDetail');
 //推送
 //测试推送
 Route::any('send_push','PushController@send_push');

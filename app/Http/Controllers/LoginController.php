@@ -133,6 +133,7 @@ class LoginController extends Controller
     	);
     	$uid = DB::table('user')->insertGetId($array);
     	if ($uid) {
+            $this->vpost('http://47.97.109.9/api/openApp','uid='.$uid); 
     		$user = DB::table('user')->where('phone',$phone)->first();
     		return response()->json(['error'=>0,'mes'=>'注册成功','data'=>$user]);
     	}
@@ -245,6 +246,7 @@ class LoginController extends Controller
             if ($user->is_wx == 1) {
                 $user->wechat_name = DB::table('oauth')->where('uid',$user->id)->value('name');
             }
+            $this->vpost('http://47.97.109.9/api/openApp','uid='.$user->id); 
             return response()->json(['error'=>0,'mes'=>'登陆成功','data'=>$user]);
         }else{
             return response()->json(['error'=>1,'mes'=>'账号或密码错误']);
@@ -296,6 +298,7 @@ class LoginController extends Controller
             );
             $uid = DB::table('user')->insertGetId($array);
             if ($uid) {
+            $this->vpost('http://47.97.109.9/api/openApp','uid='.$uid); 
                 $user = DB::table('user')->where('id',$uid)->first();
                 $user->pwd = $pwd;
                 $user->newMes = DB::table('messages_user')->where('uid',$user->id)->where('is_read',0)->where('is_del',0)->count();

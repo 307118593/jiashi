@@ -108,6 +108,14 @@ class ResidenceController
         });
         $grid->disableRowSelector();
         $grid->disableExport();
+        $grid->filter(function($filter) use($role){
+            $filter->disableIdFilter();
+            $filter->like('name','楼盘名称');
+            if ($role == 1) {
+                $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+            }
+            
+        });
         return $grid;
     }
 

@@ -100,7 +100,6 @@ class Build_caseController
         $grid->area('面积');
         $grid->style('施工风格');
         $grid->build_time('施工周期/月')->label('info');
-        $grid->price('金额/万')->label('danger');
         if ($role == 1 || $role == 2 || $role == 4 ) {
              $states = [
                 'on'  => ['value' => 1, 'text' => '是', 'color' => 'success'],
@@ -118,7 +117,16 @@ class Build_caseController
         $grid->actions(function ($actions) {
             $actions->disableView();
         });
+        $grid->disableRowSelector();
         $grid->disableExport();
+        $grid->filter(function($filter) use($role){
+            $filter->disableIdFilter();
+            $filter->like('title','案例名称');
+            $filter->equal('admin_users.name','作者');
+            if ($role == 1) {
+                $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+            }
+        });
         return $grid;
     }
 
@@ -199,7 +207,11 @@ class Build_caseController
                     $form->switch('is_appup','APP首页显示')->states($states);
                 }
             })->tab('图片材料',function($form){
-
+                // $form->hasMany('build_images','添加材料', function (Form\NestedForm $form) {
+                //     $form->text('build_images.title','名称');
+                //     $form->multipleImage('build_images.images','图片材料')->removable()->move('build_case')->uniqueName();
+                //     // $form->image('images','图片材料')->removable()->move('build_case')->uniqueName();
+                // });
                 $form->multipleImage('keting','客厅')->removable()->move('keting')->uniqueName();
                 $form->multipleImage('woshi','卧室')->removable()->move('woshi')->uniqueName();
                 $form->multipleImage('weishengjian','卫生间')->removable()->move('weishengjian')->uniqueName();
@@ -213,7 +225,7 @@ class Build_caseController
             });
 
             // $form->saving(function(Form $form){
-            //     dump(request('star'));exit;
+            //     dump(request());exit;
             // });
 
         return $form;

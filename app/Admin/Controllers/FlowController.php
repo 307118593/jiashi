@@ -171,6 +171,8 @@ class Flowcontroller extends Controller
                         sendUnicast($device_token,$predefined,$extraField);
 
                         DB::table('flow')->where('id',$form->id)->update(['starttime'=>date('Y-m-d H:i:s',time())]);
+                        //开始施工/
+                        DB::table('project')->where('id',$form->pro_id)->update(['state'=>2]);
                     }
                     if ($form->state == 2) {
                         $predefined = [

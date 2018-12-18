@@ -20,16 +20,16 @@ class StaffController extends Controller
 
 	//获取员工列表
 	public function get_staff(Request $request){
-		$uid = $request->input('uid');
-		$role = $this->getRole($uid);
-		if ($role == 4) {
-			$pid = DB::table('admin_users')->where('id',$uid)->value('pid');
-		}else if ($role == 2) {
-			$pid = $uid;
-		}else{
-			return response()->json(['error'=>1,'mes'=>'无权限!']);
-		}
-		$staff = DB::table('admin_users')->where('pid',$pid)->orderBy('id','desc')->select('id','username','name','job','avatar')->get();
+		$cid = $request->input('cid');
+		// $role = $this->getRole($uid);
+		// if ($role == 4) {
+		// 	$pid = DB::table('admin_users')->where('id',$uid)->value('pid');
+		// }else if ($role == 2) {
+		// 	$pid = $uid;
+		// }else{
+		// 	return response()->json(['error'=>1,'mes'=>'无权限!']);
+		// }
+		$staff = DB::table('admin_users')->where('pid',$cid)->orderBy('id','desc')->select('id','username','name','job','avatar')->get();
 		if ($staff->isEmpty()) {
 			 return response()->json(['error'=>0,'data'=>$staff]);
 		}
@@ -39,7 +39,7 @@ class StaffController extends Controller
                     $staff[$k]->job = '销售总监';
                     break;
                 case 2:
-                    $staff[$k]->job = '销售';
+                    $staff[$k]->job = '客户经理';
                     break;
                 case 3:
                     $staff[$k]->job = '设计师';
@@ -48,16 +48,20 @@ class StaffController extends Controller
                     $staff[$k]->job = '客服';
                     break;
                 case 10:
-                    $staff[$k]->job = '项目经理';
+                    $staff[$k]->job = '工程总监';
                     break;
                 case 11:
-                    $staff[$k]->job = '施工人员';
+                    $staff[$k]->job = '项目经理';
                     break;
                 case 12:
-                    $staff[$k]->job = '监理人员';
+                    $staff[$k]->job = '施工人员';
+                    break;
+                case 13:
+                    $staff[$k]->job = '工程监理';
                     break;
                
             }
+            $staff[$k]->avatar = $this->upload.$v->avatar;
 		}
 		return response()->json(['error'=>0,'data'=>$staff]);
 

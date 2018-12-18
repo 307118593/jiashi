@@ -3,7 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Banner;
-
+use App\Staff;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Facades\Admin;
@@ -100,6 +100,14 @@ class BannerController extends Controller
             $grid->actions(function ($actions) {
                 $actions->disableView();
             });
+           if ($role != 1) {
+                $grid->disableFilter();
+            }else{
+                $grid->filter(function($filter) use($role){
+                    $filter->disableIdFilter();
+                    $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                });
+            }
         });
     }
 

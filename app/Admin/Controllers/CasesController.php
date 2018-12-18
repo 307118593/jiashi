@@ -4,6 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Cases;
 use App\User;
+use App\Residence;
+use App\Staff;
 use DB;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -77,6 +79,7 @@ class CasesController extends Controller
             $userid = admin::user()->id;
             $pid = admin::user()->pid;
             $grid->model()->orderBy('id','desc');
+            $cid = 0;
             if ($role != 1) {
                 if ($role == 2) {
                     $cid = $userid;
@@ -87,14 +90,17 @@ class CasesController extends Controller
             }
             $grid->title('标题');
             $grid->column('admin_users.name','作者');
-            $grid->house('户型');
+            // $grid->house('户型');
             $grid->area('面积');
             $grid->style('装修风格');
             $grid->url('链接地址');
             $grid->address('地址');
+            $grid->column('residence.name','所属楼盘');
+            
 
             if ($role == 1 || $role == 2 || $role == 4 ) {
-                 $states = [
+                $grid->sort('排序')->label();
+                $states = [
                     'on'  => ['value' => 1, 'text' => '是', 'color' => 'success'],
                     'off' => ['value' => 0, 'text' => '否', 'color' => 'danger'],
                 ];
@@ -107,13 +113,29 @@ class CasesController extends Controller
                 ];
                 $grid->is_appup('APP首页显示')->switch($states);
             }
+            $grid->disableRowSelector();
             $grid->actions(function ($actions) {
                 $actions->disableView();
             });
-            $grid->tools(function ($tools) {
-                $tools->batch(function ($batch) {
-                    $batch->disableDelete();
-                });
+            // $grid->tools(function ($tools) {
+            //     $tools->batch(function ($batch) {
+            //         $batch->disableDelete();
+            //     });
+            // });
+            $grid->filter(function($filter) use($role,$cid){
+               
+                $filter->disableIdFilter();
+                $filter->like('title','案例名称');
+                $filter->equal('admin_users.name','作者');
+                 if ($role == 1) {
+                    $filter->equal('rid','所属楼盘')->select(Residence::all()->pluck('name', 'id'));
+                }else{
+                    $filter->equal('rid','所属楼盘')->select(Residence::all()->where('cid',$cid)->pluck('name', 'id'));
+                }
+                if ($role == 1) {
+                    $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                }
+                
             });
         });
     }
@@ -141,8 +163,9 @@ class CasesController extends Controller
             $form->text('style','装修风格')->setwidth(2)->help('如:中式,欧式');
             $form->select('type','装修类型')->options([0=>'全包',1=>'半包'])->default('1')->setWidth(2);
             $form->currency('price','预算金额/万')->symbol('￥');
-            $form->image('photo','首图')->move('anli')->setwidth(3)->uniqueName();
-            $form->url('url','链接地址');
+            $form->image('photo','封面图')->move('anli')->setwidth(5)->uniqueName();
+            $form->url('url','链接地址')->help('如果有案例地址可直接跳转到链接地址;');
+            $form->multipleImage('panorama','全景图')->removable()->move('anli')->uniqueName()->help('你也可以上传多张全景图;');
             $form->text('address','地址');
             $form->hidden('cid','公司')->default($cid);
             $form->hidden('addtime','时间')->default(time());

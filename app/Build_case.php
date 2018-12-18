@@ -8,6 +8,10 @@ class Build_case extends Model
 {
     protected $table = 'build_case';
     public $timestamps = false;
+    public function build_images()
+    {
+        return $this->hasMany(Build_case_images::class, 'bid');
+    }
     public function admin_users()
     {
         return $this->belongsTo('App\Staff','uid','id');

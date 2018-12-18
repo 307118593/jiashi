@@ -176,15 +176,22 @@ class UserController extends Controller
                     $actions->disableView();
                 });
             $grid->disableRowSelector();
-            $grid->filter(function($filter){
+            $grid->filter(function($filter) use($role){
                 $filter->disableIdFilter();
-                    $filter->equal('id', '用户主键');
-                // $filter->column(1/2, function ($filter) {
+                    // $filter->equal('id', '用户主键');
+                $filter->column(1/3, function ($filter) {
                     $filter->equal('phone', '手机号');
-                // });
-                // $filter->column(1/2, function ($filter) {
+                });
+                $filter->column(1/3, function ($filter) {
                     $filter->like('name', '昵称');
-                // });
+                });
+                if ($role ==1) {
+                   $filter->column(1/3, function ($filter) {
+                        // $com = 
+                        $filter->equal('cid','所属公司')->select(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                    });
+                }
+
             });
            
         });
