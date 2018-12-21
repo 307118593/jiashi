@@ -81,9 +81,9 @@ class ResidenceController
     protected function grid()
     {
         $grid = new Grid(new Residence);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
-        $userid = admin::user()->id;
-        $pid = admin::user()->pid;
+            $userid = admin::user()->id;
+            $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
+            $pid = admin::user()->pid;
         if ($role == 1) {
             $cid = 0;
             $grid->model()->orderBy('cid','desc');
@@ -142,9 +142,9 @@ class ResidenceController
     protected function form()
     {
         $form = new Form(new Residence);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
-        $userid = admin::user()->id;
-        $pid = admin::user()->pid;
+            $userid = admin::user()->id;
+            $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
+            $pid = admin::user()->pid;
         $form->text('name', '楼盘名称*')->setwidth(3);
         $form->image('image', '楼盘图片*')->help('请上传宽高比为2:1的图片适配App,大小不能超过1M')->resize(600,300)->setwidth(4)->uniqueName()->rules('max:1024');
         $form->number('sort', '排序权重')->help('权重越大.活动越靠前');

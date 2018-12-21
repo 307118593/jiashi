@@ -73,6 +73,18 @@ class MessagesController extends Controller
     protected function grid()
     {
         return Admin::grid(Messages::class, function (Grid $grid) {
+            $userid = admin::user()->id;
+            $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
+            $pid = admin::user()->pid;
+            $cid = 0;
+            if ($role != 1) {
+                if ($role == 2) {
+                    $cid = $userid;
+                }else{
+                    $cid = $pid;
+                }
+                $grid->model()->where('cid',$cid);
+            }
             $grid->model()->orderBy('id','desc');
             $grid->id('ID')->sortable();
             $grid->title('标题');
@@ -105,8 +117,8 @@ class MessagesController extends Controller
     protected function form()
     {
         return Admin::form(Messages::class, function (Form $form) {
-            $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $userid = admin::user()->id;
+            $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $pid = admin::user()->pid;
             if ($role == 1) {
                 $cid = 0;

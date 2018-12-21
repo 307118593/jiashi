@@ -333,6 +333,9 @@ class CompanyController extends Controller
 		 $data['staffCount'] =  DB::table('admin_users')->where('pid',$cid)->count();
 		 $data['userCount'] =   DB::table('user')->where('cid',$cid)->where('is_copy',0)->count();
 		 $data['invitation'] =   $cid + 1000;
+		 $month = $this->getMonth(date('Y-m-d'));
+		 // return $month;
+		 $data['newCustomer'] = DB::table('user')->where('cid',$cid)->whereBetween('addtime',$month)->count();
 		 for ($i=0; $i < 7; $i++) { 
 	        $date[$i]['day'] = date('Y-m-d', strtotime('-'.$i.' days'));
 	    	}
@@ -379,6 +382,12 @@ class CompanyController extends Controller
 			$pic[] = $this->upload.$v;
 		}
 		return $pic;
+	}
+
+ 	function getMonth($date){
+	    $firstday = date("Y-m-01",strtotime($date));
+	    $lastday = date("Y-m-d",strtotime("$firstday +1 month -1 day"));
+	    return array($firstday,$lastday);
 	}
 
 	public function getRecord(Request $request){

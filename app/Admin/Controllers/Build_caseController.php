@@ -83,8 +83,8 @@ class Build_caseController
     protected function grid()
     {
         $grid = new Grid(new Build_case);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $userid = admin::user()->id;
+        $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $pid = admin::user()->pid;
         $grid->model()->orderBy('id','desc');
         if ($role != 1) {
@@ -153,9 +153,9 @@ class Build_caseController
     protected function form()
     {
         $form = new Form(new Build_case);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
-            $userid = admin::user()->id;
-            $pid = admin::user()->pid;
+        $userid = admin::user()->id;
+        $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
+        $pid = admin::user()->pid;
             $job = admin::user()->job;
             $cid = $userid;
             if ($role != 2) {

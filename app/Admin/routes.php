@@ -8,6 +8,7 @@ Route::group([
     'prefix'        => config('admin.route.prefix'),
     'namespace'     => config('admin.route.namespace'),
     'middleware'    => config('admin.route.middleware'),
+    // 'middleware' => 'admin.permission:check,ad',
     // 'middleware'=>'admin.permission:allow,administrator'
 ], function (Router $router) {
 

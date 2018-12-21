@@ -8,6 +8,29 @@
  //        $this->upload = 'http://'.request()->server('HTTP_HOST').'/upload/';
  //    }
 
+	//获取权限
+	function getRole($id){
+		$role_id = DB::table('admin_role_users')->where('user_id',$id)->value('role_id');
+		if ($role_id == 1) {
+			$role = 1;
+		}elseif($role_id == 2 || $role_id==5){
+			$role = 2;
+		}elseif($role_id == 3 || $role_id==7){
+			$role = 3;
+		}elseif($role_id == 4 || $role_id==6){
+			$role = 4;
+		}
+		return $role;
+	}
+
+	//获取cid
+	function getCid($cid){
+		$role_id = DB::table('admin_role_users')->where('user_id',$cid)->value('role_id');
+		if ($role_id >= 5 && $role_id <= 7) {
+			$cid = 2;
+		}
+		return $cid;
+	}
 
 	//上传单图
 	function upload_image($file,$uppath='images/'){

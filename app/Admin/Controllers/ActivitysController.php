@@ -82,8 +82,8 @@ class ActivitysController
     protected function grid()
     {
         $grid = new Grid(new Activitys);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $userid = admin::user()->id;
+        $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $pid = admin::user()->pid;
         if ($role == 1) {
             $cid = 0;
@@ -163,8 +163,8 @@ class ActivitysController
     {
         // return Admin::user();
         $form = new Form(new Activitys);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $userid = admin::user()->id;
+        $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $pid = admin::user()->pid;
 
 

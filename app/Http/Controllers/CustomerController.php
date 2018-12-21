@@ -46,6 +46,7 @@ class CustomerController extends Controller
 	//获取用户列表
 	public function get_customer(Request $request){
 		$uid = $request->input('uid');
+		$condition = $request->input('condition','');
 		$role = $this->getRole($uid);
 		if ($role == 4) {
 			$pid = DB::table('admin_users')->where('id',$uid)->value('pid');
@@ -54,7 +55,13 @@ class CustomerController extends Controller
 		}else{
 			return response()->json(['error'=>1,'mes'=>'无权限!']);
 		}
-		$customer = DB::table('user')->where('cid',$pid)->get();
+		$customer = DB::table('user')->where('cid',$pid)->when($condition,function($query) use($condition){
+			return $query->where(function($query) use($condition){
+				$query->orwhere('name','like','%'.$condition.'%')->orwhere('phone','like','%'.$condition.'%')->orwhere('address','like','%'.$condition.'%');
+			});
+            //return $query->orwhere('name','like','%'.$condition.'%')->orwhere('phone','like','%'.$condition.'%')->orwhere('address','like','%'.$condition.'%');
+        })
+		->orderBy('id','desc')->get();
 		return response()->json(['error'=>0,'data'=>$customer]);
 	}
 

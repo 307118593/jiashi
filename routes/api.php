@@ -185,6 +185,8 @@ Route::any('getProjectFlow','Project_ruleController@getProjectFlow');
 Route::any('editFlowState','Project_ruleController@editFlowState');
 //上传播报
 Route::any('createBroadcast','Project_ruleController@createBroadcast');
+//修改播报
+Route::any('editBroadcast','Project_ruleController@editBroadcast');
 //上传图片
 Route::any('upload_broad_image','Project_ruleController@upload_broad_image');
 //点赞

@@ -82,10 +82,18 @@ class ArtsController
     protected function grid()
     {
         $grid = new Grid(new Arts);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $userid = admin::user()->id;
+        $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $pid = admin::user()->pid;
-
+        $grid->model()->orderBy('id','desc');
+        if ($role != 1) {
+            if ($role == 2) {
+                $cid = $userid;
+            }else{
+                $cid = $pid;
+            }
+            $grid->model()->where('cid',$cid);
+        }
         // $grid->id('Id');
         $grid->name('工艺名称');
         $grid->images('图片')->map(function ($path) {
@@ -94,9 +102,9 @@ class ArtsController
         $grid->uids('作者列表')->map(function ($uid) {
             return DB::table('admin_users')->where('id',$uid)->value('name');
         })->implode('<br>')->size('17px')->badge();
+         $grid->sort('排序')->label();
         if ($role == 1) {
             $grid->column('admin_users.name','所属公司');
-            $grid->sort('排序')->label();
             
         }
         $grid->created_at('新建');
@@ -147,13 +155,16 @@ class ArtsController
     protected function form()
     {
         $form = new Form(new Arts);
-        $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $userid = admin::user()->id;
+        $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
         $pid = admin::user()->pid;
-
+        $cid = $userid;
+        if ($role != 2) {
+            $cid = $pid;
+        }
         $form->text('name', '工艺名称')->setwidth(3);
        
-        $form->multipleImage('images', '全景图片')->help('你可以上传不超过3张图片.')->removable()->move('arts')->uniqueName();;
+        $form->multipleImage('images', '全景图片')->help('你可以上传不超过3张全景图图片.')->removable()->move('arts')->uniqueName();;
         if ($role == 1) {
             $staff1 = DB::table('admin_users')->where('job',11)->select('id','username','name')->get();  
         }else{
@@ -163,11 +174,11 @@ class ArtsController
             $staff[$v->id] = $v->name;
         }
         $form->multipleSelect('uids', '作者')->help('可以选择多个作者,工艺会展示在作者名下.')->options($staff);
-         if ($role == 1) {
+        $form->number('sort','排序权重')->help('数字越大越靠前.');
+        if ($role == 1) {
             $form->select('cid','选择公司')->options(Staff::all()->where('pid',0)->pluck('name', 'id'))->setwidth(4);
-            $form->number('sort','排序权重')->help('数字越大越靠前.');
         }else{
-            $form->hidden('cid', '公司')->default($userid);
+            $form->hidden('cid', '公司')->default($cid);
         }
         return $form;
     }

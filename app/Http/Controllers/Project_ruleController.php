@@ -268,6 +268,46 @@ class Project_ruleController extends Controller
 			return response()->json(['error'=>0,'mes'=>'上传成功']);
 		}
 	}
+
+    //修改播报
+    public function editBroadcast(Request $request){
+        $pro_id = $request->input('pro_id');
+        $f_id = $request->input('f_id');
+        $bid = $request->input('bid');
+        $uid = $request->input('uid');
+        $content = $request->input('content');
+        $file = $request->input('image');
+        $image = [];
+        if ($file) {
+            if (is_array($file)) {
+                foreach($file as $v) {
+                    $v = str_replace(' ', '+', $v);
+                    if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $v, $result)){
+                        $v = base64_decode(str_replace($result[1], '', $v));
+                        $img = Image::make($v);  
+                        // $ex = $v->getClientOriginalExtension();
+                        $name = $pro_id.time().rand(1,9).rand(1,9).rand(1,9).".".$result[2];
+                        $path = 'bobao/'.$name;
+                        $img->save('upload/'.$path);
+                        $image[] = 'bobao/'.$name;
+                    }
+                }
+            }else{
+                return response()->json(['error'=>1,'mes'=>'不是文件数组']);
+            }
+        }
+            
+         $data = [
+            'pro_id'=>$pro_id,
+            'f_id'=>$f_id,
+            'uid'=>$uid,
+            'content'=>$content,
+            'image'=>json_encode($image),
+            'addtime'=>date('Y-m-d H:i:s',time()),
+        ];
+        $res = DB::table('broadcast')->where('id',$bid)->update($data);
+        return response()->json(['error'=>0,'mes'=>'操作成功']);
+    }
 	
 
 	//点赞 

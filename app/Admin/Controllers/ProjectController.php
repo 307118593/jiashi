@@ -74,8 +74,8 @@ class ProjectController extends Controller
     protected function grid()
     {
         return Admin::grid(Project::class, function (Grid $grid) {
-            $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $userid = admin::user()->id;
+            $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $pid = admin::user()->pid;
             // if ($userid != 1 && $pid ==0) {
             //     $grid->model()->where('z_uid',$userid)->orderBy('id','desc');
@@ -210,8 +210,8 @@ class ProjectController extends Controller
     protected function form($id = 0)
     {
         return Admin::form(Project::class, function (Form $form) use($id){
-            $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $userid = admin::user()->id;
+            $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $pid = admin::user()->pid;
            	if ($role == 2) {
            		$cid = $userid;
