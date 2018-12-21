@@ -241,8 +241,7 @@ Route::any('setCompany','CasesController@setCompany');
 Route::any('setimages','CasesController@setimages');
 
 //公司--start
-//公司首页
-Route::any('companyHome','CompanyController@companyHome');
+
 //公司首页
 Route::any('companyHome1031','CompanyController@companyHome1031');
 //设计师列表
@@ -287,3 +286,9 @@ Route::any('getActs','ActivitysController@getActs');
 //活动详情
 Route::any('getActsDetail','ActivitysController@getActsDetail');
  
+
+ //判断角色中间件
+Route::group(['middleware' => ['checkRole']], function () {
+    //公司首页
+	Route::any('companyHome','CompanyController@companyHome');
+});
