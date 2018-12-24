@@ -26,7 +26,7 @@ class Camera_authController extends Controller
      */
     public function index()
     {   
-        
+        $userid = admin::user()->id;
         $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
             if ($role == 3) {
                 admin_toastr("暂无权限!");

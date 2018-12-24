@@ -90,8 +90,8 @@ class Camera_logController extends Controller
             $grid->id('ID')->sortable();
             $grid->mac('设备标识');
             $grid->column('camera.name','设备名称');
-            $grid->column('user.phone','观看人')->display(function($phone){
-                return DB::table('user')->where('phone',$phone)->value('name').'<br>'.$phone;
+            $grid->uid('观看人')->display(function($uid){
+                return DB::table('user')->where('id',$uid)->value('name').'<br>'.DB::table('user')->where('id',$uid)->value('phone');
             });
            $grid->alivetime('当日观看时长/分钟')->display(function($alivetime){
                 return round($alivetime/60,1);

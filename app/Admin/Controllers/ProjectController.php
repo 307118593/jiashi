@@ -376,7 +376,10 @@ class ProjectController extends Controller
                         "uid" => $form->uid,
                     ];
                     $device_token = DB::table('user')->where('id',$form->uid)->value('DeviceToken');
-                    sendUnicast($device_token,$predefined,$extraField);
+                    if ($device_token) {
+                        sendUnicast($device_token,$predefined,$extraField);
+                    }
+                    
                 }
                 
             });

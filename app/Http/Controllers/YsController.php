@@ -65,7 +65,7 @@ class YsController extends Controller
                 $td = $this->vpost('https://open.ys7.com/api/lapp/device/camera/list','accessToken='.$this->accessToken.'&deviceSerial='.$v->mac);
                 $td = json_decode($td);
                 $Support = DB::table('camera')->where('mac',$v->mac)->select('staff_share','user_share','pro_id','isSupportPTZ','isSupportTalk','isSupportZoom','name','picUrl')->first();
-                if ($ys->code == 200) {
+                if ($ys->code == 200 && $Support) {
                     $auth[$k]->status = $ys->data->status;
                     $auth[$k]->defence = $ys->data->defence;
                     $auth[$k]->isEncrypt = $ys->data->isEncrypt;

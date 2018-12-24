@@ -92,7 +92,7 @@ class Controller extends BaseController
 	}
 	//获取初始数据
 	public function getStartSource(Request $request){
-		$cid = $request->input('cid',0);
+		$cid = $request->input('cid',2);
 		$uid = $request->input('uid');
 		if ($uid) {
     		DB::table('user')->where('id',$uid)->update(['uptime'=>date('Y-m-d H:i:s',time())]);
@@ -101,7 +101,7 @@ class Controller extends BaseController
 				
 				$new = [
 					'uid'=>$uid,
-					'cid'=>$cid,
+					'cid'=>DB::table('user')->where('id',$uid)->value('cid'),
 					'starttime'=>time(),
 					'day'=>date('Y-m-d'),
 				];

@@ -143,152 +143,153 @@ Route::any('get_share_list','CameraController@get_share_list');
 Route::any('edit_user_name','CameraController@edit_user_name');
 
 
-
-//轮播
-Route::any('get_banner','CasesController@get_banner');
-
-
-//案例 --start
-//添加案例
-Route::any('create_case','CasesController@create_case');
-//案例上传图片
-Route::any('upload_photo','CasesController@upload_photo');
-//获取案例
-Route::any('get_cases','CasesController@get_cases');
-//获取案例热度
-Route::any('caseHot','CasesController@caseHot');
-//获取楼盘
-Route::any('get_residence','CasesController@get_residence');
-//获取楼盘下的案例列表
-Route::any('getResidenceCase','CasesController@getResidenceCase');
-//分享转发
-Route::any('get_share','CasesController@get_share');
-
-//项目管理--业主 --start
-//查询我的项目
-Route::any('getMyProject','ProjectController@getMyProject');
-//查询我的项目1026
-Route::any('getMyProject1026','ProjectController@getMyProject1026');
-//查询我的项目进度
-Route::any('getMyProjectFlow','ProjectController@getMyProjectFlow');
-//查询我的项目进度--播报多图
-Route::any('getMyProjectFlow1015','ProjectController@getMyProjectFlow1015');
-
-
-Route::any('getCompanyList','Project_ruleController@getCompanyList');
-//项目管理--公司 --start
-//查询我的项目
-Route::any('myProject','Project_ruleController@myProject');
-//查询项目进度
-Route::any('getProjectFlow','Project_ruleController@getProjectFlow');
-//修改进度状态
-Route::any('editFlowState','Project_ruleController@editFlowState');
-//上传播报
-Route::any('createBroadcast','Project_ruleController@createBroadcast');
-//修改播报
-Route::any('editBroadcast','Project_ruleController@editBroadcast');
-//上传图片
-Route::any('upload_broad_image','Project_ruleController@upload_broad_image');
-//点赞
-Route::any('touchZan','Project_ruleController@touchZan');
-//上传播报图片
-Route::any('uploadBroadcast','Project_ruleController@uploadBroadcast');
-//新建项目--获取项目初始数据
-Route::any('getProjectData','Project_ruleController@getProjectData');
-//新建项目
-Route::any('creatProject','Project_ruleController@creatProject');
-
-
-// 公司客户端
-// 员工操作 --start
-// 获取员工列表
-Route::any('get_staff','StaffController@get_staff');
-//获取岗位
-Route::any('getJob','StaffController@getJob');
-// 添加员工
-Route::any('add_staff','StaffController@add_staff');
-// 修改员工
-Route::any('edit_staff','StaffController@edit_staff');
-// 删除员工
-Route::any('del_staff','StaffController@del_staff');
-
-
-// 客户管理 --start
-// 添加客户
-Route::any('add_customer','CustomerController@add_customer');
-Route::any('get_customer','CustomerController@get_customer');
-//修改客户
-Route::any('edit_customer','CustomerController@edit_customer');
-
-//萤石设备管理 --start
-//添加设备
-Route::any('add_ys','AdminYsController@add_ys');
-//查询设备列表
-Route::any('get_ys','AdminYsController@get_ys');
-//修改设备名称
-Route::any('edit_ys_name','AdminYsController@edit_ys_name');
-
-//获取员工共享设备
-Route::any('getShareList','AdminYsController@getShareList');
-//后台解除绑定工地和业主
-Route::any('jiechubangding','AdminYsController@jiechubangding');
-
-
-
-//设置公司简介
-Route::any('setCompany','CasesController@setCompany');
-//设置相册
-Route::any('setimages','CasesController@setimages');
-
-//公司--start
-
-//公司首页
-Route::any('companyHome1031','CompanyController@companyHome1031');
-//设计师列表
-Route::any('designer_list','CompanyController@designer_list');
-//设计师列表
-Route::any('designer_detail','CompanyController@designer_detail');
-//设计师案例列表
-Route::any('designer_cases','CompanyController@designer_cases');
-//案例详情
-Route::any('case_detail','CompanyController@case_detail');
-//获取相册
-Route::any('get_pics','CompanyController@get_pics');
-//获取邀请页面链接
-Route::any('getShareLink','CompanyController@getShareLink');
-//获取施工团队里列表
-Route::any('getBuildTeam','CompanyController@getBuildTeam');
-//获取项目经理详情
-Route::any('getBuilderDetail','CompanyController@getBuilderDetail');
-//获取施工案例详情
-Route::any('getBuildDetail','CompanyController@getBuildDetail');
-//获取公司统计
-Route::any('companyRecord','CompanyController@companyRecord');
-//获取工艺详情
-Route::any('artDetail','CompanyController@artDetail');
-//推送
-//测试推送
-Route::any('send_push','PushController@send_push');
-//储存用户 DeviceToken
-Route::any('pushDeviceToken','PushController@pushDeviceToken');
-
-//消息管理
-//获取消息列表
-Route::any('getMessages','MessagesController@getMessages');
-//获取消息详情
-Route::any('getMesDetail','MessagesController@getMesDetail');
-//删除消息
-Route::any('delMes','MessagesController@delMes');
-
-//活动管理
-//获取活动
-Route::any('getActs','ActivitysController@getActs');
-//活动详情
-Route::any('getActsDetail','ActivitysController@getActsDetail');
- 
-
  //判断角色中间件
 Route::group(['middleware' => ['checkRole']], function () {
-    //公司首页
+	//轮播
+	Route::any('get_banner','CasesController@get_banner');
+
+
+	//案例 --start
+	//添加案例
+	Route::any('create_case','CasesController@create_case');
+	//案例上传图片
+	Route::any('upload_photo','CasesController@upload_photo');
+	//获取案例
+	Route::any('get_cases','CasesController@get_cases');
+	//获取案例热度
+	Route::any('caseHot','CasesController@caseHot');
+	//获取楼盘
+	Route::any('get_residence','CasesController@get_residence');
+	//获取楼盘下的案例列表
+	Route::any('getResidenceCase','CasesController@getResidenceCase');
+	//分享转发
+	Route::any('get_share','CasesController@get_share');
+
+	//项目管理--业主 --start
+	//查询我的项目
+	Route::any('getMyProject','ProjectController@getMyProject');
+	//查询我的项目1026
+	Route::any('getMyProject1026','ProjectController@getMyProject1026');
+	//查询我的项目进度
+	Route::any('getMyProjectFlow','ProjectController@getMyProjectFlow');
+	//查询我的项目进度--播报多图
+	Route::any('getMyProjectFlow1015','ProjectController@getMyProjectFlow1015');
+
+
+	Route::any('getCompanyList','Project_ruleController@getCompanyList');
+	//项目管理--公司 --start
+	//查询我的项目
+	Route::any('myProject','Project_ruleController@myProject');
+	//查询项目进度
+	Route::any('getProjectFlow','Project_ruleController@getProjectFlow');
+	//修改进度状态
+	Route::any('editFlowState','Project_ruleController@editFlowState');
+	//上传播报
+	Route::any('createBroadcast','Project_ruleController@createBroadcast');
+	//修改播报
+	Route::any('editBroadcast','Project_ruleController@editBroadcast');
+	//上传图片
+	Route::any('upload_broad_image','Project_ruleController@upload_broad_image');
+	//点赞
+	Route::any('touchZan','Project_ruleController@touchZan');
+	//上传播报图片
+	Route::any('uploadBroadcast','Project_ruleController@uploadBroadcast');
+	//新建项目--获取项目初始数据
+	Route::any('getProjectData','Project_ruleController@getProjectData');
+	//新建项目
+	Route::any('creatProject','Project_ruleController@creatProject');
+
+
+	// 公司客户端
+	// 员工操作 --start
+	// 获取员工列表
+	Route::any('get_staff','StaffController@get_staff');
+	//获取岗位
+	Route::any('getJob','StaffController@getJob');
+	// 添加员工
+	Route::any('add_staff','StaffController@add_staff');
+	// 修改员工
+	Route::any('edit_staff','StaffController@edit_staff');
+	// 删除员工
+	Route::any('del_staff','StaffController@del_staff');
+
+
+	// 客户管理 --start
+	// 添加客户
+	Route::any('add_customer','CustomerController@add_customer');
+	Route::any('get_customer','CustomerController@get_customer');
+	//修改客户
+	Route::any('edit_customer','CustomerController@edit_customer');
+
+	//萤石设备管理 --start
+	//添加设备
+	Route::any('add_ys','AdminYsController@add_ys');
+	//查询设备列表
+	Route::any('get_ys','AdminYsController@get_ys');
+	//修改设备名称
+	Route::any('edit_ys_name','AdminYsController@edit_ys_name');
+
+	//获取员工共享设备
+	Route::any('getShareList','AdminYsController@getShareList');
+	//后台解除绑定工地和业主
+	Route::any('jiechubangding','AdminYsController@jiechubangding');
+
+
+
+	//设置公司简介
+	Route::any('setCompany','CasesController@setCompany');
+	//设置相册
+	Route::any('setimages','CasesController@setimages');
+
+	//公司--start
+
+	//公司首页
 	Route::any('companyHome','CompanyController@companyHome');
+	//公司首页
+	Route::any('companyHome1031','CompanyController@companyHome1031');
+	//设计师列表
+	Route::any('designer_list','CompanyController@designer_list');
+	//设计师列表
+	Route::any('designer_detail','CompanyController@designer_detail');
+	//设计师案例列表
+	Route::any('designer_cases','CompanyController@designer_cases');
+	//案例详情
+	Route::any('case_detail','CompanyController@case_detail');
+	//获取相册
+	Route::any('get_pics','CompanyController@get_pics');
+	//获取邀请页面链接
+	Route::any('getShareLink','CompanyController@getShareLink');
+	//获取施工团队里列表
+	Route::any('getBuildTeam','CompanyController@getBuildTeam');
+	//获取项目经理详情
+	Route::any('getBuilderDetail','CompanyController@getBuilderDetail');
+	//获取施工案例详情
+	Route::any('getBuildDetail','CompanyController@getBuildDetail');
+	//获取公司统计
+	Route::any('companyRecord','CompanyController@companyRecord');
+	//获取工艺详情
+	Route::any('artDetail','CompanyController@artDetail');
+	//推送
+	//测试推送
+	Route::any('send_push','PushController@send_push');
+	//储存用户 DeviceToken
+	Route::any('pushDeviceToken','PushController@pushDeviceToken');
+
+	//消息管理
+	//获取消息列表
+	Route::any('getMessages','MessagesController@getMessages');
+	//获取消息详情
+	Route::any('getMesDetail','MessagesController@getMesDetail');
+	//删除消息
+	Route::any('delMes','MessagesController@delMes');
+
+	//活动管理
+	//获取活动
+	Route::any('getActs','ActivitysController@getActs');
+	//活动详情
+	Route::any('getActsDetail','ActivitysController@getActsDetail');
+	 
+
+
+    
 });
