@@ -29,7 +29,7 @@ class Project_ruleController extends Controller
 	public function myProject(Request $request){
         $uid = $request->input('uid');
 		$condition = $request->input('condition','');
-		$role = $this->getRole($uid);
+		$role = getRole($uid);
 		if ($role != 1) {
 			$z_uid = DB::table('admin_users')->where('id',$uid)->value('pid');
 		}else{
@@ -306,6 +306,13 @@ class Project_ruleController extends Controller
             'addtime'=>date('Y-m-d H:i:s',time()),
         ];
         $res = DB::table('broadcast')->where('id',$bid)->update($data);
+        return response()->json(['error'=>0,'mes'=>'操作成功']);
+    }
+
+    //删除播报
+    public function delBroadcast(Request $request){
+        $bid = $request->input('bid');
+        DB::table('broadcast')->where('id',$bid)->delete();
         return response()->json(['error'=>0,'mes'=>'操作成功']);
     }
 	

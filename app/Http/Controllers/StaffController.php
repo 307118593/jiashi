@@ -8,7 +8,7 @@ class StaffController extends Controller
 {
 	public function getJob(Request $request){
 		$job = $reuqest->input('job',0);
-		$array = [1=>'销售总监',2=>'--销售',3=>'--设计师',4=>'--客服',10=>'工程总监',10=>'--项目总监',11=>'--施工人员',12=>'--监理人员'];
+		$array = [1=>'销售总监',2=>'--客户经理',3=>'--设计师',4=>'--客服',10=>'工程总监',10=>'--项目经理',11=>'--施工人员',12=>'--监理人员'];
 		if ($job == 0) {	
 			$job = $array;
 		}else{
@@ -70,7 +70,7 @@ class StaffController extends Controller
 	//添加员工
 	public function add_staff(Request $request){
 		$uid = $request->input('uid');
-		$role = $this->getRole($uid);
+		$role = getRole($uid);
 		if ($role == 4) {
 			$pid = DB::table('admin_users')->where('id',$uid)->value('pid');
 		}else if ($role == 2) {

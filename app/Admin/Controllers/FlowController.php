@@ -168,7 +168,9 @@ class Flowcontroller extends Controller
                             "uid" => DB::table('project')->where('id',$form->pro_id)->value('uid'),
                         ];
                         $device_token = DB::table('user')->where('id',DB::table('project')->where('id',$form->pro_id)->value('uid'))->value('DeviceToken');
-                        sendUnicast($device_token,$predefined,$extraField);
+                        if ($device_token) {
+                            sendUnicast($device_token,$predefined,$extraField);
+                        }
 
                         DB::table('flow')->where('id',$form->id)->update(['starttime'=>date('Y-m-d H:i:s',time())]);
                         //开始施工/
@@ -186,7 +188,10 @@ class Flowcontroller extends Controller
                             "uid" => DB::table('project')->where('id',$form->pro_id)->value('uid'),
                         ];
                         $device_token = DB::table('user')->where('id',DB::table('project')->where('id',$form->pro_id)->value('uid'))->value('DeviceToken');
-                        sendUnicast($device_token,$predefined,$extraField);
+                        if ($device_token) {
+                            sendUnicast($device_token,$predefined,$extraField);
+                        }
+                        
                         DB::table('flow')->where('id',$form->id)->update(['endtime'=>date('Y-m-d H:i:s',time())]);
                     }
                     // exit;

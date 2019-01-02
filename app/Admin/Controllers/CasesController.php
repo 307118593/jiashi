@@ -162,10 +162,10 @@ class CasesController extends Controller
             $form->number('area','面积')->default(100);
             $form->text('style','装修风格')->setwidth(2)->help('如:中式,欧式');
             $form->select('type','装修类型')->options([0=>'全包',1=>'半包'])->default('1')->setWidth(2);
-            $form->currency('price','预算金额/万')->symbol('￥');
+            // $form->currency('price','预算金额/万')->symbol('￥');
             $form->image('photo','封面图')->move('anli')->setwidth(5)->uniqueName();
             $form->url('url','链接地址')->help('如果有案例地址可直接跳转到链接地址;');
-            $form->multipleImage('panorama','全景图')->removable()->move('anli')->uniqueName()->help('你也可以上传多张全景图;');
+            // $form->multipleImage('panorama','全景图')->removable()->move('anli')->uniqueName()->help('你也可以上传多张全景图;');
             $form->text('address','地址');
             $form->hidden('cid','公司')->default($cid);
             $form->hidden('addtime','时间')->default(time());

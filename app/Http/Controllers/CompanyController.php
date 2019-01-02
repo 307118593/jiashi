@@ -43,6 +43,9 @@ class CompanyController extends Controller
 					$cases[$k]->photo = $this->upload.$v->photo;
 				}
 				$cases[$k]->author = DB::table('admin_users')->where('id',$v->uid)->value('name');
+				// if (empty($v->url)) {
+				// 	$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=1&case_id='.$v->id;
+				// }
 			}
 		$build = DB::table('admin_users')->where('pid',$cid)->where('job',11)->first();
 		$data['build_team'] = 0;
@@ -103,9 +106,9 @@ class CompanyController extends Controller
 							$cases[$k]->photo = $this->upload.$v->photo;
 						}
 						$cases[$k]->author = DB::table('admin_users')->where('id',$v->uid)->value('name');
-						if (empty($v->url)) {
-							$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?case_id='.$v->id;
-						}
+						// if (empty($v->url)) {
+						// 	$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=1&case_id='.$v->id;
+						// }
 					}
 				$data['banner'] = $banner;
 				$data['company'] = $company;
@@ -164,9 +167,9 @@ class CompanyController extends Controller
 			// if ($v->panorama) {
 			// 	$v->panorama = $this->duotu($v->panorama);
 			// }
-			if (empty($v->url)) {
-				$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?case_id='.$v->id;
-			}
+			// if (empty($v->url)) {
+			// 	$v->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=1&case_id='.$v->id;
+			// }
 		}
 		return response()->json(['error'=>0,'data'=>$cases]);
 	}
@@ -179,9 +182,9 @@ class CompanyController extends Controller
 			$cases->photo = $this->upload.$cases->photo;
 		}
 		$cases->author = DB::table('admin_users')->where('id',$cases->uid)->value('name');
-		if ($cases->panorama) {
-			$cases->panorama = $this->duotu($cases->panorama);
-		}
+		// if ($cases->panorama) {
+		// 	$cases->panorama = $this->duotu($cases->panorama);
+		// }
 	
 		return response()->json(['error'=>0,'data'=>$cases]);
 	}
@@ -285,7 +288,7 @@ class CompanyController extends Controller
 		$arts = DB::table('arts')->where('uids','like','%"'.$uid.'"%')->orderby('sort','desc')->get();
 		foreach ($arts as $k => $v) {
 			$arts[$k]->images = $this->duotu($v->images);
-			$arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?case_id='.$v->id;
+			// $arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
 		}
 		$data['builder'] = $builder;
 		$data['arts'] = $arts;
@@ -297,9 +300,17 @@ class CompanyController extends Controller
 	//获取工艺详情
 	public function artDetail(Request $request){
 		$art_id = $request->input('case_id');
-		$art = DB::table('arts')->where('id',$art_id)->first();
-		$art->images = $this->duotu($art->images);
-		return response()->json(['error'=>0,'data'=>$art]);
+		$type = $request->input('type',0);//0是工艺1是案例
+		if ($type == 0) {
+			$art = DB::table('arts')->where('id',$art_id)->first();
+			$art->images = $this->duotu($art->images);
+			return response()->json(['error'=>0,'data'=>$art]);
+		}else{
+			$case = DB::table('cases')->where('id',$art_id)->first();
+			$case->images = $this->duotu($case->panorama);
+			return response()->json(['error'=>0,'data'=>$case]);
+		}
+		
 	}
 
 	//获取施工案例详情

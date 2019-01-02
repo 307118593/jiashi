@@ -64,10 +64,11 @@
                     $name = time().rand(1,9).rand(1,9).rand(1,9).".".$result[2];
                     $path = $uppath.$name;
                     $img->save('upload/'.$path);
+                    $cpath[] = $path;
                     // $image = 'bobao/'.$name;
                 }
             }
-            return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path]);
+            return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path,'cpath'=>$cpath]);
         }else{
             return response()->json(['error'=>1,'mes'=>'不是文件数组']);
         }
@@ -89,7 +90,7 @@
                     $path = $uppath.$name;
                     $img->save('upload/'.$path);
                     // $image = 'bobao/'.$name;
-                    return 'upload/'.$path;
+                    return $path;
             		// return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path]);
                 }else{
                 	return false;
@@ -102,6 +103,14 @@
 	}
 
 
+	function is_url($v){
+		$pattern="#(http|https)://(.*\.)?.*\..*#i";
+		if(preg_match($pattern,$v)){ 
+			return true; 
+		}else{ 
+			return false; 
+		} 
+	}
 	//友盟单播
 	function sendUnicast($device_token,$predefined,$extraField){
 		Umeng::android()->sendUnicast($device_token,$predefined); //单播

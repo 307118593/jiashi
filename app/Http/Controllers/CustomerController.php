@@ -9,7 +9,7 @@ class CustomerController extends Controller
 	//添加客户
 	public function add_customer(Request $request){
 		$uid = $request->input('uid');
-		$role = $this->getRole($uid);
+		$role = getRole($uid);
 		if ($role == 4) {
 			$pid = DB::table('admin_users')->where('id',$uid)->value('pid');
 		}else if ($role == 2) {
@@ -59,7 +59,6 @@ class CustomerController extends Controller
 			return $query->where(function($query) use($condition){
 				$query->orwhere('name','like','%'.$condition.'%')->orwhere('phone','like','%'.$condition.'%')->orwhere('address','like','%'.$condition.'%');
 			});
-            //return $query->orwhere('name','like','%'.$condition.'%')->orwhere('phone','like','%'.$condition.'%')->orwhere('address','like','%'.$condition.'%');
         })
 		->orderBy('id','desc')->get();
 		return response()->json(['error'=>0,'data'=>$customer]);
@@ -68,7 +67,7 @@ class CustomerController extends Controller
 	//修改客户资料
 	public function edit_customer(Request $request){
 		$uid = $request->input('uid');
-		$role = $this->getRole($uid);
+		$role = getRole($uid);
 		if ($role == 4) {
 			$pid = DB::table('admin_users')->where('id',$uid)->value('pid');
 		}else if ($role == 2) {
@@ -77,7 +76,12 @@ class CustomerController extends Controller
 			return response()->json(['error'=>1,'mes'=>'无权限!']);
 		}
 
-		$user_uid = $request->input('user_uid');
+		$user_uid = $request->input('user_uid',0);
+		$phone = $request->input('phone');
+		$res = DB::table('user')->where('phone',$phone)->first();
+		if ($res) {
+			return response()->json(['error'=>1,'mes'=>'该手机号已存在!']);
+		}
 		$name = $request->input('name');
 		$address = $request->input('address');
 		$area = $request->input('area');
@@ -97,12 +101,23 @@ class CustomerController extends Controller
 			'birthday'=>$birthday,
 			'remark'=>$remark,
 			'source'=>$source,
+			'cid'=>$pid,
 		];
+		if ($user_uid == 0) {
+			$pwd = substr($phone,-6);
+        	$password = \Hash::make($pwd);
+        	$data['password'] = $password;
+        	$data['phone'] = $phone;
+        	$data['addtime'] = $date('Y-m-d H:i:s');
+			$res = DB::table('user')->insert($data);
+		}else{
+			$res = DB::table('user')->where('id',$user_uid)->update($data);
+		}
 
-		$res = DB::table('user')->where('id',$user_uid)->update($data);
+		
 		if ($res) {
-			$user = DB::table('user')->where('id',$user_uid)->first();
-			return response()->json(['error'=>0,'data'=>$user]);
+			// $user = DB::table('user')->where('id',$user_uid)->first();
+			return response()->json(['error'=>0,'mes'=>'操作成功.']);
 		}
 	}
 }

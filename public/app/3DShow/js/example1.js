@@ -1,16 +1,18 @@
-﻿window.onload = function() {
+window.onload = function() {
 	var list = document.getElementById('myList');
 	var listChild = document.getElementsByTagName('li');
-	var id = getnavivalues()["case_id"];
 
+	
+	var id = getnavivalues()["case_id"];
+	var type = getnavivalues()["type"];
 	if(id != undefined && id != null) {
 		var url = "https://www.homeeyes.cn/api/artDetail";
-		var param = "case_id=" + id;
+		var param = "case_id=" + id+"&type="+type;
 		
 		ajax_method(url, param, "post", function(data) {
 		
 			var images = data.data.images;
-			
+			console.log(images)
 			if(images != undefined && images.length > 0) {
 				setImg(images[0]);
 				list.innerHTML = "";
@@ -27,8 +29,9 @@
 					}, false);
 					para.appendChild(img);
 					list.appendChild(para);
-
+					
 				}
+				
 			} else {
 				loadPredefinedPanorama();
 			}
@@ -64,6 +67,8 @@ function loadPredefinedPanorama(evt) {
 function setImg(url) {
 	var height = document.documentElement.clientHeight + "px";
 	var div = document.getElementById('container');
+	var masking=document.getElementById("masking");
+	masking.style.display="block";
 	var PSV = new PhotoSphereViewer({
 		// Path to the panorama
 		panorama: url,
@@ -72,15 +77,19 @@ function setImg(url) {
 		container: div,
 
 		// Deactivate the animation
-		time_anim: false,
+		time_anim: true,
 
 		// Display the navigation bar
 		navbar: true,
-
+		min_fov:'180',
 		// Resize the panorama
 		size: {
 			width: '100%',
 			height: height
+		},
+	
+		onready:function(){
+			masking.style.display="none";
 		}
 	});
 }

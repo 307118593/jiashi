@@ -23,9 +23,16 @@ Route::any('test',function(){
 	//     "text"=>'您好,您的工地名称:测试..已经新建完成',   
 	//     "after_open" => 'go_app',
 	// ];
-	// $device_token = DB::table('user')->where('id',35)->value('DeviceToken');
-	// $res = sendUnicast($device_token,$predefined);
+	// $device_token = DB::table('user')->where('id',346)->value('DeviceToken');
+	// $extraField = [
+	// 	'uid'=>0,
+	// 	'cid'=>0,
+	// ];
+	// $res = sendUnicast($device_token,$predefined,$extraField);
 	// return $res;
+
+
+	
 	// $camera = DB::table('camera_log')->get();
 	// foreach ($camera as $k => $v) {
 	// 	$cid = DB::table('camera')->where('mac',$v->mac)->value('cid');
@@ -150,6 +157,8 @@ Route::group(['middleware' => ['checkRole']], function () {
 
 
 	//案例 --start
+	//获取案例数据
+	Route::any('getCaseSource','CasesController@getCaseSource');
 	//添加案例
 	Route::any('create_case','CasesController@create_case');
 	//案例上传图片
@@ -162,6 +171,18 @@ Route::group(['middleware' => ['checkRole']], function () {
 	Route::any('get_residence','CasesController@get_residence');
 	//获取楼盘下的案例列表
 	Route::any('getResidenceCase','CasesController@getResidenceCase');
+
+	//施工案例-----
+	//获取施工案例数据
+	Route::any('getBuildCaseSource','CasesController@getBuildCaseSource');
+	//添加施工案例
+	Route::any('createBuildcase','CasesController@createBuildcase');
+	//添加工艺展示
+	Route::any('createArt','CasesController@createArt');
+	//获取工艺展示
+	Route::any('getArts','CasesController@getArts');
+
+
 	//分享转发
 	Route::any('get_share','CasesController@get_share');
 
@@ -188,6 +209,8 @@ Route::group(['middleware' => ['checkRole']], function () {
 	Route::any('createBroadcast','Project_ruleController@createBroadcast');
 	//修改播报
 	Route::any('editBroadcast','Project_ruleController@editBroadcast');
+	//删除播报
+	Route::any('delBroadcast','Project_ruleController@delBroadcast');
 	//上传图片
 	Route::any('upload_broad_image','Project_ruleController@upload_broad_image');
 	//点赞
