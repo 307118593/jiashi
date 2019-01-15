@@ -22,6 +22,8 @@ class HomeController extends Controller
           //admin_toastr("统计暂未开放!");
           //return redirect(admin_url('admin'));
             // $role = Admin::user()->roles[0]['id'];//获取权限.1管理员.2公司负责人.3普通员工.4总监
+            $content->header('首页');
+            $content->description('数据统计');
             $userid = admin::user()->id;
             $role = getRole($userid);//获取权限.1管理员.2公司负责人.3普通员工.4总监
             $pid = admin::user()->pid;
@@ -30,12 +32,59 @@ class HomeController extends Controller
                 $cid = $userid;
             }elseif($role == 3 || $role == 4){
                 $cid = $pid;
-            }else{
-                admin_toastr("暂无权限!");
-                return redirect(admin_url('admin'));
+            }elseif($role == 1){//管理员
+                $content->row(function(Row $row) use($role,$cid){
+                    //设备数量->已分配->未分配->设备使用率->使用率
+                    $comeraCount =  DB::table('camera')->count();
+                    $fenpeiCount =  DB::table('camera')->whereRaw('(uid> ? or pro_id > ?)', [0,0])->count();
+                    $meiCount =  DB::table('camera')->where('uid',0)->where('pro_id',0)->count();
+                    $shiyonglv = 0;
+                    if ($comeraCount != 0) {
+                        $shiyonglv = $fenpeiCount/$comeraCount * 100 ;
+                    }
+                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
+
+                    //工地数量->施工中数量->已完成数量->客户总数
+                    $projectCount = DB::table('project')->count();
+                    $project = DB::table('project')->select('id')->get();
+                    $shigongzhong = 0;
+                    foreach ($project as $k => $v) {
+                        $wcjd = DB::table('flow')->where('state','>',0)->where('pro_id',$v->id)->count();
+                        if ($wcjd > 0) {
+                            $shigongzhong ++;
+                        }
+                    }
+                    $yiwancheng = 0;
+                    foreach ($project as $k => $v) {
+                        $wcjd = DB::table('flow')->where('state','>',0)->where('pro_id',$v->id)->count();
+                        $flows = DB::table('flow')->where('pro_id',$v->id)->count();
+                        if ($wcjd == $flows && $flows > 0) {
+                            $yiwancheng ++;
+                        }
+                    }
+                    $userCount = DB::table('user')->where('is_copy',0)->count();
+                    // $yaoqingma = $cid + 1000;
+                    $PROJECT = new InfoBox('正在施工:'.$shigongzhong, 'fa-cogs', 'orange', '/admin/project', '工地数量:'.$projectCount);
+
+                    //员工总数->总监->设计师
+                    $staffCount = DB::table('admin_users')->count();
+                    $zongjianCount = DB::table('admin_users')->whereIn('job',[1,10])->count();
+                    $designCount = DB::table('admin_users')->where('job',3)->count();
+                    $companyCount = DB::table('admin_users')->where('pid',0)->count();
+                    $newUserConut = DB::table('user')->where('addtime','>',date('Y-m-d'))->count();
+                    $STAFF = new InfoBox('员工数:'.$staffCount.'人', 'fa-cogs', 'green', '/admin/staff', '公司数量:'.$companyCount.'个');
+                    $USER = new InfoBox('本月新增客户:'.$newUserConut, 'fa-cogs', 'purple', '/admin/user', '注册客户:'.$userCount.'人');
+                    $row->column(3, $CAMERA);
+                    $row->column(3, $PROJECT);
+                    $row->column(3, $STAFF);
+                    $row->column(3, $USER);
+                });//第一行结束
+            
             }
-            $content->header('首页');
-            $content->description('数据统计');
+            
+            
+
+
             if ($role == 2 || $role == 4){//负责人或总监
                 $content->row(function(Row $row) use($role,$cid){
                     //设备数量->已分配->未分配->设备使用率->使用率
@@ -91,16 +140,41 @@ class HomeController extends Controller
                     // $row->column(12, $tab);
                 });
             }//负责人总监结束--
-            if ($cid == 2) {
+            // if ($cid == 2) {
                 $content->row(function(Row $row) use($role,$cid){
-                    for ($i=0; $i < 7; $i++) { 
-                        $date[$i] = date('m-d', strtotime('-'.$i.' days'));
+
+                    $date = date('m-d', strtotime('-7 days'));
+                    $day = date('Y-m-d', strtotime('-7 days'));
+                    $camera = DB::table('camera')->where('cid',$cid)->select('mac','name')->get();
+                    foreach ($camera as $k => $v) {
+                        $camera[$k]->alive = round(DB::table('camera_log')->where('mac',$v->mac)->where('day','>',$day)->sum('alivetime')/60,1);
+                        if ($camera[$k]->alive  == 0) {
+                            unset($camera[$k]);
+                        }
                     }
-                    // return $date;
-                    $charjs = new Box('近一周用户在线时长', view('admin.chartjs.line',compact('cc','date')));
-                    $row->column(6, $charjs);
+                    $camera = $camera->toArray();
+                    $camera = array_values($camera);
+                    // dd($camera);
+                    $pie = new Box('近一周设备观看比例', view('admin.chartjs.pie',compact('camera')));
+                    $row->column(7, $pie);
+
+                    for ($i=0; $i < 7; $i++) { 
+                        $alive[$i]['date'] = date('m-d', strtotime('-'.$i.' days'));
+                        $alive[$i]['day'] = date('Y-m-d', strtotime('-'.$i.' days'));
+                    }
+                    foreach ($alive as $k => $v) {
+                        $alive[$k]['alive'] = round(DB::table('camera_log')->where('cid',$cid)->where('day',$v['day'])->sum('alivetime')/60,1);
+                       
+                    }
+                    
+                    // dd($alive);
+                    $line = new Box('近一周设备观看总时长', view('admin.chartjs.line',compact('alive')));
+                    $row->column(5, $line);
+
+
+                
                 });
-            }
+            // }
                 
         });
     }

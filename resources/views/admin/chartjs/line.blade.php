@@ -1,20 +1,20 @@
 <canvas id="myChart" width="400" height="200"></canvas>
-<!-- @foreach($date as $k => $v)
-<div>{{$k}} -- {{$v}}<div>
-@endforeach -->
+
 <script>
 $(function () {
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ["{{$date[6]}}","{{$date[5]}}", "{{$date[4]}}", "{{$date[3]}}", "{{$date[2]}}", "{{$date[1]}}", "{{$date[0]}}"],
+            labels: ["{{$alive[6]['alive']}}","{{$alive[5]['alive']}}", "{{$alive[4]['alive']}}", "{{$alive[3]['alive']}}", "{{$alive[2]['alive']}}", "{{$alive[1]['alive']}}", "{{$alive[0]['alive']}}"],
             datasets: [{
                 label: '分钟数',
-                data: [55, 19, 3, 15, 25, 3,5],
+                // data: [55, 19, 3, 15, 25, 3,5],
+                data: ["{{$alive[6]['alive']}}","{{$alive[5]['alive']}}", "{{$alive[4]['alive']}}", "{{$alive[3]['alive']}}", "{{$alive[2]['alive']}}", "{{$alive[1]['alive']}}", "{{$alive[0]['alive']}}"],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0)',
                 ],
+                // fill: false,
                 borderColor: [
                     // 'rgba(255,99,132,1)',
                     // 'rgba(54, 162, 235, 1)',

@@ -208,12 +208,38 @@ class CasesController extends Controller
     //获取案例列表
     public function get_cases(Request $request){
         $cid = $request->input('cid',2);
-        $condition = $request->input('condition','');
+        $condition = $request->input('condition');
+        $default = $request->input('default');
+        $time = $request->input('time');
+        $hot = $request->input('hot');
+        $minarea = $request->input('minarea');
+        $maxarea = $request->input('maxarea');
+        // dd(isset($minarea));
+        // DB::enableQueryLog();
     	$cases = DB::table('cases')->where('cid',$cid)->when($condition,function($query) use($condition){
             return $query->where(function($query) use($condition){
                 $query->orwhere('title','like','%'.$condition.'%')->orwhere('style','like','%'.$condition.'%')->orwhere('address','like','%'.$condition.'%');
             });
-        })->orderBy('sort','desc')->get();
+        })->when($default,function($query) use($default){
+            return $query->orderBy('sort','desc');
+        })->when($time == 1,function($query){
+            return $query->orderBy('addtime','desc');
+        })->when($time == 0,function($query){
+            return $query->orderBy('addtime','asc');
+        })->when($hot == 1,function($query){
+            return $query->orderBy('hot','desc');
+        })->when($hot == 0,function($query){
+            return $query->orderBy('hot','asc');
+        })->when($minarea > 0 && $maxarea > 0,function($query) use($minarea,$maxarea){
+            return $query->wherebetween('area',[$minarea,$maxarea]);
+        })->when($minarea > 0 && $maxarea == 0,function($query) use($minarea){
+            return $query->where('area','>=',$minarea);
+        })->when($minarea == 0 && $maxarea > 0,function($query) use($maxarea){
+            return $query->where('area','<=',$maxarea);
+        })
+        ->orderBy('sort','desc')->get();
+
+// dd( DB::getQueryLog()); 
     	foreach ($cases as $k => $v) {
     		$cases[$k]->photo = $this->upload.$v->photo;
             // if ($v->panorama && empty($v->url)) {

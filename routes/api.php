@@ -236,6 +236,11 @@ Route::group(['middleware' => ['checkRole']], function () {
 	// 删除员工
 	Route::any('del_staff','StaffController@del_staff');
 
+	// 申请试用
+	Route::any('apply','StaffController@apply');
+	// 申请处理
+	Route::any('chuli','StaffController@chuli');
+
 
 	// 客户管理 --start
 	// 添加客户
@@ -305,6 +310,12 @@ Route::group(['middleware' => ['checkRole']], function () {
 	Route::any('getMesDetail','MessagesController@getMesDetail');
 	//删除消息
 	Route::any('delMes','MessagesController@delMes');
+	//获取发送消息数据
+	Route::any('getSendSource','MessagesController@getSendSource');
+	//发送消息
+	Route::any('sendMes','MessagesController@sendMes');
+	//获取消息列表
+	Route::any('getMesList','MessagesController@getMesList');
 
 	//活动管理
 	//获取活动

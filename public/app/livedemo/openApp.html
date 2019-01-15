@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="apple-itunes-app" content="app-id=477927812">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Document</title>
+		<style type="text/css">
+			html,body{
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			.page{
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				background-image: url(img/bg_register.png);
+				background-size: 100%;
+				text-align: center;
+			}
+			#openApp,#mod_pop{
+				background: #00CD76;
+				color: white;
+				border-radius: 6px;
+				padding: 5px;
+				position: fixed;
+				top: 50%;
+				left: 20%;
+				right: 20%;
+			}
+		</style>
+	</head>
+
+	<body>
+	<div class="page">
+		<a id="openApp">点击打开贴吧客户端</a>
+		      <a href="homeeye://yueyou.com:80/mypath?name=weixin">点击打开APP并将name的值传过去</a>
+		<p id="mod_pop" style="display:none;">请在其他浏览器中打开</p>
+		</div>
+		<script type="text/javascript">
+			window.onload = function() {
+				function isWeixin() {
+					var ua = navigator.userAgent.toLowerCase(); //获取判断用的对象
+					if(ua.match(/MicroMessenger/i) == "micromessenger") {
+						return true; //微信打开
+					} else {
+						return false; //不是微信打开
+					}
+				}
+
+				document.getElementById('openApp').onclick = function(e) {
+					if(isWeixin()) {
+						var modPop = document.getElementById('mod_pop');
+						modPop.style.display = "block";
+					} else {
+						if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) { //ios判断
+							window.location.href = "com.baidu.tieba://"; //通过app打开协议来打开app
+							window.setTimeout(function() {
+								window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.yueyou.homeeye&fromcase=40003"; //没有弹框打开app则打开app下载地址
+							}, 20)
+						} else if(/(Android)/i.test(navigator.userAgent)) { //Android判断
+							var state = null;
+							try {
+								state = window.open("com.yueyou.homeeye://");
+							} catch(e) {}
+							if(state) {
+								window.close();
+							} else {
+								window.location.href = "https://a.app.qq.com/o/simple.jsp?pkgname=com.yueyou.homeeye&fromcase=40003";
+							}
+						}
+					}
+				};
+			}
+		</script>
+	</body>
+
+</html>

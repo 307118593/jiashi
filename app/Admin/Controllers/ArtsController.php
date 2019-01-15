@@ -169,7 +169,8 @@ class ArtsController
             $staff1 = DB::table('admin_users')->where('job',11)->select('id','username','name')->get();  
         }else{
             $staff1 = DB::table('admin_users')->where('pid',$cid)->where('job',11)->select('id','username','name')->get();  
-        }
+        } 
+        $staff = [];
         foreach ($staff1 as $k => $v) {
             $staff[$v->id] = $v->name;
         }

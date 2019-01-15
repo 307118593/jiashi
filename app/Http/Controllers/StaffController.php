@@ -131,4 +131,49 @@ class StaffController extends Controller
 		}
 		return response()->json(['error'=>1,'mes'=>'操作失败.']);
 	}
+
+	//申请使用
+	public function apply(Request $request){
+		$name = $request->input('name');
+		$company = $request->input('company');
+		$phone = $request->input('phone');
+		$address = $request->input('address');
+		$source = $request->input('source');
+        $code = $request->input('code');
+        $ralcode = DB::table('message_log')->where('phone',$phone)->orderBy('id','desc')->value('code');
+	    $nowtime = time();
+	    $losetime = DB::table('message_log')->where('phone',$phone)->orderBy('id','desc')->value('time')+10*60;
+	    if ($nowtime > $losetime) {
+	    	return response()->json(['error'=>1,'mes'=>'验证码过期.']);
+	    }
+	    if ($code != $ralcode) {
+	    	return response()->json(['error'=>1,'mes'=>'验证码错误.']);
+	    }
+		$data = [
+			'name'=>$name,
+			'company'=>$company,
+			'phone'=>$phone,
+			'address'=>$address,
+			'source'=>$source,
+			'addtime'=>date('Y-m-d H:i:s'),
+		];
+		$res = DB::table('apply')->insert($data);
+		if ($res) {
+			return response()->json(['error'=>0,'mes'=>'申请成功.']);
+		}
+	}
+
+	public function chuli(){
+        $id = \request('id');
+        $is_deal = \request('is_deal');
+        // return 22;
+        if ($is_deal == 0) {
+        	DB::table('apply')->where('id',$id)->update(['is_deal'=>1]);
+        	return 1;
+        }else{
+        	DB::table('apply')->where('id',$id)->update(['is_deal'=>0]);
+        	return 0;
+        }
+        return 2;
+    }
 }

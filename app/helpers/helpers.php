@@ -32,6 +32,17 @@
 		return $cid;
 	}
 
+	//获取公司角色
+	function getComRole($cid){
+		$role_id = DB::table('admin_role_users')->where('user_id',$cid)->value('role_id');
+		if ($role_id >= 5 && $role_id <= 7) {
+			$isvip = 0;
+		}else{
+			$isvip = 1;
+		}
+		return $isvip;
+	}
+
 	//上传单图
 	function upload_image($file,$uppath='images/'){
 	    $dx = $file->getClientSize();
@@ -99,6 +110,26 @@
         // }else{
             // return response()->json(['error'=>1,'mes'=>'不是文件数组']);
         // }
+
+	}
+
+		//上传base64位单图图
+	function upload_base64_aimage($file,$uppath='images/'){
+                $file = str_replace(' ', '+', $file);
+                if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $file, $result)){
+                    $file = base64_decode(str_replace($result[1], '', $file));
+                    $img = Image::make($file);  
+                    // $ex = $v->getClientOriginalExtension();
+                    $name = time().rand(1,9).rand(1,9).rand(1,9).".".$result[2];
+                    $path = $uppath.$name;
+                    $img->save('upload/'.$path);
+                    // $image = 'bobao/'.$name;
+                    return 'upload/'.$path;
+            		// return response()->json(['error'=>0,'image'=>'http://'.request()->server('HTTP_HOST').'/upload/'.$path,'path'=>$path]);
+                }else{
+                	return false;
+                }
+   
 
 	}
 

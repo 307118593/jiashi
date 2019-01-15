@@ -52,4 +52,84 @@ class MessagesController extends Controller
 		$res = DB::table('messages_user')->where('uid',$uid)->where('mid',$mid)->update(['is_del'=>1]);
 		return response()->json(['error'=>0,'mes'=>'操作成功~']);
 	}
+
+	//获取消息数据
+	public function getSendSource(Request $request){
+		$uid = $request->input('uid');
+		$role = getRole($uid);
+		$cid = $request->input('cid');
+		// if ($role == 2) {
+		// 	$cid = $uid;
+		// }else{
+		// 	$cid = DB::table('admin_users')->where('id',$uid)->value('pid');
+		// }
+		// return $role;
+		if ($role ==2 || $role ==4) {
+			$type = [0=>"发送个人",1=>"群发"];
+		}else{
+			$type = [0=>"发送个人"];
+		}
+		$staff = DB::table('admin_users')->where('pid',$cid)->pluck('name','id');
+		$data['type'] = $type;
+		$data['staff'] = $staff;
+		return response()->json(['error'=>0,'data'=>$data]);
+	}
+
+
+	//发送消息
+	public function sendMes(Request $request){
+		$uid = $request->input('uid');
+		$cid = $request->input('cid');
+		$touser = $request->input('touser');
+		$type = $request->input('type');
+		$title = $request->input('title');
+		$content = $request->input('content');
+		if ($type == 1) {//群发本地消息
+			$data = [
+				'cid'=>$cid,
+				'title'=>$title,
+				'content'=>$content,
+				'addtime'=>date('Y-m-d H:i:s'),
+				'type'=>-1,
+				'senduser'=>$cid,
+			];
+			$mid = DB::table('messages')->insertGetId($data);
+			$staff = DB::table('admin_users')->where('pid',$cid)->pluck('id');
+			foreach ($staff as $k => $v) {
+				$arr = [
+					'mid'=>$mid,
+					'fromuser'=>$uid,
+					'touser'=>$v->id,
+					'addtime'=>date('Y-m-d H:i:s'),
+				];
+				DB::table('messages_user')->insert($arr);
+			}
+			return response()->json(['error'=>0,'mes'=>'ok']);
+
+		}else{//单发
+			$data = [
+				'cid'=>$cid,
+				'title'=>$title,
+				'content'=>$content,
+				'addtime'=>date('Y-m-d H:i:s'),
+				'type'=>-1,
+				'senduser'=>$touser,
+			];
+			$mid = DB::table('messages')->insertGetId($data);
+			$arr = [
+				'mid'=>$mid,
+				'fromuser'=>$uid,
+				'touser'=>$touser,
+				'addtime'=>date('Y-m-d H:i:s'),
+			];
+			DB::table('messages_user')->insert($arr);
+		}
+		return response()->json(['error'=>0,'mes'=>'ok']);
+	}
+
+
+	//获取消息列表
+	public function getMesList(Request $request){
+		
+	}
 }

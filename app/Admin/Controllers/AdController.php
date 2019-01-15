@@ -117,13 +117,13 @@ class AdController extends Controller
         //     $data['logo'] = $path;
         // }
         if (preg_match('/data:image\/.*?;base64/is',$file)) {
-        	$data['image'] = upload_base64_oneimage($file,'company/');
+        	$data['image'] = upload_base64_aimage($file,'company/');
         }
         if (preg_match('/data:image\/.*?;base64/is',$logo)) {
-        	$data['logo'] = upload_base64_oneimage($logo,'company/');
+        	$data['logo'] = upload_base64_aimage($logo,'company/');
         }
         if (preg_match('/data:image\/.*?;base64/is',$company_bg)) {
-        	$data['company_bg'] = upload_base64_oneimage($company_bg,'company/');
+        	$data['company_bg'] = upload_base64_aimage($company_bg,'company/');
         }
         // if ($content) {
             $data['content'] = $content;

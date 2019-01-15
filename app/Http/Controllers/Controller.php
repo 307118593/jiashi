@@ -42,7 +42,7 @@ class Controller extends BaseController
 		$type = $request->input('type',0); 
 		$version = $request->input('version',-1);
 		// return $type; 
-		if ($type==1) {
+		if ($type==1) {//区别客户端
 			if ($version == -1) {
 				$res = DB::table('company_version')->orderBy('version','desc')->first();
 				return response()->json(['error'=>0,'data'=>$res]);

@@ -52,12 +52,27 @@ class CompanyController extends Controller
 		if ($build) {
 			$data['build_team'] = 1;
 		}
+
 		$data['banner'] = $banner;
 		$data['company'] = $company;
 		$data['designer'] = $designer;
 		$data['cases'] = $cases;
 
-
+		//更新数量
+		//楼盘数量
+		$residenceCount = DB::table('residence')->where('cid',$cid)->count();
+		//设计师
+		$designerCount = DB::table('admin_users')->where('pid',$cid)->where('job',3)->count();
+		//活动
+		$actCount = DB::table('activitys')->where('cid',$cid)->where('type',1)->count();
+		//项目团队
+		$xmjl = DB::table('admin_users')->where('pid',$cid)->where('job',11)->pluck('id');
+		$xmjl = $xmjl->toArray();
+		$buildCount = DB::table('build_case')->whereIn('uid',$xmjl)->count() + DB::table('arts')->where('cid',$cid)->count();
+		$data['residenceCount'] = $residenceCount;
+		$data['designerCount'] = $designerCount;
+		$data['actCount'] = $actCount;
+		$data['buildCount'] = $buildCount;
 		return response()->json(['error'=>0,'data'=>$data]);
 	}
 	//公司首页1031 多地址
@@ -288,7 +303,7 @@ class CompanyController extends Controller
 		$arts = DB::table('arts')->where('uids','like','%"'.$uid.'"%')->orderby('sort','desc')->get();
 		foreach ($arts as $k => $v) {
 			$arts[$k]->images = $this->duotu($v->images);
-			// $arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
+			$arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
 		}
 		$data['builder'] = $builder;
 		$data['arts'] = $arts;
@@ -297,7 +312,7 @@ class CompanyController extends Controller
 
 	}
 
-	//获取工艺详情
+	//获取工艺详情 
 	public function artDetail(Request $request){
 		$art_id = $request->input('case_id');
 		$type = $request->input('type',0);//0是工艺1是案例
