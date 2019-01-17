@@ -415,10 +415,25 @@ class CompanyController extends Controller
 	    $lastday = date("Y-m-d",strtotime("$firstday +1 month -1 day"));
 	    return array($firstday,$lastday);
 	}
-
-	public function getRecord(Request $request){
+	//月度报表
+	public function getMonthRecord(Request $request){
 		$cid = $request->input('cid');
+		//直播数据--
+		//1.直播总时间
+		//2.直播时间最多的前三个设备和时间
+		//3.观看直播最长的三个人
+		//4.比上个月相比的直播时长
+
+		//项目数据--
+		//1.本月新增项目
+		//2.本月开始的项目
+		//3.本月完成的项目
+
+		//用户数据--
+		//1.本月新增用户
 		
+		//消费数据--
+		//.本月消费金额
 	}
 
 }
