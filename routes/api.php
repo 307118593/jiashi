@@ -95,6 +95,11 @@ Route::any('changestaff','LoginController@changestaff');
 //后台将员工转为客户
 Route::any('changeuser','LoginController@changeuser');
 
+//微信小程序登陆
+Route::any('wxonlogin','WxLoginController@wxonlogin');
+//微信绑定手机号
+Route::any('wxBindPhone','WxLoginController@wxBindPhone');
+
 
 //注册--end
 
@@ -297,6 +302,10 @@ Route::group(['middleware' => ['checkRole']], function () {
 	Route::any('companyRecord','CompanyController@companyRecord');
 	//获取工艺详情
 	Route::any('artDetail','CompanyController@artDetail');
+	//获取月当月的月度报表
+	Route::any('getMonthRecord','CompanyController@getMonthRecord');
+	//小程序公司官网
+	Route::any('companyPics','CompanyController@companyPics');
 	//推送
 	//测试推送
 	Route::any('send_push','PushController@send_push');

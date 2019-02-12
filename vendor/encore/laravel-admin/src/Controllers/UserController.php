@@ -99,7 +99,22 @@ class UserController extends Controller
                 $actions->disableDelete();
             });
         });
-
+        $grid->filter(function($filter){
+            $filter->disableIdFilter();
+            $filter->equal('username', '手机号/账号');
+            $filter->like('name', '昵称');
+            $filter->equal('job','职位')->radio([
+                // ''   => 'All',
+                1    => '销售总监',
+                10    => '工程总监',
+                3    => '设计师',
+                11    => '项目经理',
+            ]);
+            $filter->equal('pid','角色')->radio([
+                // ''   => 'All',
+                0    => '公司角色',
+            ]);
+        });
         return $grid;
     }
 

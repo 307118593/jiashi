@@ -41,6 +41,9 @@ class MessagesController extends Controller
 		$mes->title = $detail->title;
 		$mes->content = $detail->content;
 		$mes->url = $detail->url;
+		if (!$mes->url) {
+			$mes->url = 'https://www.homeeyes.cn/app/livedemo/messageinfo.html';
+		}
 
 		return response()->json(['error'=>0,'data'=>$mes]);
 	}

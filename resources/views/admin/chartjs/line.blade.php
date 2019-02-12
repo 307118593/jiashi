@@ -6,7 +6,7 @@ $(function () {
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ["{{$alive[6]['alive']}}","{{$alive[5]['alive']}}", "{{$alive[4]['alive']}}", "{{$alive[3]['alive']}}", "{{$alive[2]['alive']}}", "{{$alive[1]['alive']}}", "{{$alive[0]['alive']}}"],
+            labels: ["{{$alive[6]['date']}}","{{$alive[5]['date']}}", "{{$alive[4]['date']}}", "{{$alive[3]['date']}}", "{{$alive[2]['date']}}", "{{$alive[1]['date']}}", "{{$alive[0]['date']}}"],
             datasets: [{
                 label: '分钟数',
                 // data: [55, 19, 3, 15, 25, 3,5],
@@ -14,7 +14,7 @@ $(function () {
                 backgroundColor: [
                     'rgba(255, 99, 132, 0)',
                 ],
-                // fill: false,
+                fill: false,
                 borderColor: [
                     // 'rgba(255,99,132,1)',
                     // 'rgba(54, 162, 235, 1)',

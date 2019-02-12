@@ -181,6 +181,12 @@ class ActivitysController
         ];
 
         $form->switch('state', '状态')->states($states)->default(0);
+        $statess = [
+            'on'  => ['value' => 1, 'text' => '弹出', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => '不弹出', 'color' => 'default'],
+        ];
+
+        $form->switch('is_pop', '首页弹出')->states($statess)->default(0);
         $form->number('sort', '排序权重')->help('权重越大.活动越靠前');
         if ($role == 1) {
             $form->select('cid', '选择公司')->options(Staff::all()->where('pid',0)->pluck('name','id'))->setwidth(3);

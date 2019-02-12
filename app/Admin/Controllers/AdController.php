@@ -63,6 +63,10 @@ class AdController extends Controller
                         $form->divide();
                         $form->text('sharetitle','分享标题');
                         $form->text('sharecontent','分享内容')->help('分享设置用户客户分享到微信的封面内容,可不填.');
+
+                        if ($z_uid == 2) {
+                            
+                        }
                         $collapse = new Collapse();
                         // $image = DB::table('admin_users')->where('id',$z_uid)->value('image');
                         // $logo = DB::table('admin_users')->where('id',$z_uid)->value('logo');

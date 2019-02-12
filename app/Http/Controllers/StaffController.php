@@ -139,16 +139,16 @@ class StaffController extends Controller
 		$phone = $request->input('phone');
 		$address = $request->input('address');
 		$source = $request->input('source');
-        $code = $request->input('code');
-        $ralcode = DB::table('message_log')->where('phone',$phone)->orderBy('id','desc')->value('code');
-	    $nowtime = time();
-	    $losetime = DB::table('message_log')->where('phone',$phone)->orderBy('id','desc')->value('time')+10*60;
-	    if ($nowtime > $losetime) {
-	    	return response()->json(['error'=>1,'mes'=>'验证码过期.']);
-	    }
-	    if ($code != $ralcode) {
-	    	return response()->json(['error'=>1,'mes'=>'验证码错误.']);
-	    }
+     //    $code = $request->input('code');
+     //    $ralcode = DB::table('message_log')->where('phone',$phone)->orderBy('id','desc')->value('code');
+	    // $nowtime = time();
+	    // $losetime = DB::table('message_log')->where('phone',$phone)->orderBy('id','desc')->value('time')+10*60;
+	    // if ($nowtime > $losetime) {
+	    // 	return response()->json(['error'=>1,'mes'=>'验证码过期.']);
+	    // }
+	    // if ($code != $ralcode) {
+	    // 	return response()->json(['error'=>1,'mes'=>'验证码错误.']);
+	    // }
 		$data = [
 			'name'=>$name,
 			'company'=>$company,

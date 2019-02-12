@@ -30,12 +30,12 @@ class Project_ruleController extends Controller
         $uid = $request->input('uid');
 		$condition = $request->input('condition','');
 		$role = getRole($uid);
-		if ($role != 1) {
+		if ($role != 1 && $role != 2) {
 			$z_uid = DB::table('admin_users')->where('id',$uid)->value('pid');
-		}else{
+		}else if($role == 2){
 			$z_uid = $uid;
 		}
-		
+        
     	$project = DB::table('project')->where('z_uid',$z_uid)->when($condition,function($query) use($condition){
             return $query->where('name','like','%'.$condition.'%');
         })
@@ -67,9 +67,12 @@ class Project_ruleController extends Controller
                    $project[$k]->speed = $project[$k]->speed.'%';
                 }
     		}
-    		if ($uid != $v->leader_id && !in_array($uid,$project_us) && $v->staff_share == 0) {
-    			unset($project[$k]);
-    		}
+            if ($role != 2 && $role!=4) {
+                if ($uid != $v->leader_id && !in_array($uid,$project_us) && $v->staff_share == 0) {
+                    unset($project[$k]);
+                }
+            }
+        		
     		
     	}
     	$project = $project->toArray();

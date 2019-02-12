@@ -260,6 +260,7 @@ class ProjectController extends Controller
             	}
                 }
         $project->project_us = array_values($project_us);
+        $project->shareUrl = 'https://www.homeeyes.cn/app/livedemo/scheduleinfo.html?from=singlemessage&uid='.$project->uid.'&pro_id='.$project->id;
     	// $project->project_us = $project_us;
      //    $project = array_values($project->project_us);
     	$flow = DB::table('flow')->where(['pro_id'=>$pro_id])->orderBy('sort','asc')->get();

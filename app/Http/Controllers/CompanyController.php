@@ -17,6 +17,9 @@ class CompanyController extends Controller
 			}
 		}
 		$company = DB::table('admin_users')->where('id',$cid)->select('id','name','avatar','content','image','address','style','year','age','homeurl','tel','logo','company_bg')->first();
+		if (empty($company)) {
+			return response()->json(['error'=>0,'mes'=>'参数错误..']);
+		}
 		if ($company->image) {
 			$company->image = $this->host.$company->image;
 		}
@@ -69,10 +72,18 @@ class CompanyController extends Controller
 		$xmjl = DB::table('admin_users')->where('pid',$cid)->where('job',11)->pluck('id');
 		$xmjl = $xmjl->toArray();
 		$buildCount = DB::table('build_case')->whereIn('uid',$xmjl)->count() + DB::table('arts')->where('cid',$cid)->count();
+
+		//活动图片
+		$act = DB::table('activitys')->where('is_pop',1)->where('cid',$cid)->orderBy('id','desc')->select('image')->first();
+		if ($act) {
+			$act->image = $this->upload.$act->image;
+		}
+
 		$data['residenceCount'] = $residenceCount;
 		$data['designerCount'] = $designerCount;
 		$data['actCount'] = $actCount;
 		$data['buildCount'] = $buildCount;
+		$data['act'] = $act;
 		return response()->json(['error'=>0,'data'=>$data]);
 	}
 	//公司首页1031 多地址
@@ -165,6 +176,7 @@ class CompanyController extends Controller
 				$v->panorama = $this->duotu($v->panorama);
 			}
 		}
+		$designer->shareUrl = 'https://www.homeeyes.cn/app/livedemo/stylelistinfo.html?from=singlemessage&uid='.$designer->id;
 		$data['designer'] = $designer;
 		$data['cases'] = $cases;
 		return response()->json(['error'=>0,'data'=>$data]);
@@ -197,9 +209,9 @@ class CompanyController extends Controller
 			$cases->photo = $this->upload.$cases->photo;
 		}
 		$cases->author = DB::table('admin_users')->where('id',$cases->uid)->value('name');
-		// if ($cases->panorama) {
-		// 	$cases->panorama = $this->duotu($cases->panorama);
-		// }
+		if ($cases->panorama) {
+			$cases->panorama = $this->duotu($cases->panorama);
+		}
 	
 		return response()->json(['error'=>0,'data'=>$cases]);
 	}
@@ -303,7 +315,7 @@ class CompanyController extends Controller
 		$arts = DB::table('arts')->where('uids','like','%"'.$uid.'"%')->orderby('sort','desc')->get();
 		foreach ($arts as $k => $v) {
 			$arts[$k]->images = $this->duotu($v->images);
-			$arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
+			$arts[$k]->url = 'https://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
 		}
 		$data['builder'] = $builder;
 		$data['arts'] = $arts;
@@ -338,6 +350,7 @@ class CompanyController extends Controller
 		if ($build_cases->photo) {
 			$build_cases->photo = $this->upload.$build_cases->photo;
 		}
+		$build_cases->shareUrl = 'https://www.homeeyes.cn/app/livedemo/constructioncase.html?from=singlemessage&pid='.$build_cases->id;
 		$build_cases->keting = $this->duotu($build_cases->keting);
 		$build_cases->woshi = $this->duotu($build_cases->woshi);
 		$build_cases->weishengjian = $this->duotu($build_cases->weishengjian);
@@ -415,25 +428,108 @@ class CompanyController extends Controller
 	    $lastday = date("Y-m-d",strtotime("$firstday +1 month -1 day"));
 	    return array($firstday,$lastday);
 	}
+
+	// function getlastMonthDays($date){
+	// 	  $timestamp = strtotime($date);
+	// 	  $firstday = date('Y-m-01',strtotime(date('Y',$timestamp).'-'.(date('m',$timestamp)-1).'-01'));
+	// 	  $lastday = date('Y-m-d',strtotime("$firstday +1 month -1 day"));
+	// 	  return array($firstday,$lastday);
+	// 	// return 55;
+	// }
+	function getlastMonthDays($date){
+		$timestamp = strtotime($date);
+		$firstday = date('Y-m-01',strtotime(date('Y',$timestamp).'-'.(date('m',$timestamp)-1).'-01'));
+		$lastday = date('Y-m-d',strtotime("$firstday +1 month -1 day"));
+		return array($firstday,$lastday);
+	}
+
 	//月度报表
 	public function getMonthRecord(Request $request){
 		$cid = $request->input('cid');
+		//获取上个月的时间区间
+		$month = $this->getlastMonthDays(date('Y-m-d'));
 		//直播数据--
 		//1.直播总时间
+		$liveallmin = intval(DB::table('camera_log')->where('cid',$cid)->wherebetween('day',$month)->sum('alivetime')/60);
 		//2.直播时间最多的前三个设备和时间
+		// DB::enableQueryLog();
+		$camera = DB::table('camera_log')->select('mac',DB::raw('SUM(alivetime) as alivetime'))->where('uid','>',0)->where('cid',$cid)->wherebetween('day',$month)->groupBy('mac')->orderBy('alivetime','desc')->take(3)->get();
+		foreach ($camera as $k => $v) {
+			$camera[$k]->name = DB::table('camera')->where('mac',$v->mac)->value('name');
+			$camera[$k]->alivetime =intval($v->alivetime/60);
+		}
+		// $users = DB::table('camera_log')->where('uid',324)->wherebetween('day',$month)->sum('alivetime');
+		// $users = DB::select('select uid,alivetime from camera_log where day between '.$month[0].' and '.$month[1].' group by uid');
+		// dd( DB::getQueryLog()); 
+		// dd($users);
+		// return $camera;
+		// $liveusers = 
 		//3.观看直播最长的三个人
+		$users = DB::table('camera_log')->select('uid',DB::raw('SUM(alivetime) as alivetime'))->where('uid','>',0)->where('cid',$cid)->wherebetween('day',$month)->groupBy('uid')->orderBy('alivetime','desc')->take(3)->get();
+		foreach ($users as $k => $v) {
+			$users[$k]->name = DB::table('user')->where('id',$v->uid)->value('name');
+			$users[$k]->alivetime =intval($v->alivetime/60);
+		}
 		//4.比上个月相比的直播时长
-
+		$lastmonth = $this->getlastMonthDays(date('Y-m-d',strtotime("-1 month")));
+		$lastmonthmin  = intval(DB::table('camera_log')->where('cid',$cid)->wherebetween('day',$lastmonth)->sum('alivetime')/60);
+		$comparelastmonthmin = $liveallmin-$lastmonthmin;
+		if ($comparelastmonthmin >= 0) {
+			$comparelastmonthmin = "比上个月增加了".$comparelastmonthmin."分钟";
+		}else{
+			$comparelastmonthmin = "比上个月减少了".$comparelastmonthmin."分钟";
+		}
+		// return $comparelastmonthmin;
+		// return $lastmonth;
 		//项目数据--
 		//1.本月新增项目
+		$newproject = DB::table('project')->where('z_uid',$cid)->wherebetween('created_at',$month)->select('name')->get();
+		// return $newproject;
 		//2.本月开始的项目
 		//3.本月完成的项目
+		$finishproject = DB::table('project')->where('z_uid',$cid)->wherebetween('finishtime',$month)->select('name')->get();
 
 		//用户数据--
 		//1.本月新增用户
-		
+		$newuser = DB::table('user')->where('cid',$cid)->wherebetween('addtime',$month)->count();
 		//消费数据--
 		//.本月消费金额
+		$money = 1000;
+		$data['liveallmin'] = $liveallmin;
+		$data['camera'] = $camera;
+		$data['users'] = $users;
+		$data['comparelastmonthmin'] = $comparelastmonthmin;
+		$data['newproject'] = $newproject;
+		$data['finishproject'] = $finishproject;
+		$data['newuser'] = $newuser;
+		$data['money'] = $money;
+		return response()->json(['error'=>0,'data'=>$data]);
+	}
+
+	//小程序公司官网
+	public function companyPics(Request $request){
+		$cid = $request->input('cid');
+		$company = DB::table('admin_users')->where('id',$cid)->select('id','name','avatar','content','image','address','homeurl','tel','logo')->first();
+		if (empty($company)) {
+			return response()->json(['error'=>0,'mes'=>'参数错误..']);
+		}
+		if ($company->image) {
+			$company->image = $this->host.$company->image;
+		}
+		if ($company->avatar) {
+			$company->avatar = $this->upload.$company->avatar;
+		}
+		if ($company->logo) {
+			$company->logo = $this->host.$company->logo;
+		}
+		$pics = DB::table('pics')->where('cid',$cid)->orderBy('sort','desc')->get();
+		foreach ($pics as $k => $v) {
+			$pics[$k]->image = $this->upload.$v->image;
+		}
+		$data['company'] = $company;
+		$data['pics'] = $pics;
+		return response()->json(['error'=>0,'data'=>$data]);
+		
 	}
 
 }

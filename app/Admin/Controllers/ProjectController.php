@@ -313,7 +313,7 @@ class ProjectController extends Controller
                     $form->switch('user_share', '是否客户共享')->states($statess)->default(0)->help('所有客户都可查看工地进度');
                 }
                     
-                $form->hidden('created_at', '添加时间');
+                $form->display('created_at', '新建时间');
                 $form->hidden('updated_at', '更新时间');
             })->tab('项目材料',function($form){
                  $form->multipleImage('zxht','装修合同')->removable()->move('zxht')->uniqueName();
@@ -342,7 +342,9 @@ class ProjectController extends Controller
                  
             //      // $form->text('uid','项目成员')->default($uid);
             // });
-
+            // $form->saving(function (Form $form){
+            //     dump($form->created_at);exit;
+            // });
 
             $form->saved(function (Form $form){
                 $pro_id = $form->model()->id;
@@ -368,8 +370,6 @@ class ProjectController extends Controller
                         'title' => '工地新建通知',
                         "text"=>'您好,您的工地名:'.$form->name.'已经新建完成',   
                         "after_open" => 'go_app',
-                        "cid" => $form->z_uid,
-                        "uid" => $form->uid,
                     ];
                     $extraField=[
                         "cid" => $form->z_uid,

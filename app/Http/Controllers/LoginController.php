@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 class LoginController extends Controller
 {
+    
     public function __construct(){
         $this->host = 'http://'.request()->server('HTTP_HOST').'/';
     }

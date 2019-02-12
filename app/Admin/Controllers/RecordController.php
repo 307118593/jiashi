@@ -11,7 +11,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
-
+use DB;
 class RecordController
 {
     use HasResourceActions;
@@ -95,7 +95,11 @@ class RecordController
             $grid->model()->where('cid',$cid);
         }
         $grid->id('ID');
-        $grid->column('user.name','用户名称');
+        $grid->uid('用户名称')->display(function($uid){
+            $is_copy = DB::table('user')->where('id',$uid)->value('is_copy');
+            $name = DB::table('user')->where('id',$uid)->value('name');
+            return $is_copy==1?$name.'(员工)':$name;
+        });
         if ($role == 1) {
             $grid->column('admin_users.name','所属公司');
         }

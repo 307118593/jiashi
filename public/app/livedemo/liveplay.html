@@ -82,6 +82,7 @@
 			var request = new Request();
 			var value = request.getnavivalues();
 			var mac = value["mac"];
+			var title = value["title"];
 			var invitation = value["invitation"];
 			var homeurl = "https://www.homeeyes.cn";
 			var showUrl = homeurl + "/app/livedemo/index.html?invitation=";
@@ -100,7 +101,13 @@
 				$header.hide();
 				$content.css("margin-top","0rem")
 			}else{
-				$header.show();
+				if(title==0){
+					$header.hide();
+					$content.css("margin-top","0rem")
+				}else{
+					$header.show();
+				}
+				
 			}
 			
 			if(mac != undefined) {

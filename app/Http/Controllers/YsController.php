@@ -18,6 +18,7 @@ class YsController extends Controller
         if ($cid == 0 ) {
             $cid = 2;
         }
+        $invitation = 1000+$cid;
         //查看员工共享设备
         $is_copy = DB::table('user')->where('id',$uid)->value('is_copy');
         $share = DB::table('camera')->where('cid',$cid)->Where('user_share',1)->get();
@@ -52,6 +53,7 @@ class YsController extends Controller
                     }else{
                         $camera[$k]->picUrl = $this->host.'upload/live_base.jpg';
                     }
+                    $camera[$k]->shareUrl = 'app/livedemo/liveplay.html?mac='.$v->mac.'&invitation='.$invitation;
                 }
             }
         }
@@ -85,6 +87,7 @@ class YsController extends Controller
                     $auth[$k]->isSupportTalk = $Support->isSupportTalk;
                     $auth[$k]->isSupportZoom = $Support->isSupportZoom;
                     $auth[$k]->name = $Support->name;
+                    $auth[$k]->shareUrl = 'app/livedemo/liveplay.html?mac='.$v->mac.'&invitation='.$invitation;
                     if ($Support->user_share == 1 || ($is_copy == 1 && $Support->staff_share == 1)) {
                         unset($auth[$k]);
                     }
@@ -301,6 +304,7 @@ class YsController extends Controller
 
     public function getH5Address(Request $request){
         $mac = $request->input('mac');
+        $camera = DB::table('camera')->where('mac',$mac)->select('pro_id','name')->first();
         $res = $this->vpost('https://open.ys7.com/api/lapp/live/address/get','accessToken='.$this->accessToken.'&source='.$mac.':1');
         $res = json_decode($res);
         // return $res->data->deviceSerial;
@@ -308,6 +312,8 @@ class YsController extends Controller
             $data = [];
             $data['hls'] = $res->data[0]->hls;
             $data['rtmp'] = $res->data[0]->rtmp;
+            $data['project'] = DB::table('project')->where('id',$camera->pro_id)->value('name');
+            $data['name'] = $camera->name;
             return response()->json(['error'=>0,'data'=>$data]);
         }else{
             return response()->json(['error'=>1,'code'=>$res->code]);
