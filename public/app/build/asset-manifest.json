@@ -1,13 +1,17 @@
 {
-  "main.css": "static/css/main.d002ce62.css",
-  "main.css.map": "static/css/main.d002ce62.css.map",
-  "main.js": "static/js/main.dece20bd.js",
-  "main.js.map": "static/js/main.dece20bd.js.map",
+  "main.css": "static/css/main.252d8fbd.css",
+  "main.css.map": "static/css/main.252d8fbd.css.map",
+  "main.js": "static/js/main.272f869f.js",
+  "main.js.map": "static/js/main.272f869f.js.map",
+  "static\\media\\bg_company.png": "static/media/bg_company.8f185fd5.png",
+  "static\\media\\bg_execution.png": "static/media/bg_execution.8f673293.png",
   "static\\media\\bg_share.png": "static/media/bg_share.fdb4b2b7.png",
+  "static\\media\\bg_total.png": "static/media/bg_total.9f1c3c2f.png",
   "static\\media\\bgstart.png": "static/media/bgstart.4580e611.png",
   "static\\media\\haha.jpg": "static/media/haha.86a9b6d9.jpg",
   "static\\media\\img1.jpg": "static/media/img1.b07810e2.jpg",
   "static\\media\\img2.jpg": "static/media/img2.6ec92844.jpg",
   "static\\media\\img3.jpg": "static/media/img3.3116494b.jpg",
-  "static\\media\\img4.jpg": "static/media/img4.45bb0bc7.jpg"
+  "static\\media\\img4.jpg": "static/media/img4.45bb0bc7.jpg",
+  "static\\media\\invite.png": "static/media/invite.6b478c4b.png"
 }

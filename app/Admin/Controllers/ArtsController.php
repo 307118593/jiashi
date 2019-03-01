@@ -164,7 +164,8 @@ class ArtsController
         }
         $form->text('name', '工艺名称')->setwidth(3);
        
-        $form->multipleImage('images', '全景图片')->help('你可以上传不超过3张全景图图片.')->removable()->move('arts')->uniqueName();;
+        $form->multipleImage('images', '全景图片')->help('你可以上传不超过3张全景图图片.')->removable()->move('arts')->uniqueName();
+        $form->url('url','链接地址')->help('如果有全景地址可直接跳转到链接地址,上传的全景图将失效.');
         if ($role == 1) {
             $staff1 = DB::table('admin_users')->where('job',11)->select('id','username','name')->get();  
         }else{

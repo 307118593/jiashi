@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use DB;
 class WxLoginController extends Controller
 {
-	
+	//小程序
     var $appid = 'wx092d82d9583bef76';
     var $appsecret = 'f1f761811f74af2c5a2d0112e6b745a3';
     //GET https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=JSCODE&grant_type=authorization_code

@@ -105,6 +105,8 @@ class MessagesController extends Controller
             // $grid->updated_at();
             $grid->actions(function ($actions) {
                 $actions->disableView();
+                $actions->disableDelete();
+                $actions->disableEdit();
             });
         });
     }
@@ -133,7 +135,7 @@ class MessagesController extends Controller
             $form->textarea('content','内容*')->setwidth(5);
             $form->text('url','链接')->help('如果有活动海报链接.')->setwidth(5);
             $form->image('image','消息图片')->setWidth(4)->uniqueName();
-            $form->radio('type','详细类型')->options([0=>'本地消息',1=>'推送消息']);
+            $form->radio('type','消息类型')->options([0=>'本地消息',1=>'推送消息']);
             if ($role == 1) {
                 $data[0] = '全部';
                 $com = DB::table('admin_users')->where('pid',0)->select('id','name')->get();

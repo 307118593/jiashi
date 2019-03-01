@@ -39,6 +39,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapWxRoutes();
         //
     }
 
@@ -69,5 +70,12 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+    }
+
+    protected function mapWxRoutes()
+    {
+        Route::prefix('wx')
+             ->namespace($this->namespace.'\Wechat')
+             ->group(base_path('routes/wx.php'));
     }
 }

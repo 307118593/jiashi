@@ -89,6 +89,9 @@ class ProjectController extends Controller
                 $grid->model()->where('z_uid',$pid)->where('leader_id',$userid);
             }elseif($role == 4){
                 $grid->model()->where('z_uid',$pid);
+            }elseif($role == 5){
+                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                $grid->model()->whereIn('z_uid',$companyid);
             }
             $grid->id('ID')->sortable();
             if ($userid != 1) {
@@ -259,6 +262,9 @@ class ProjectController extends Controller
                 
                 foreach ($staff1 as $k => $v) {
                     $staff[$v->id] = $v->username.'--'.$v->name;
+                }
+                if (empty($staff)) {
+                    $staff[0] = '请先添加员工';
                 }
                 $form->select('leader_id','负责人*')->options($staff)->setWidth(3)->rules('required|min:1');
                 $form->multipleSelect('project_us','项目成员')->options($staff)->setWidth(8)->help('负责人已经是项目成员.无需重复添加..');

@@ -111,6 +111,8 @@ Route::any('test001','Controller@test001');
 Route::any('getAndriod','CompanyController@getAndriod');
 //获取萤石设备列表
 Route::any('get_YsList','YsController@get_YsList');
+//优化后获取设备列表
+Route::any('get_YsList222','YsController@get_YsList222');
 //修改名称
 Route::any('edit_YsName','YsController@edit_YsName');
 //解除绑定
@@ -119,6 +121,8 @@ Route::any('remove_Ys','YsController@remove_Ys');
 Route::any('snap','YsController@snap');
 //后台导入设备
 Route::any('daoru','YsController@daoru');
+//更新设备状态.优化拉取速度
+Route::any('updateYs','YsController@updateYs');
 //获取\H5直播地址
 Route::any('getH5Address','YsController@getH5Address');
 //打开设备通知接口

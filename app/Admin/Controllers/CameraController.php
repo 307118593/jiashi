@@ -99,6 +99,11 @@ class CameraController extends Controller
             if ($role == 1) {
                 $grid->id('id','ID')->sortable();
             }
+            if ($role == 5) {//代理商
+                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                $grid->model()->whereIn('cid',$companyid);
+                $grid->id('id','ID')->sortable();
+            }
             // $grid->id('ID')->sortable();
             $grid->mac('设备标识');
             $grid->name('别名');

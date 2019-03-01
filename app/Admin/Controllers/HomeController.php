@@ -82,6 +82,58 @@ class HomeController extends Controller
             
             }
             
+            if ($role == 5) {//代理商
+                $content->row(function(Row $row) use($role,$userid){
+                    //公司id
+                    $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                    // dd($companyid);
+                    //设备数量->已分配->未分配->设备使用率->使用率
+                    $comeraCount =  DB::table('camera')->whereIn('cid',$companyid)->count();
+                    $fenpeiCount =  DB::table('camera')->whereRaw('(uid> ? or pro_id > ?)', [0,0])->whereIn('cid',$companyid)->count();
+                    $meiCount =  DB::table('camera')->where('uid',0)->where('pro_id',0)->whereIn('cid',$companyid)->count();
+                    $shiyonglv = 0;
+                    if ($comeraCount != 0) {
+                        $shiyonglv = $fenpeiCount/$comeraCount * 100 ;
+                    }
+                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
+
+                    //工地数量->施工中数量->已完成数量->客户总数
+                    $projectCount = DB::table('project')->whereIn('z_uid',$companyid)->count();
+                    $project = DB::table('project')->select('id')->whereIn('z_uid',$companyid)->get();
+                    $shigongzhong = 0;
+                    foreach ($project as $k => $v) {
+                        $wcjd = DB::table('flow')->where('state','>',0)->where('pro_id',$v->id)->count();
+                        if ($wcjd > 0) {
+                            $shigongzhong ++;
+                        }
+                    }
+                    $yiwancheng = 0;
+                    foreach ($project as $k => $v) {
+                        $wcjd = DB::table('flow')->where('state','>',0)->where('pro_id',$v->id)->count();
+                        $flows = DB::table('flow')->where('pro_id',$v->id)->count();
+                        if ($wcjd == $flows && $flows > 0) {
+                            $yiwancheng ++;
+                        }
+                    }
+                    $userCount = DB::table('user')->whereIn('cid',$companyid)->where('is_copy',0)->count();
+                    // $yaoqingma = $cid + 1000;
+                    $PROJECT = new InfoBox('正在施工:'.$shigongzhong, 'fa-cogs', 'orange', '/admin/project', '工地数量:'.$projectCount);
+
+                    //员工总数->总监->设计师
+                    $staffCount = DB::table('admin_users')->whereIn('pid',$companyid)->count();
+                    // $staffCount = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                    // $zongjianCount = DB::table('admin_users')->whereIn('job',[1,10])->count();
+                    // $designCount = DB::table('admin_users')->where('job',3)->count();
+                    $companyCount = DB::table('admin_users')->where('did',$userid)->count();
+                    $newUserConut = DB::table('user')->where('addtime','>',date('Y-m-d'))->whereIn('cid',$companyid)->count();
+                    $STAFF = new InfoBox('员工数:'.$staffCount.'人', 'fa-cogs', 'green', '/admin/staff', '公司数量:'.$companyCount.'个');
+                    $USER = new InfoBox('本月新增客户:'.$newUserConut, 'fa-cogs', 'purple', '/admin/user', '注册客户:'.$userCount.'人');
+                    $row->column(3, $CAMERA);
+                    $row->column(3, $PROJECT);
+                    $row->column(3, $STAFF);
+                    $row->column(3, $USER);
+                });//第一行结束
+            }
             
 
 

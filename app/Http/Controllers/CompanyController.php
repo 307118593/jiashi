@@ -10,6 +10,9 @@ class CompanyController extends Controller
 {
 	public function companyHome(Request $request){
 		$cid = $request->input('cid',2);
+		if ($cid == 0) {
+			$cid = 2;
+		}
 		$banner = DB::table('banner')->where('cid',$cid)->orderBy('sort','desc')->get();
 		foreach ($banner as $k => $v) {
 			if ($v->image) {
@@ -315,7 +318,10 @@ class CompanyController extends Controller
 		$arts = DB::table('arts')->where('uids','like','%"'.$uid.'"%')->orderby('sort','desc')->get();
 		foreach ($arts as $k => $v) {
 			$arts[$k]->images = $this->duotu($v->images);
-			$arts[$k]->url = 'https://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
+			if (empty($v->url)) {
+				$arts[$k]->url = 'http://www.homeeyes.cn/app/3DShow/index.html?type=0&case_id='.$v->id;
+				
+			}
 		}
 		$data['builder'] = $builder;
 		$data['arts'] = $arts;
@@ -484,10 +490,13 @@ class CompanyController extends Controller
 		//项目数据--
 		//1.本月新增项目
 		$newproject = DB::table('project')->where('z_uid',$cid)->wherebetween('created_at',$month)->select('name')->get();
+		$newprojectCount = $newproject->count();
 		// return $newproject;
 		//2.本月开始的项目
+		$beingprojectCount = DB::table('flow as a')->join('project as b','b.id','a.pro_id')->where('b.z_uid',$cid)->where('a.starttime','>',0)->whereNULL('b.finishtime')->count();
 		//3.本月完成的项目
 		$finishproject = DB::table('project')->where('z_uid',$cid)->wherebetween('finishtime',$month)->select('name')->get();
+		$finishprojectCount = $finishproject->count();
 
 		//用户数据--
 		//1.本月新增用户
@@ -499,8 +508,9 @@ class CompanyController extends Controller
 		$data['camera'] = $camera;
 		$data['users'] = $users;
 		$data['comparelastmonthmin'] = $comparelastmonthmin;
-		$data['newproject'] = $newproject;
-		$data['finishproject'] = $finishproject;
+		$data['newprojectCount'] = $newprojectCount;
+		$data['beingprojectCount'] = $beingprojectCount;
+		$data['finishprojectCount'] = $finishprojectCount;
 		$data['newuser'] = $newuser;
 		$data['money'] = $money;
 		return response()->json(['error'=>0,'data'=>$data]);

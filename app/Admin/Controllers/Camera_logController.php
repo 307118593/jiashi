@@ -87,6 +87,10 @@ class Camera_logController extends Controller
                 }
                 $grid->model()->where('cid',$cid);
             }
+            if ($role == 5) {
+                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                $grid->model()->whereIn('cid',$companyid);
+            }
             $grid->id('ID')->sortable();
             $grid->mac('设备标识');
             $grid->column('camera.name','设备名称');

@@ -28,16 +28,19 @@ class LoginController extends Controller
         if ($pid >= 0) {
             $info = DB::table('admin_users')->where('id',$uid)->first();
             if ($info->avatar) {
-                    $info->avatar = $this->host.'upload/'.$info->avatar;
-                }
-                $info->role = $this->getRole($info->id);
-                if ($info->pid == -1) {
-                    $info->cid = -1;
-                }else if ($info->pid == 0) {
-                    $info->cid = $info->id;
-                }else{
-                    $info->cid = $info->pid;
-                }
+                $info->avatar = $this->host.'upload/'.$info->avatar;
+            }
+            $info->role = $this->getRole($info->id);
+            if ($info->pid == -1) {
+                $info->cid = -1;
+            }else if ($info->pid == 0) {
+                $info->cid = $info->id;
+            }else{
+                $info->cid = $info->pid;
+            }
+            $info->companyname = DB::table('admin_users')->where('id',$info->cid)->value('name');
+            $jobs = [1=>'销售总监',2=>'客户经理',3=>'设计师',4=>'客服',10=>'工程总监',11=>'项目经理',12=>'施工人员',13=>'工程监理',];
+            $info->job = $jobs[$info->job];
             return response()->json(['error'=>0,'data'=>$info]);
         }
         if ($DeviceToken) {

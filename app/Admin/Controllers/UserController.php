@@ -142,7 +142,7 @@ class UserController extends Controller
                     <script type='text/javascript'>
                          function firm(id,name){
                             
-                                    confirm('客户名为\"'+name+'\"!', \"该操作会将客户的账号和密码转为员工,次记录会保留.\", function (isConfirm) {
+                                    confirm('客户名为\"'+name+'\"!', \"该操作会将客户的账号和密码转为员工,此记录会保留.\", function (isConfirm) {
                                         if (isConfirm) {
                                             var data = {id:id};
                                             $.ajax({
@@ -152,7 +152,8 @@ class UserController extends Controller
                                               type:\"POST\",
                                               success:function(data){
                                                  if(data.error == 0){
-                                                  location.reload(true);
+                                                    console.log(data);
+                                                  location.reload();
                                                 }
                                                 if(data.code==1){
                                                   alert(\"操作失败\");

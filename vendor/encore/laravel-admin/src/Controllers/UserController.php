@@ -10,7 +10,7 @@ use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use Illuminate\Routing\Controller;
-
+use Admin;
 class UserController extends Controller
 {
     use HasResourceActions;
@@ -22,6 +22,14 @@ class UserController extends Controller
      */
     public function index(Content $content)
     {
+        $userid = admin::user()->id;
+        $role = getRole($userid);
+        if ($role == 5) {//代理商
+            return $content
+                ->header('账户')
+                ->description(trans('admin.list'))
+                ->body($this->grid()->render());
+        }
         return $content
             ->header(trans('admin.administrator'))
             ->description(trans('admin.list'))
@@ -53,6 +61,7 @@ class UserController extends Controller
      */
     public function edit($id, Content $content)
     {
+    
         return $content
             ->header(trans('admin.administrator'))
             ->description(trans('admin.edit'))
@@ -66,6 +75,7 @@ class UserController extends Controller
      */
     public function create(Content $content)
     {
+
         return $content
             ->header(trans('admin.administrator'))
             ->description(trans('admin.create'))
@@ -80,10 +90,27 @@ class UserController extends Controller
     protected function grid()
     {
         $grid = new Grid(new Administrator());
-
+        $userid = admin::user()->id;
+        $role = getRole($userid);
+        if ($role == 5) {//代理商
+            $grid->model()->where('did',$userid);
+        }
         $grid->id('ID')->sortable();
         $grid->username(trans('admin.username'));
-        $grid->name(trans('admin.name'));
+        if (\Request::get('pid')!=0) {
+            $grid->column('邀请码')->display(function(){
+                return $this->id+1000;
+            });
+        }
+        $grid->name(trans('admin.name').'/邀请码')->display(function($name){
+            $int = $this->id+1000;
+            if ($this->pid == 0) {
+               return $name."($int)";
+            }else{
+                return $name;
+            }
+        });
+      
         $grid->roles(trans('admin.roles'))->pluck('name')->label();
         $grid->created_at(trans('admin.created_at'));
         $grid->updated_at(trans('admin.updated_at'));
@@ -92,6 +119,7 @@ class UserController extends Controller
             if ($actions->getKey() == 1) {
                 $actions->disableDelete();
             }
+                $actions->disableView();
         });
 
         $grid->tools(function (Grid\Tools $tools) {
@@ -99,6 +127,7 @@ class UserController extends Controller
                 $actions->disableDelete();
             });
         });
+            $grid->disableRowSelector();
         $grid->filter(function($filter){
             $filter->disableIdFilter();
             $filter->equal('username', '手机号/账号');
@@ -152,6 +181,8 @@ class UserController extends Controller
     public function form()
     {
         $form = new Form(new Administrator());
+        $userid = admin::user()->id;
+        $role = getRole($userid);
 
         $form->display('id', 'ID');
 
@@ -166,16 +197,29 @@ class UserController extends Controller
 
         $form->ignore(['password_confirmation']);
 
-        $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->pluck('name', 'id'));
-        $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->pluck('name', 'id'));
+        if ($role == 1) {//管理员
+            $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->whereIn('id',[2,3,4,5,6,7,8])->pluck('name', 'id'));
+        }else{//代理商
+            $form->multipleSelect('roles', trans('admin.roles'))->options(Role::all()->whereIn('id',[2,3,4,5,6,7])->pluck('name', 'id'));
+        }
+        if ($role == 1) {//管理员
+            $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->whereIn('id',[6,7,9,11])->pluck('name', 'id'));
+        }else{//代理商
+            $form->multipleSelect('permissions', trans('admin.permissions'))->options(Permission::all()->whereIn('id',[6,7,9])->pluck('name', 'id'));
+            $form->hidden('did','代理商id')->default($userid);
+        }
 
         $form->display('created_at', trans('admin.created_at'));
         $form->display('updated_at', trans('admin.updated_at'));
 
-        $form->saving(function (Form $form) {
+        $form->saving(function (Form $form) use($role,$userid){
             if ($form->password && $form->model()->password != $form->password) {
                 $form->password = bcrypt($form->password);
             }
+            // if ($role == 5) {//代理商
+            //     $form->did = $userid;
+            // }
+            // dump(($form));exit;
         });
 
         return $form;

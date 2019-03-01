@@ -11,8 +11,8 @@ class YsController extends Controller
         $this->upload = 'http://'.request()->server('HTTP_HOST').'/upload/';
         $this->host = 'http://'.request()->server('HTTP_HOST').'/';
 	}
-	// 获取设备列表
-	public function get_YsList(Request $request){
+	// 获取设备列表 优化之前的接口
+	public function get_YsList222(Request $request){
 		$uid = $request->input('uid',29);
         $cid = DB::table('user')->where('id',$uid)->value('cid');
         if ($cid == 0 ) {
@@ -105,6 +105,70 @@ class YsController extends Controller
         $data['camera_auth'] = $auth;
 		return response()->json(['error'=>0,'data'=>$data]);
 	}
+    // 获取设备列表2019/2/22
+    public function get_YsList(Request $request){
+        $uid = $request->input('uid',29);
+        $cid = DB::table('user')->where('id',$uid)->value('cid');
+        if ($cid == 0 ) {
+            $cid = 2;
+        }
+        $invitation = 1000+$cid;
+        //查看员工共享设备
+        $is_copy = DB::table('user')->where('id',$uid)->value('is_copy');
+        $share = DB::table('camera')->where('cid',$cid)->Where('user_share',1)->get();
+        $share = $share->toArray();
+        if ($is_copy == 1) {
+            $sshare = DB::table('camera')->where('cid',$cid)->Where('staff_share',1)->where('user_share',0)->get();
+            $sshare = $sshare->toArray();
+            $share = array_merge($share,$sshare);
+        }
+        $camera = DB::table('camera')->where('uid',$uid)->where('cid',$cid)->Where('user_share',0)->get();
+        $camera = $camera->toArray();
+        // if (!$camera->isEmpty()) {
+        $camera = array_merge($camera,$share);
+        if (!empty($camera)) {
+            foreach ($camera as $k => $v) {
+                    $image = DB::table('project')->where('id',$v->pro_id)->value('image');
+                    if ($image) {
+                        $camera[$k]->picUrl = $this->upload.$image;
+                    }else{
+                        $camera[$k]->picUrl = $this->host.'upload/live_base.jpg';
+                    }
+                    $camera[$k]->shareUrl = 'app/livedemo/liveplay.html?mac='.$v->mac.'&invitation='.$invitation;
+            }
+        }
+
+        
+        $auth = DB::table('camera_auth')->where('uid',$uid)->whereNotNull('mac')->get();
+        if (!$auth->isEmpty()) {
+            foreach ($auth as $k => $v) {
+                $Support = DB::table('camera')->where('mac',$v->mac)->select('staff_share','user_share','pro_id','isSupportPTZ','isSupportTalk','isSupportZoom','name','picUrl')->first();
+                    $image = DB::table('project')->where('id',$Support->pro_id)->value('image');
+                    if ($image) {
+                        $auth[$k]->picUrl = $this->upload.$image;
+                    }else{
+                        $auth[$k]->picUrl = $this->host.'upload/live_base.jpg';
+                    }
+                    
+                    $auth[$k]->isSupportPTZ = $Support->isSupportPTZ;
+                    $auth[$k]->isSupportTalk = $Support->isSupportTalk;
+                    $auth[$k]->isSupportZoom = $Support->isSupportZoom;
+                    $auth[$k]->name = $Support->name;
+                    $auth[$k]->shareUrl = 'app/livedemo/liveplay.html?mac='.$v->mac.'&invitation='.$invitation;
+                    if ($Support->user_share == 1 || ($is_copy == 1 && $Support->staff_share == 1)) {
+                        unset($auth[$k]);
+                    }
+                 
+                
+            }
+        
+        }
+        $auth = $auth->toArray();
+        $auth = array_values($auth);
+        $data['camera'] = $camera;
+        $data['camera_auth'] = $auth;
+        return response()->json(['error'=>0,'data'=>$data]);
+    }
 
     // // 获取设备列表1026
     // public function get_YsList1026(Request $request){
@@ -300,6 +364,31 @@ class YsController extends Controller
     public function getYsList($pageStart){
         $ys = $this->vpost('https://open.ys7.com/api/lapp/camera/list','accessToken='.$this->accessToken.'&pageStart='.$pageStart.'&pageSize=50');
         return $ys;
+    }
+
+    //更新设备状态.优化拉取速度
+    public function updateYs(){
+        $macs = DB::table('camera')->pluck('mac');
+        // $macs = $macs->toArray();
+        foreach ($macs as $k => $v) {
+            $ys = $this->vpost('https://open.ys7.com/api/lapp/device/info','accessToken='.$this->accessToken.'&deviceSerial='.$v);
+            $ys = json_decode($ys);
+            $td = $this->vpost('https://open.ys7.com/api/lapp/device/camera/list','accessToken='.$this->accessToken.'&deviceSerial='.$v);
+            $td = json_decode($td);
+            $data = [
+                'status'=>$ys->data->status,
+                'defence'=>$ys->data->defence,
+                'isEncrypt'=>$ys->data->isEncrypt,
+                'alarmSoundMode'=>$ys->data->alarmSoundMode,
+                'offlineNotify'=>$ys->data->offlineNotify,
+                'videoLevel'=>$td->data[0]->videoLevel,
+                'cameraNo'=>$td->data[0]->channelNo,
+                'isShared'=>$td->data[0]->isShared,
+            ];
+            DB::table('camera')->where('mac',$v)->update($data);
+      
+        }
+        return 'ok';
     }
 
     public function getH5Address(Request $request){

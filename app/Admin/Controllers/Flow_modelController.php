@@ -144,8 +144,11 @@ class Flow_modelController extends Controller
             $form->text('name','流程名称')->setWidth(2);
             // $form->select('dsfds','图标')->options();
             // $form->icon('icon');
-            $form->number('sort','排序权重')->help('数字小排名靠前.且不能相同..');
-            $form->number('temp','加入模板')->default(1)->help('模板号相同的为一组流程.默认从1开始的自然数');
+            $form->number('sort','排序权重')->help('数字小排名靠前.且不能相同..')->attribute('data-sort', 'sort');
+            $form->number('temp','加入模板')->default(1)->help('模板号相同的为一组流程.默认从1开始的自然数')->attribute('data-temp', 'temp');
+            Admin::script("
+                console.log(555);
+                ");
             $form->saving(function(Form $form){
                     if ($form->temp < 1) {
                         $error = new MessageBag([

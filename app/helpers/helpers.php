@@ -12,13 +12,15 @@
 	function getRole($id){
 		$role_id = DB::table('admin_role_users')->where('user_id',$id)->value('role_id');
 		if ($role_id == 1) {
-			$role = 1;
+			$role = 1;//admin
 		}elseif($role_id == 2 || $role_id==5){
-			$role = 2;
+			$role = 2;//公司
 		}elseif($role_id == 3 || $role_id==7){
-			$role = 3;
+			$role = 3;//员工
 		}elseif($role_id == 4 || $role_id==6){
-			$role = 4;
+			$role = 4;//总监
+		}elseif($role_id ==8){
+			$role = 5;//代理商
 		}
 		return $role;
 	}
@@ -164,7 +166,22 @@
 		}
 	}
 
-
+	function curlGet($url, $method = 'get', $data = ''){
+		$ch = curl_init();
+		$header = "Accept-Charset: utf-8";
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+		//curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$temp = curl_exec($ch);
+		return $temp;
+	}
 
 
 
