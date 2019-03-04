@@ -117,9 +117,9 @@ class ProjectController extends Controller
             //     }
             //     return $name;
             // })->implode('<br>')->badge();
-            $grid->starttime_d('项目计划周期')->display(function($time){
-                $endtime = date('Y-m-d',strtotime('+'.$this->month.' month',strtotime($time)));
-                return str_limit($time, 10,'').'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~<br>'.$endtime;
+            $grid->column('项目计划周期')->display(function(){
+                $endtime = date('Y-m-d',strtotime('+'.$this->month.' month',strtotime($this->starttime_d)));
+                return str_limit($this->starttime_d, 10,'').'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;~<br>'.$endtime;
             });
             $grid->area('面积')->display(function($area){
                 return $area;
@@ -127,6 +127,26 @@ class ProjectController extends Controller
             $grid->type('半包全包')->display(function($type){
                 return $type==0?'全包':'半包';
             });
+            if ($role == 1) {
+                // $grid->try_uid('体验人员')->display(function ($tryuid) {
+                //     // $try_uid = json_decode($try_uid, true);
+                //     // dd($try_uid);
+                //         // $try_uid = $this->try_uid;
+                //             $data = ''; 
+                //         if (is_array($tryuid)) {
+                //             foreach ($tryuid as $k => $v) {
+                //                 $data .= DB::table('user')->where('id',$v)->value('name')."<br>";
+                //             }
+                //         }
+                //         return $data;
+                    
+                //     // return DB::table('user')->where('id',$try_uid)->value('name');
+                // });
+                $grid->try_uid('体验人员')->map(function ($try_uid) {
+                    return DB::table('user')->where('id',$try_uid)->value('name');
+                })->implode('<br>');
+            }
+            
             // $grid->state('装修状态')->display(function($state){
             //     switch ($state) {
             //         case 0:

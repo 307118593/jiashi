@@ -17,6 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::any('test',function(){
+	return 55;
 	// $predefined = [
 	// 	'ticker' => '这是ticker',
 	//     'title' => '工地新建通知',

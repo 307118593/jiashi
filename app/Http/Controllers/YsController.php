@@ -142,7 +142,7 @@ class YsController extends Controller
         $auth = DB::table('camera_auth')->where('uid',$uid)->whereNotNull('mac')->get();
         if (!$auth->isEmpty()) {
             foreach ($auth as $k => $v) {
-                $Support = DB::table('camera')->where('mac',$v->mac)->select('staff_share','user_share','pro_id','isSupportPTZ','isSupportTalk','isSupportZoom','name','picUrl')->first();
+                $Support = DB::table('camera')->where('mac',$v->mac)->select('status','staff_share','user_share','pro_id','isSupportPTZ','isSupportTalk','isSupportZoom','name','picUrl')->first();
                     $image = DB::table('project')->where('id',$Support->pro_id)->value('image');
                     if ($image) {
                         $auth[$k]->picUrl = $this->upload.$image;
@@ -154,6 +154,7 @@ class YsController extends Controller
                     $auth[$k]->isSupportTalk = $Support->isSupportTalk;
                     $auth[$k]->isSupportZoom = $Support->isSupportZoom;
                     $auth[$k]->name = $Support->name;
+                    $auth[$k]->status = $Support->status;
                     $auth[$k]->shareUrl = 'app/livedemo/liveplay.html?mac='.$v->mac.'&invitation='.$invitation;
                     if ($Support->user_share == 1 || ($is_copy == 1 && $Support->staff_share == 1)) {
                         unset($auth[$k]);

@@ -105,6 +105,9 @@ class UserController extends Controller
                 $grid->model()->where('bywho',$userid);
             }elseif($role == 4){
                 $grid->model()->where('cid',$pid);
+            }elseif ($role == 5) {
+                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                $grid->model()->whereIn('cid',$companyid);
             }
 
             $grid->id('ID','用户主键')->sortable();
@@ -221,7 +224,7 @@ class UserController extends Controller
             //  }
             $form->hidden('password');
             $form->text('address','地址')->setWidth(4);
-            if ($role != 1) {
+            if ($role != 1 && $role !=5) {
                 $form->hidden('cid', '公司')->default($userid);
                 if ($role == 2 || $role == 4) {
                     $data = DB::table('admin_users')->where('pid',$userid)->whereBetween('job',[1,9])->select('id','name','job')->get();
@@ -239,8 +242,15 @@ class UserController extends Controller
                     $form->select('bywho','选择接手人')->options($staff)->setwidth(3);
                 }
             }else{
+                if ($role == 5) {
+                    $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                    $form->select('cid','选择公司')->options(Staff::all()->whereIn('did',$companyid)->pluck('name', 'id'));
+                    
+                }else{
+                    $form->select('cid','选择公司')->options(Staff::all()->where('pid',0)->pluck('name', 'id'));
 
-                $form->select('cid','选择公司')->options(Staff::all()->where('pid',0)->pluck('name', 'id'));
+                }
+
             }
             $form->hidden('addtime', 'Created At')->default(date('Y-m-d H:i:s'));
             // $form->hidden('uptime', 'Updated At');

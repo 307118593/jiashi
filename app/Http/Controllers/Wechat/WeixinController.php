@@ -35,6 +35,7 @@ class WeixinController
 		// session::save();
 		// print(session('targetUrl')) ;
 		// dd(session('targetUrl'));
+        $_SESSION['type']=0; 
 		$app = $this->app;
 		
         // 未登录
@@ -168,10 +169,9 @@ class WeixinController
 //公司端公众号登陆模块
     public function Com_oauth(Request $request){
         $targetUrl = $request->input('targetUrl');
-        $type = 1;
         session_start();
         $_SESSION['targetUrl']=$targetUrl;
-        $_SESSION['type']=$type;
+        $_SESSION['type']=1;
         // session(['targetUrl'=>$targetUrl]);
         // session::save();
         // print(session('targetUrl')) ;
