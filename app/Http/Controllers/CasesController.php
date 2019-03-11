@@ -221,7 +221,9 @@ class CasesController extends Controller
                 $query->orwhere('title','like','%'.$condition.'%')->orwhere('style','like','%'.$condition.'%')->orwhere('address','like','%'.$condition.'%');
             });
         })->when($default,function($query) use($default){
-            return $query->orderBy('sort','desc');
+            return $query->where(function($query) use($default){
+                $query->where('style','like','%'.$default.'%');
+            });
         })->when($time == 1,function($query){
             return $query->orderBy('addtime','desc');
         })->when($time == 0,function($query){
@@ -372,5 +374,19 @@ class CasesController extends Controller
         
         
 
+    }
+
+    //获取该公司下的所有案例风格
+    public function getStyle(Request $request){
+        $cid = $request->input('cid');
+    
+        $allstyle = DB::table('cases')->where('cid',$cid)->groupBy('style')->whereNotNull('style')->pluck('style');
+        $style = "";
+        foreach ($allstyle as $k => $v) {
+            $style .= $v.",";
+        }
+        $style = rtrim($style,",");
+        $style = explode(",",$style);
+        return response()->json(['error'=>0,'data'=>$style]);
     }
 }

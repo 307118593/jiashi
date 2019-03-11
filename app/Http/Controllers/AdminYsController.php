@@ -63,25 +63,25 @@ class AdminYsController extends Controller
 			return response()->json(['error'=>1,'mes'=>'无权限!']);
 		}
 		$camera = DB::table('camera')->where('cid',$pid)->get();
-		if (!$camera->isEmpty()) {
-            foreach ($camera as $k => $v) {
-                $ys = $this->vpost('https://open.ys7.com/api/lapp/device/info','accessToken='.$this->accessToken.'&deviceSerial='.$v->mac);
-                $ys = json_decode($ys);
-                $td = $this->vpost('https://open.ys7.com/api/lapp/device/camera/list','accessToken='.$this->accessToken.'&deviceSerial='.$v->mac);
-                $td = json_decode($td);
-                if ($ys->code == 200) {
-                    $camera[$k]->status = $ys->data->status;
-                    $camera[$k]->defence = $ys->data->defence;
-                    $camera[$k]->isEncrypt = $ys->data->isEncrypt;
-                    $camera[$k]->alarmSoundMode = $ys->data->alarmSoundMode;
-                    $camera[$k]->offlineNotify = $ys->data->offlineNotify;
-                    $camera[$k]->videoLevel = $td->data[0]->videoLevel;
-                    $camera[$k]->cameraNo = $td->data[0]->channelNo;
-                    $camera[$k]->isShared = $td->data[0]->isShared;
-                    $camera[$k]->picUrl = $td->data[0]->picUrl;
-                }
-            }
-        }
+		// if (!$camera->isEmpty()) {
+  //           foreach ($camera as $k => $v) {
+  //               $ys = $this->vpost('https://open.ys7.com/api/lapp/device/info','accessToken='.$this->accessToken.'&deviceSerial='.$v->mac);
+  //               $ys = json_decode($ys);
+  //               $td = $this->vpost('https://open.ys7.com/api/lapp/device/camera/list','accessToken='.$this->accessToken.'&deviceSerial='.$v->mac);
+  //               $td = json_decode($td);
+  //               if ($ys->code == 200) {
+  //                   $camera[$k]->status = $ys->data->status;
+  //                   $camera[$k]->defence = $ys->data->defence;
+  //                   $camera[$k]->isEncrypt = $ys->data->isEncrypt;
+  //                   $camera[$k]->alarmSoundMode = $ys->data->alarmSoundMode;
+  //                   $camera[$k]->offlineNotify = $ys->data->offlineNotify;
+  //                   $camera[$k]->videoLevel = $td->data[0]->videoLevel;
+  //                   $camera[$k]->cameraNo = $td->data[0]->channelNo;
+  //                   $camera[$k]->isShared = $td->data[0]->isShared;
+  //                   $camera[$k]->picUrl = $td->data[0]->picUrl;
+  //               }
+  //           }
+  //       }
         return response()->json(['error'=>0,'data'=>$camera]);
 	}
 

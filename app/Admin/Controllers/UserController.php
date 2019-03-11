@@ -144,19 +144,28 @@ class UserController extends Controller
                     return "<button type='button' class='btn btn-danger btn-sm' onclick=\"firm('$this->id','$this->name')\">转为员工</button>
                     <script type='text/javascript'>
                          function firm(id,name){
-                            
+                            var domain = window.location.host;
+                            console.log(domain);
+                            if(domain=='47.97.109.9'){//防止跨域退出登录
+                                var host = 'www.homeeyes.cn';
+                            }else{
+                                var host = '47.97.109.9';
+                            }
                                     confirm('客户名为\"'+name+'\"!', \"该操作会将客户的账号和密码转为员工,此记录会保留.\", function (isConfirm) {
                                         if (isConfirm) {
                                             var data = {id:id};
+                                            
                                             $.ajax({
-                                              url:\"http://47.97.109.9/api/changestaff\",
+                                              url:\"http://\"+host+\"/api/changestaff\",
                                               data:data,
                                               dataType:\"json\",
                                               type:\"POST\",
                                               success:function(data){
                                                  if(data.error == 0){
                                                     console.log(data);
-                                                  location.reload();
+                                                  //location.reload();
+                                                $.pjax.reload('#pjax-container');
+                                                toastr.success('操作成功');
                                                 }
                                                 if(data.code==1){
                                                   alert(\"操作失败\");

@@ -36,13 +36,14 @@ class HomeController extends Controller
                 $content->row(function(Row $row) use($role,$cid){
                     //设备数量->已分配->未分配->设备使用率->使用率
                     $comeraCount =  DB::table('camera')->count();
+                    $online =  DB::table('camera')->where('status',1)->count();
                     $fenpeiCount =  DB::table('camera')->whereRaw('(uid> ? or pro_id > ?)', [0,0])->count();
                     $meiCount =  DB::table('camera')->where('uid',0)->where('pro_id',0)->count();
                     $shiyonglv = 0;
                     if ($comeraCount != 0) {
                         $shiyonglv = $fenpeiCount/$comeraCount * 100 ;
                     }
-                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
+                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台,实时在线:'.$online.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
 
                     //工地数量->施工中数量->已完成数量->客户总数
                     $projectCount = DB::table('project')->count();
@@ -88,14 +89,15 @@ class HomeController extends Controller
                     $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
                     // dd($companyid);
                     //设备数量->已分配->未分配->设备使用率->使用率
-                    $comeraCount =  DB::table('camera')->whereIn('cid',$companyid)->count();
-                    $fenpeiCount =  DB::table('camera')->whereRaw('(uid> ? or pro_id > ?)', [0,0])->whereIn('cid',$companyid)->count();
-                    $meiCount =  DB::table('camera')->where('uid',0)->where('pro_id',0)->whereIn('cid',$companyid)->count();
+                    $comeraCount =  DB::table('camera')->where('did',$userid)->count();
+                    $online =  DB::table('camera')->where('did',$userid)->where('status',1)->count();
+                    $fenpeiCount =  DB::table('camera')->whereRaw('(uid> ? or pro_id > ?)', [0,0])->where('did',$userid)->count();
+                    $meiCount =  DB::table('camera')->where('uid',0)->where('pro_id',0)->where('did',$userid)->count();
                     $shiyonglv = 0;
                     if ($comeraCount != 0) {
                         $shiyonglv = $fenpeiCount/$comeraCount * 100 ;
                     }
-                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
+                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台,实时在线:'.$online.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
 
                     //工地数量->施工中数量->已完成数量->客户总数
                     $projectCount = DB::table('project')->whereIn('z_uid',$companyid)->count();
@@ -141,13 +143,14 @@ class HomeController extends Controller
                 $content->row(function(Row $row) use($role,$cid){
                     //设备数量->已分配->未分配->设备使用率->使用率
                     $comeraCount =  DB::table('camera')->where('cid',$cid)->count();
+                    $online =  DB::table('camera')->where('cid',$cid)->where('status',1)->count();
                     $fenpeiCount =  DB::table('camera')->where('cid',$cid)->whereRaw('(uid> ? or pro_id > ?)', [0,0])->count();
                     $meiCount =  DB::table('camera')->where('cid',$cid)->where('uid',0)->where('pro_id',0)->count();
                     $shiyonglv = 0;
                     if ($comeraCount != 0) {
                         $shiyonglv = $fenpeiCount/$comeraCount * 100 ;
                     }
-                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
+                    $CAMERA = new InfoBox('已分配:'.$fenpeiCount.'台,未分配:'.$meiCount.'台,实时在线:'.$online.'台', 'fa-cogs', 'aqua', '/admin/camera', '设备数量:'.$comeraCount.',   使用率:'.round($shiyonglv,1).'%');
 
                     //工地数量->施工中数量->已完成数量->客户总数
                     $projectCount = DB::table('project')->where('z_uid',$cid)->count();
@@ -193,11 +196,19 @@ class HomeController extends Controller
                 });
             }//负责人总监结束--
             // if ($cid == 2) {
-                $content->row(function(Row $row) use($role,$cid){
+                $content->row(function(Row $row) use($role,$cid,$userid){
 
                     $date = date('m-d', strtotime('-7 days'));
                     $day = date('Y-m-d', strtotime('-7 days'));
-                    $camera = DB::table('camera')->where('cid',$cid)->select('mac','name')->get();
+                    if ($role == 1) {//管理员
+                        $camera = DB::table('camera')->select('mac','name')->get();
+                    }else if($role == 5){//代理商
+                        // $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                        $camera = DB::table('camera')->where('did',$userid)->select('mac','name')->get();
+                    }else{
+                        $camera = DB::table('camera')->where('cid',$cid)->select('mac','name')->get();
+                    }
+                    
                     foreach ($camera as $k => $v) {
                         $camera[$k]->alive = round(DB::table('camera_log')->where('mac',$v->mac)->where('day','>',$day)->sum('alivetime')/60,1);
                         if ($camera[$k]->alive  == 0) {
@@ -215,7 +226,15 @@ class HomeController extends Controller
                         $alive[$i]['day'] = date('Y-m-d', strtotime('-'.$i.' days'));
                     }
                     foreach ($alive as $k => $v) {
-                        $alive[$k]['alive'] = round(DB::table('camera_log')->where('cid',$cid)->where('day',$v['day'])->sum('alivetime')/60,1);
+                        if ($role == 1) {//管理员
+                            $alive[$k]['alive'] = round(DB::table('camera_log')->where('day',$v['day'])->sum('alivetime')/60,1);
+                        }else if($role == 5){//代理商
+                            $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                            $alive[$k]['alive'] = round(DB::table('camera_log')->whereIn('cid',$companyid)->where('day',$v['day'])->sum('alivetime')/60,1);
+                        }else{
+                            $alive[$k]['alive'] = round(DB::table('camera_log')->where('cid',$cid)->where('day',$v['day'])->sum('alivetime')/60,1);
+                        }
+                        // $alive[$k]['alive'] = round(DB::table('camera_log')->where('cid',$cid)->where('day',$v['day'])->sum('alivetime')/60,1);
                        
                     }
                     

@@ -114,20 +114,20 @@ class ProjectController extends Controller
        
         if (empty($uid) || $cid == 2) {//未登录查看项目
             // return response()->json(['error'=>1,'data'=>'uid为空']);
-            $share = DB::table('project')->Where('user_share',1)->where('z_uid',$cid)->select('user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
+            $share = DB::table('project')->where('guidang',0)->Where('user_share',1)->where('z_uid',$cid)->select('user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
            
         }else{
-            $share = DB::table('project')->where('z_uid',$cid)->Where('user_share',1)->select('staff_share','user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
+            $share = DB::table('project')->where('guidang',0)->where('z_uid',$cid)->Where('user_share',1)->select('staff_share','user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
             
         }
         $share = $share->toArray();
         if ($is_copy == 1) {
-            $sshare = DB::table('project')->where('z_uid',$cid)->Where('staff_share',1)->where('user_share',0)->select('staff_share','user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
+            $sshare = DB::table('project')->where('guidang',0)->where('z_uid',$cid)->Where('staff_share',1)->where('user_share',0)->select('staff_share','user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
             $sshare = $sshare->toArray();
             $share = array_merge($share,$sshare);
         }
         
-        $project = DB::table('project')->where('uid',$uid)->where('z_uid',$cid)->Where('user_share',0)->select('user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
+        $project = DB::table('project')->where('guidang',0)->where('uid',$uid)->where('z_uid',$cid)->Where('user_share',0)->select('user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
 
 
         $project = $project->toArray();
@@ -160,7 +160,7 @@ class ProjectController extends Controller
             }
         }
 
-         $ty = DB::table('project')->whereNotNull('try_uid')->where('uid','<>',$uid)->where('user_share',0)->select('staff_share','user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
+         $ty = DB::table('project')->where('guidang',0)->whereNotNull('try_uid')->where('uid','<>',$uid)->where('user_share',0)->select('staff_share','user_share','try_uid','id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id')->get();
         
         if (!$ty->isEmpty()) {
             foreach ($ty as $k => $v) {

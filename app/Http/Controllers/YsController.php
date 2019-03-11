@@ -142,7 +142,7 @@ class YsController extends Controller
         $auth = DB::table('camera_auth')->where('uid',$uid)->whereNotNull('mac')->get();
         if (!$auth->isEmpty()) {
             foreach ($auth as $k => $v) {
-                $Support = DB::table('camera')->where('mac',$v->mac)->select('status','staff_share','user_share','pro_id','isSupportPTZ','isSupportTalk','isSupportZoom','name','picUrl')->first();
+                $Support = DB::table('camera')->where('mac',$v->mac)->select('status','staff_share','user_share','pro_id','isSupportPTZ','isSupportTalk','isSupportZoom','name','picUrl','defence','isEncrypt','alarmSoundMode','offlineNotify','videoLevel','cameraNo','is_playback')->first();
                     $image = DB::table('project')->where('id',$Support->pro_id)->value('image');
                     if ($image) {
                         $auth[$k]->picUrl = $this->upload.$image;
@@ -155,6 +155,13 @@ class YsController extends Controller
                     $auth[$k]->isSupportZoom = $Support->isSupportZoom;
                     $auth[$k]->name = $Support->name;
                     $auth[$k]->status = $Support->status;
+                    $auth[$k]->defence = $Support->defence;
+                    $auth[$k]->isEncrypt = $Support->isEncrypt;
+                    $auth[$k]->alarmSoundMode = $Support->alarmSoundMode;
+                    $auth[$k]->offlineNotify = $Support->offlineNotify;
+                    $auth[$k]->videoLevel = $Support->videoLevel;
+                    $auth[$k]->cameraNo = $Support->cameraNo;
+                    $auth[$k]->is_playback = $Support->is_playback;
                     $auth[$k]->shareUrl = 'app/livedemo/liveplay.html?mac='.$v->mac.'&invitation='.$invitation;
                     if ($Support->user_share == 1 || ($is_copy == 1 && $Support->staff_share == 1)) {
                         unset($auth[$k]);
@@ -354,6 +361,7 @@ class YsController extends Controller
                 $data = [
                     'mac'=>$v['deviceSerial'],
                     'name'=>$v['channelName'],
+                    'number'=>$v['channelName'],
                     'addtime'=>date('Y-m-d H:i:s'),
                 ];
                 DB::table('camera')->insert($data);
@@ -489,6 +497,27 @@ class YsController extends Controller
             'closetime'=>time(),
         ];
         DB::table('camera_log')->where('id',$res->id)->update($up);
+        return response()->json(['error'=>0,'data'=>'ok']);
+    }
+
+    //后台批量分配
+    public function fenpei(Request $request){
+        $request = $request->all();
+        $ids = $request['ids'];//设备id
+        $cid = $request['cid'];
+        $did = $request['did'];
+        $data = [];
+        if ($cid > 0) {
+            $data['cid']=$cid;
+        }
+        if ($did > 0) {
+            $data['did']=$did;
+        }
+
+        foreach ($ids as $k => $v) {
+            DB::table('camera')->where('id',$v)->update($data);
+        }
+
         return response()->json(['error'=>0,'data'=>'ok']);
     }
  

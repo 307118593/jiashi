@@ -39,6 +39,7 @@ class LoginController extends Controller
                 $info->cid = $info->pid;
             }
             $info->companyname = DB::table('admin_users')->where('id',$info->cid)->value('name');
+            $info->logo = $this->host.DB::table('admin_users')->where('id',$info->cid)->value('logo');
             $jobs = [1=>'销售总监',2=>'客户经理',3=>'设计师',4=>'客服',10=>'工程总监',11=>'项目经理',12=>'施工人员',13=>'工程监理',];
             $info->job = $jobs[$info->job];
             return response()->json(['error'=>0,'data'=>$info]);

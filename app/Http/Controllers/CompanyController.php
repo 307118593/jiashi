@@ -374,6 +374,7 @@ class CompanyController extends Controller
 		 $cid = $request->input('cid');
 		 $uid = $request->input('uid');
 		 $data['comeraCount'] =  DB::table('camera')->where('cid',$cid)->count();
+		 $data['onLinecomeraCount'] =  DB::table('camera')->where('cid',$cid)->where('status',1)->count();
 		 $data['projectCount'] = DB::table('project')->where('z_uid',$cid)->count();
 		 $data['staffCount'] =  DB::table('admin_users')->where('pid',$cid)->count();
 		 $data['userCount'] =   DB::table('user')->where('cid',$cid)->where('is_copy',0)->count();
@@ -386,7 +387,7 @@ class CompanyController extends Controller
 	    	}
 	    	$date = array_reverse($date);
 	     foreach ($date as $k => $v) {
-	     	$date[$k]['count'] = DB::table('record')->where('day',$v['day'])->count();
+	     	$date[$k]['count'] = DB::table('record')->where('cid',$cid)->where('day',$v['day'])->count();
 	     }
 	     $data['alive'] = $date;
 
@@ -459,7 +460,7 @@ class CompanyController extends Controller
 		$liveallmin = intval(DB::table('camera_log')->where('cid',$cid)->wherebetween('day',$month)->sum('alivetime')/60);
 		//2.直播时间最多的前三个设备和时间
 		// DB::enableQueryLog();
-		$camera = DB::table('camera_log')->select('mac',DB::raw('SUM(alivetime) as alivetime'))->where('uid','>',0)->where('cid',$cid)->wherebetween('day',$month)->groupBy('mac')->orderBy('alivetime','desc')->take(3)->get();
+		$camera = DB::table('camera_log')->select('mac',DB::raw('SUM(alivetime) as alivetime'))->where('uid','>',0)->where('cid',$cid)->wherebetween('day',$month)->groupBy('mac')->orderBy('alivetime','desc')->take(10)->get();
 		foreach ($camera as $k => $v) {
 			$camera[$k]->name = DB::table('camera')->where('mac',$v->mac)->value('name');
 			$camera[$k]->alivetime =intval($v->alivetime/60);

@@ -8,10 +8,12 @@ use App\Staff;
 use DB;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use App\Admin\Extensions\Tools\Projects;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Support\Facades\Request;
 use App\Admin\Extensions\ExcelExpoter;
 class ProjectController extends Controller
 {
@@ -93,6 +95,15 @@ class ProjectController extends Controller
                 $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
                 $grid->model()->whereIn('z_uid',$companyid);
             }
+            // $grid->model()->where('guidang',0);
+            // if (in_array(Request::get('project'), [0,1])) {
+                if (Request::get('project') == 1) {
+                    // $grid->id('ID')->sortable();
+                    $grid->model()->where('guidang',1);
+                }else{
+                    $grid->model()->where('guidang',0);
+                }
+            // }
             $grid->id('ID')->sortable();
             if ($userid != 1) {
                 $grid->name('项目名称');
@@ -102,7 +113,7 @@ class ProjectController extends Controller
                 });
             }
             
-            $grid->column('业主')->display(function(){
+            $grid->uid('业主')->display(function(){
                 return DB::table('user')->where('id',$this->uid)->value('phone').'<br>'.DB::table('user')->where('id',$this->uid)->value('name');
             });
             $grid->column('负责人')->display(function(){
@@ -142,9 +153,9 @@ class ProjectController extends Controller
                     
                 //     // return DB::table('user')->where('id',$try_uid)->value('name');
                 // });
-                $grid->try_uid('体验人员')->map(function ($try_uid) {
-                    return DB::table('user')->where('id',$try_uid)->value('name');
-                })->implode('<br>');
+                // $grid->try_uid('体验人员')->map(function ($try_uid) {
+                //     return DB::table('user')->where('id',$try_uid)->value('name');
+                // })->implode('<br>');
             }
             
             // $grid->state('装修状态')->display(function($state){
@@ -161,19 +172,57 @@ class ProjectController extends Controller
             //     }
             // });
             $grid->column('装修进度')->display(function(){
-                $href = '<a style="color:#CC3300;" href="/admin/flow?pro_id='.$this->id.'">查看进度</a>';
+                // $href = '<a style="color:#CC3300;" href="/admin/flow?pro_id='.$this->id.'">查看进度</a>';
+                // $href = "<a href=\"/admin/flow?pro_id='.$this->id.'\"><button type='button' class='btn btn-danger btn-xs'>查看进度</button></a>";
+                if ($this->guidang == 1) {
+                    return "<button type='button' class='btn btn-default btn-sm'>已归档</button>";
+                }
                 $wcjd = DB::table('flow')->where('state','>',0)->where('pro_id',$this->id)->count();
                 if ($wcjd == 0) {
-                    return '未开始<br>'.$href;
+                    return "<a href=\"/admin/flow?pro_id='.$this->id.'\"><button type='button' class='btn btn-default btn-sm'>未开始</button></a>";
                 }else{
                     $flows = DB::table('flow')->where('pro_id',$this->id)->count();
+                    $guidang = "";//归档
                   	if($flows == 0){
                         $jindu = 0;
                     }else{
                       $jindu = DB::table('flow')->where('state',2)->where('pro_id',$this->id)->count()/DB::table('flow')->where('pro_id',$this->id)->count()*100;
-
+                      if ($jindu == 100) {//项目完成时选择归档
+                          $guidang = "<br><button type='button' class='btn btn-danger btn-sm' onclick=\"firm('$this->id','$this->name')\">归档</button>
+                    <script type='text/javascript'>
+                         function firm(id,name){
+                            
+                                    confirm('项目名为\"'+name+'\"!', \"该操作将会项目归档,不再任何地方显示.如要查看.请点击归档按钮.\", function (isConfirm) {
+                                        if (isConfirm) {
+                                            var data = {id:id};
+                                            $.ajax({
+                                              url:\"http://47.97.109.9/api/guidang\",
+                                              data:data,
+                                              dataType:\"json\",
+                                              type:\"POST\",
+                                              success:function(data){
+                                                 if(data.error == 0){
+                                                  location.reload(true);
+                                                }
+                                                if(data.code==1){
+                                                  alert(\"操作失败\");
+                                                }  
+                                              }
+                                            })
+                                        } else {
+                                        }
+                                    }, {confirmButtonText: '确定', cancelButtonText: '取消', width: 400});
+                                                
+                           }
+                    </script>
+                        ";
+                          echo '<link rel="stylesheet" href="http://47.97.109.9/css/BeAlert.css">
+                            <script src="http://47.97.109.9/resources/js/BeAlert.js"></script>
+                          ';
+                      }
                     }
-                    return '<span style="font-size:17px">'.ceil($jindu).'％</span><br>'.$href;
+                    return "<a href=\"/admin/flow?pro_id=$this->id\"> <button type='button' class='btn btn-default btn-link'>".ceil($jindu)."%</button></a>".$guidang;
+                    // return '<span style="font-size:17px">'.ceil($jindu).'％</span><br>'.$href;
                 }
             });
             $grid->column('进度播报')->display(function(){
@@ -204,9 +253,16 @@ class ProjectController extends Controller
                 $actions->disableDelete(); $actions->disableView();
                 // $actions->disableEdit();
             });
+            // if (in_array($role,[1])) {
+                $grid->tools(function ($tools) {
+                    $tools->append(new Projects());
+                });
+            // }
+            
             $grid->filter(function($filter) use($role){
                 $filter->disableIdFilter();
                 $filter->column(1/2, function ($filter) use($role) {
+                    $filter->like('name', '项目名称');
                     $filter->equal('user.phone', '业主手机号');
                     $filter->like('user.name', '业主名称');
                     if ($role == 1) {
@@ -293,6 +349,7 @@ class ProjectController extends Controller
                 }else{
                     $ty1 = DB::table('user')->where('cid',$cid)->select('id','phone','name')->get(); 
                 }
+                $ty = [];
                 foreach ($ty1 as $k => $v) {
                     $ty[$v->id] = $v->phone.'--'.$v->name;
                 }

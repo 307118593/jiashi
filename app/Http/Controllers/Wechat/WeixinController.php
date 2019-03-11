@@ -310,7 +310,7 @@ class WeixinController
         $data['newUser'] = DB::table('user')->where('cid',$cid)->orderBy('id','desc')->take(3)->get();
 
         //最近编辑的项目
-        $project = DB::table('flow as a')->leftjoin('project as b','b.id','a.pro_id')->select('b.id','b.image','b.name','b.leader_id','a.name as flow_name','a.endtime as time','a.starttime as time')->orderBy('a.starttime','desc')->orderBy('a.endtime','desc')->take(3)->get();
+        $project = DB::table('flow as a')->leftjoin('project as b','b.id','a.pro_id')->where('b.z_uid',$cid)->select('b.id','b.image','b.name','b.leader_id','a.name as flow_name','a.endtime as time','a.starttime as time')->orderBy('a.starttime','desc')->orderBy('a.endtime','desc')->take(3)->get();
         // $host = new Controller;
         foreach ($project as $k => $v) {
             $project[$k]->leader = DB::table('admin_users')->where('id',$v->leader_id)->value('name');

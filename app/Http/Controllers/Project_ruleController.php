@@ -36,7 +36,7 @@ class Project_ruleController extends Controller
 			$z_uid = $uid;
 		}
         
-    	$project = DB::table('project')->where('z_uid',$z_uid)->when($condition,function($query) use($condition){
+    	$project = DB::table('project')->where('guidang',0)->where('z_uid',$z_uid)->when($condition,function($query) use($condition){
             return $query->where('name','like','%'.$condition.'%');
         })
         ->select('id','uid','name','z_uid','starttime_d','image','project_us','state','type','area','leader_id','staff_share')->orderBy('id','desc')->get();
@@ -44,7 +44,7 @@ class Project_ruleController extends Controller
     	// $leaderProject = [];
     	// $joinProject = [];
     	foreach ($project as $k => $v) {
-    		$project[$k]->starttime_d = strtotime($v->starttime_d);
+    		// $project[$k]->starttime_d = strtotime($v->starttime_d);
     		$project[$k]->company = DB::table('admin_users')->where('id',$v->z_uid)->value('name');
     		$project[$k]->image = $this->host.'upload/'.$v->image;
     		$project_us = json_decode($v->project_us,true);
@@ -507,6 +507,15 @@ class Project_ruleController extends Controller
 
         return response()->json(['error'=>0,'mes'=>'添加成功']);
 
+    }
+
+    //归档操作
+    public function guidang(Request $request){
+        $id = $request->input('id');
+        $res = DB::table('project')->where('id',$id)->update(['guidang'=>1]);
+        if ($res) {
+            return response()->json(['error'=>0,'mes'=>'添加成功']);
+        }
     }
 
 }

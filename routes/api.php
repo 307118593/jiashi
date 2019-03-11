@@ -17,7 +17,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::any('test',function(){
-	return 55;
+	$allstyle = DB::table('cases')->where('cid',15)->groupBy('style')->whereNotNull('style')->pluck('style');
+            $style = "";
+            foreach ($allstyle as $k => $v) {
+                $style .= $v.",";
+            }
+           
+            $style = rtrim($style,",");
+            $style = explode(",",$style);
+            // $style = settype($style,'array');
+
+            dd($style);
 	// $predefined = [
 	// 	'ticker' => '这是ticker',
 	//     'title' => '工地新建通知',
@@ -122,6 +132,8 @@ Route::any('remove_Ys','YsController@remove_Ys');
 Route::any('snap','YsController@snap');
 //后台导入设备
 Route::any('daoru','YsController@daoru');
+//后台批量分配
+Route::any('fenpei','YsController@fenpei'); 
 //更新设备状态.优化拉取速度
 Route::any('updateYs','YsController@updateYs');
 //获取\H5直播地址
@@ -181,6 +193,8 @@ Route::group(['middleware' => ['checkRole']], function () {
 	Route::any('get_residence','CasesController@get_residence');
 	//获取楼盘下的案例列表
 	Route::any('getResidenceCase','CasesController@getResidenceCase');
+	//获取风格数据
+	Route::any('getStyle','CasesController@getStyle');
 
 	//施工案例-----
 	//获取施工案例数据
@@ -231,6 +245,8 @@ Route::group(['middleware' => ['checkRole']], function () {
 	Route::any('getProjectData','Project_ruleController@getProjectData');
 	//新建项目
 	Route::any('creatProject','Project_ruleController@creatProject');
+	//归档操作
+	Route::any('guidang','Project_ruleController@guidang');
 
 
 	// 公司客户端

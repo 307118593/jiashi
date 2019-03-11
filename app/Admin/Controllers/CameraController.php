@@ -7,6 +7,7 @@ use App\User;
 use App\Staff;
 use DB;
 use App\Admin\Extensions\Tools\Cameras;
+use App\Admin\Extensions\Tools\Fenpei;
 use Illuminate\Support\Facades\Request;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,6 +16,7 @@ use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
 use Illuminate\Support\MessageBag;
+use App\Admin\Extensions\ExcelExpoter;
 class CameraController extends Controller
 {
     use ModelForm;
@@ -100,11 +102,13 @@ class CameraController extends Controller
                 $grid->id('id','ID')->sortable();
             }
             if ($role == 5) {//代理商
-                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
-                $grid->model()->whereIn('cid',$companyid);
-                $grid->id('id','ID')->sortable();
+                // $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                // $grid->model()->whereIn('cid',$companyid);
+                $grid->model()->where('did',$userid);
+                // $grid->id('id','ID')->sortable();
             }
             // $grid->id('ID')->sortable();
+
             $grid->mac('设备标识');
             $grid->name('别名');
 
@@ -116,14 +120,24 @@ class CameraController extends Controller
                 return "<span style=''>人数:".$count."人</span><br><a style='color:#CC3300;' href='/admin/camera_auth?mac=$this->mac'>点击查看</a>";
             });
             
-            if ($role == 1) {
+            if ($role == 1 || $role ==5) {
                 // $grid->cid('所属公司')->display(function($cid){
                 //     return DB::table('admin_users')->where('id',$cid)->value('name');
                 // });
-                 $grid->column('admin_users.name','所属公司');
+                if ($role == 1) {
+                    $grid->column('代理商')->display(function(){
+                        return DB::table('admin_users')->where('id',$this->did)->value('name');
+                     });
+                }
+                 $grid->column('所属公司')->display(function(){
+                    return DB::table('admin_users')->where('id',$this->cid)->value('name');
+                 });
+                 
             }
-            $grid->column('project.name','绑定工地');
-            $grid->addtime('新建时间');
+            $grid->column('绑定工地')->display(function(){
+                return DB::table('project')->where('id',$this->pro_id)->value('name');
+             });
+            // $grid->addtime('新建时间');
             if (in_array(Request::get('cameras'), ['1'])) {
                 $states = [
                     'on'  => ['value' => 1, 'text' => '是', 'color' => 'success'],
@@ -135,6 +149,16 @@ class CameraController extends Controller
                     'off' => ['value' => 0, 'text' => '否', 'color' => 'default'],
                 ];
                 $grid->user_share('是否客户共享')->switch($statess);
+                $statesss = [
+                    'on'  => ['value' => 0, 'text' => '允许', 'color' => 'success'],
+                    'off' => ['value' => 1, 'text' => '禁用', 'color' => 'default'],
+                ];
+                $grid->is_playback('回放')->switch($statesss);
+                $grid->status('是否在线')->display(function($status){
+                    // if ($this->status == 1) {
+                    return $status == 0?"<span style='color:#999'>离线</span>":"<span style='color:green'>在线</span>";
+                    // }
+                });
                 $grid->column('观看直播')->display(function(){
                     return "<button type='button' class='btn btn-success btn-sm' onclick=\"live('$this->mac')\">点击观看</button>
                         <script>function live(mac){
@@ -148,18 +172,25 @@ class CameraController extends Controller
                     return "<button type='button' class='btn btn-danger btn-sm' onclick=\"firm('$this->id','$this->name')\">解除绑定</button>
                     <script type='text/javascript'>
                          function firm(id,name){
-                            
+                             var domain = window.location.host;
+                            console.log(domain);
+                            if(domain=='47.97.109.9'){//防止跨域退出登录
+                                var host = 'www.homeeyes.cn';
+                            }else{
+                                var host = '47.97.109.9';
+                            }
                                     confirm('设备名为\"'+name+'\"!', \"该操作将会设备初始化,包括子用户.\", function (isConfirm) {
                                         if (isConfirm) {
                                             var data = {id:id};
                                             $.ajax({
-                                              url:\"http://47.97.109.9/api/jiechubangding\",
+                                              url:\"http://\"+host+\"/api/jiechubangding\",
                                               data:data,
                                               dataType:\"json\",
                                               type:\"POST\",
                                               success:function(data){
                                                  if(data.error == 0){
-                                                  location.reload(true);
+                                                  $.pjax.reload('#pjax-container');
+                                                  toastr.success('操作成功');
                                                 }
                                                 if(data.code==1){
                                                   alert(\"操作失败\");
@@ -180,7 +211,7 @@ class CameraController extends Controller
             echo '<link rel="stylesheet" href="http://47.97.109.9/css/BeAlert.css">
                     <script src="http://47.97.109.9/resources/js/BeAlert.js"></script>
                   ';
-            $grid->disableExport();
+            // $grid->disableExport();
             // if ($role != 1) {
             $grid->disableCreateButton();
                 $grid->actions(function ($actions) {
@@ -188,9 +219,62 @@ class CameraController extends Controller
                     // $actions->disableEdit();
                 });
             // }
-            $grid->disableRowSelector();
-         
+            if ($role != 1 ) {
+                $grid->disableRowSelector();
+            }
+if ($role == 1) {
+        $dids = DB::table('admin_role_users')->where('role_id',8)->pluck('user_id');
+            $company = Staff::all()->where('pid',0)->whereNotIn('id',$dids)->pluck('name', 'id');
+            $dali = Staff::all()->whereIn('id',$dids)->pluck('name', 'id');
+            $comop = "<option value = 0>选择公司</option>";
+            $daliop = "<option value = 0>选择代理商</option>";
+            // dd($company);
+            foreach ($company as $k => $v) {
+                $comop .= "<option value =".$k.">".$v."</option>";
+            }
+            foreach ($dali as $k => $v) {
+                $daliop .= "<option value =".$k.">".$v."</option>";
+            }
+echo "<div class='modal fade' id='createFileMModal' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+  <div class='modal-dialog' role='document'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <h5 class='modal-title' id='createFileTitle'>请选择分配的公司或代理商</h5>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+      </div>
+      <div class='modal-body'>
+        <form>
+        <select id='com' class='form-control'>
+            ".$comop."
+        </select>
+        </form>
+      </div>
+       <div class='modal-body'>
+        <form>
+        <select id='daili' class='form-control'>
+            ".$daliop."
+        </select>
+        </form>
+      </div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-primary' id='createFileSureBut'>确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+";
+}
+        
             $grid->tools(function ($tools) use($role,$userid){
+                if ($role == 1) {
+                    $tools->batch(function ($batch) {
+                        $batch->disableDelete();
+                        $batch->add('批量分配', new Fenpei());
+                    });
+                }
+                
                 $tools->append(new Cameras());
                 $userid = time().$userid;
                 if (Request::get('cameras') == 1) {
@@ -203,9 +287,16 @@ class CameraController extends Controller
 
                         $(".daoru").click(function(){
                             confirm("该操作会将萤石设备导入", "可能会花费较长时间.请不要刷新页面", function (isConfirm) {
+                                 var domain = window.location.host;
+                            console.log(domain);
+                            if(domain=="47.97.109.9"){//防止跨域退出登录
+                                var host = "www.homeeyes.cn";
+                            }else{
+                                var host = "47.97.109.9";
+                            }
                             if (isConfirm) {
                                 $.ajax({
-                                  url:"http://47.97.109.9/api/daoru",
+                                  url:"http://"+host+"/api/daoru",
                                   dataType:"json",
                                   type:"POST",
                                   success:function(data){
@@ -272,8 +363,17 @@ class CameraController extends Controller
             });//C15769474
             // $form->text('code','设备六位验证码')->setwidth(3);//XIRIVB
             $form->text('name','设备名称*')->setwidth(3)->help('长度不大于20字，不能包含特殊字符');
-            if ($role == 1) {
-                $form->select('cid','选择公司')->options(Staff::all()->where('pid',0)->pluck('name', 'id'))->setwidth(4);
+            if ($role == 1 || $role == 5) {
+                
+                if ($role == 1) {
+                    $dids = DB::table('admin_role_users')->where('role_id',8)->pluck('user_id');
+                    $form->select('cid','选择公司')->options(Staff::all()->where('pid',0)->whereNotIn('id',$dids)->pluck('name', 'id'))->setwidth(4);
+                    $form->select('did','选择代理商')->options(Staff::all()->whereIn('id',$dids)->pluck('name', 'id'))->setwidth(4);
+                }else{//代理商
+                    $form->select('cid','选择公司')->options(Staff::all()->where('did',$userid)->pluck('name', 'id'))->setwidth(4);
+                }
+                
+
             }else{
                 $form->hidden('cid', '公司')->default($userid);
             }
@@ -285,8 +385,14 @@ class CameraController extends Controller
                 }else{
                     $where = ['cid'=>$pid];
                 }
+               
             }
+
             $phones = DB::table('user')->whereNotNull('phone')->where($where)->select('id','phone','name')->get();
+             if ($role == 5) {
+                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                $phones = DB::table('user')->whereNotNull('phone')->whereIn('cid',$companyid)->select('id','phone','name')->get();
+            }
             $data = [];
             foreach ($phones as $k => $v) {
                 $data[$v->id] = $v->phone.'--'.$v->name;
@@ -301,11 +407,17 @@ class CameraController extends Controller
                     $where1 = ['z_uid'=>$pid];
                 }
             }
+            $pros = DB::table('project')->where($where1)->pluck('name','id');
+            if ($role == 5) {
+                $companyid = DB::table('admin_users')->where('did',$userid)->pluck('id');
+                $phones = DB::table('user')->whereNotNull('phone')->whereIn('cid',$companyid)->select('id','phone','name')->get();
+            }
+            $form->select('pro_id','请选择工地')->options($pros)->setwidth(5);
             if ($userid == 1) {
                 $form->dateRange('begintime', 'endtime', '租赁时间范围');
                 $form->currency('money','押金金额')->symbol('￥');
             }
-            $form->select('pro_id','请选择工地')->options(DB::table('project')->where($where1)->pluck('name','id'))->setwidth(5);
+
             $states = [
                 'on'  => ['value' => 1, 'text' => '是', 'color' => 'success'],
                 'off' => ['value' => 0, 'text' => '否', 'color' => 'default'],
@@ -316,6 +428,11 @@ class CameraController extends Controller
                 'off' => ['value' => 0, 'text' => '否', 'color' => 'default'],
             ];
             $form->switch('user_share', '是否客户共享')->states($statess)->default(0)->help('所有客户都可查看和操作设备');
+            $statesss = [
+                'on'  => ['value' => 0, 'text' => '允许', 'color' => 'success'],
+                'off' => ['value' => 1, 'text' => '禁用', 'color' => 'default'],
+            ];
+            $form->switch('is_playback', '是否允许客户查看回放')->states($statesss)->default(0);
             $form->hidden('addtime','添加时间')->default(date('Y-m-d H:i:s'));
             $form->saving(function(Form $form){
                 $accessToken = $this->get_accessToken();

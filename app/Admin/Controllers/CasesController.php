@@ -160,7 +160,11 @@ class CasesController extends Controller
             $form->hidden('id', 'ID');
             $form->text('title','标题')->setwidth(3);
             $form->number('area','面积')->default(100);
-            $form->text('style','装修风格')->setwidth(2)->help('如:中式,欧式');
+            //获取该公司案例下的风格
+           
+            $style = $this->getStyle($cid,$role);
+            // $form->text('style','装修风格')->setwidth(2)->help('如:中式,欧式');
+            $form->tags('style','装修风格')->help('你可以自定义添加标签:输入文字按回车键成为一个标签.')->setWidth(5)->options($style);
             $form->select('type','装修类型')->options([0=>'全包',1=>'半包'])->default('1')->setWidth(2);
             // $form->currency('price','预算金额/万')->symbol('￥');
             $form->image('photo','封面图')->move('anli')->setwidth(5)->uniqueName();
@@ -203,4 +207,21 @@ class CasesController extends Controller
             
         });
     }
+
+    protected function getStyle($cid,$role){
+     if ($role == 1) {
+            $where = [];
+        }else{
+            $where =['cid'=>$cid];
+        }
+        $allstyle = DB::table('cases')->where($where)->groupBy('style')->whereNotNull('style')->pluck('style');
+        $style = "";
+        foreach ($allstyle as $k => $v) {
+            $style .= $v.",";
+        }
+        $style = rtrim($style,",");
+        $style = explode(",",$style);
+        return $style;
+    }
+  
 }
